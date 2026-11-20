@@ -1,0 +1,305 @@
+.portal-carousel {
+  position: relative;
+  isolation: isolate;
+  height: max(580px, calc(100svh - 118px));
+  min-height: 580px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #062c22;
+  color: #fff8e9;
+  cursor: pointer;
+  user-select: none;
+  animation: portal-carousel-enter 1s ease-out both;
+}
+
+/* All slides are stacked. Only the active and outgoing ones are visible. */
+.portal-carousel__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 0;
+  opacity: 0;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  pointer-events: none;
+  transition: opacity 700ms ease;
+}
+
+.portal-carousel__slide.is-active {
+  z-index: 2;
+  opacity: 1;
+  will-change: transform, opacity;
+  animation: portal-carousel-zoom var(--slide-duration, 10000ms) linear forwards;
+}
+
+/* Same animation declaration as .is-active, so the zoom keeps running while it fades out. */
+.portal-carousel__slide.is-leaving {
+  z-index: 1;
+  opacity: 0;
+  animation: portal-carousel-zoom var(--slide-duration, 10000ms) linear forwards;
+}
+
+.portal-carousel__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(90deg, rgba(18, 15, 13, .78) 0%, rgba(18, 15, 13, .52) 42%, rgba(18, 15, 13, .12) 100%),
+    linear-gradient(0deg, rgba(18, 15, 13, .42), transparent 42%);
+  pointer-events: none;
+}
+
+.portal-carousel__content {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+}
+
+.portal-landing-copy {
+  position: absolute;
+  top: 50%;
+  left: clamp(24px, 9vw, 150px);
+  width: min(620px, 62vw);
+  transform: translateY(-50%);
+}
+
+.portal-landing-eyebrow,
+.portal-landing-title,
+.portal-landing-description,
+.portal-landing-cta {
+  animation: portal-carousel-copy-enter .75s ease-out both;
+}
+
+.portal-landing-eyebrow { animation-delay: .25s; }
+.portal-landing-title { animation-delay: .4s; }
+.portal-landing-description { animation-delay: .55s; }
+.portal-landing-cta { animation-delay: .7s; }
+
+.portal-landing-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 22px;
+  color: #f0d98f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.portal-landing-eyebrow::before {
+  width: 27px;
+  height: 1px;
+  background: #d6ad56;
+  content: '';
+}
+
+.portal-landing-title {
+  max-width: 660px;
+  margin: 0;
+  color: #fff9eb;
+  font-family: var(--serif);
+  font-size: clamp(48px, 7vw, 98px);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  line-height: .98;
+  text-wrap: balance;
+}
+
+.portal-landing-title em {
+  color: #e8c86f;
+  font-weight: 500;
+}
+
+.portal-landing-description {
+  max-width: 490px;
+  margin: 23px 0 0;
+  color: rgba(255, 248, 233, .84);
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.8;
+}
+
+.portal-landing-cta {
+  display: inline-flex;
+  min-height: 49px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 29px;
+  padding: 0 25px;
+  border: 1px solid #e8c86f;
+  border-radius: 999px;
+  background: #741e24;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+  color: #fff9eb;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.portal-landing-cta:hover {
+  transform: translateY(-2px);
+  background: #8b292d;
+}
+
+.portal-carousel__product {
+  position: absolute;
+  z-index: 4;
+  bottom: clamp(24px, 5vh, 58px);
+  left: clamp(24px, 9vw, 150px);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  color: #fff8e9;
+  pointer-events: none;
+}
+
+.portal-carousel__counter {
+  color: #e8c86f;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .12em;
+}
+
+.portal-carousel__product-name {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.2vw, 30px);
+}
+
+/* Zoom from 100% to 115% over the length of the slide (set inline as --slide-duration). */
+@keyframes portal-carousel-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+@keyframes portal-carousel-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes portal-carousel-copy-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Applied by the component when reduced motion is respected and the OS setting is on. */
+.portal-carousel--static {
+  animation: none;
+}
+
+.portal-carousel--static .portal-carousel__slide {
+  transition: none;
+}
+
+.portal-carousel--static .portal-carousel__slide.is-active,
+.portal-carousel--static .portal-carousel__slide.is-leaving {
+  animation: none;
+}
+
+.portal-carousel--static .portal-landing-eyebrow,
+.portal-carousel--static .portal-landing-title,
+.portal-carousel--static .portal-landing-description,
+.portal-carousel--static .portal-landing-cta {
+  animation: none;
+}
+
+.portal-carousel--static .portal-landing-cta {
+  transition: none;
+}
+
+@media (max-width: 760px) {
+  .portal-carousel {
+    height: max(560px, calc(100svh - 105px));
+    min-height: 560px;
+  }
+
+  .portal-carousel__shade {
+    background:
+      linear-gradient(90deg, rgba(18, 15, 13, .72), rgba(18, 15, 13, .28)),
+      linear-gradient(0deg, rgba(18, 15, 13, .5), transparent 58%);
+  }
+
+  .portal-landing-copy {
+    top: 43%;
+    left: 24px;
+    width: calc(100% - 48px);
+  }
+
+  .portal-landing-eyebrow {
+    margin-bottom: 17px;
+    font-size: 10px;
+  }
+
+  .portal-landing-title {
+    max-width: 540px;
+    font-size: clamp(48px, 11vw, 74px);
+  }
+
+  .portal-landing-description {
+    max-width: 460px;
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  .portal-landing-cta {
+    min-height: 45px;
+    margin-top: 23px;
+  }
+
+  .portal-carousel__product {
+    bottom: 26px;
+    left: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .portal-carousel {
+    height: max(540px, calc(100svh - 100px));
+    min-height: 540px;
+  }
+
+  .portal-landing-copy {
+    left: 18px;
+    width: calc(100% - 36px);
+  }
+
+  .portal-landing-title {
+    font-size: clamp(44px, 12vw, 54px);
+  }
+
+  .portal-landing-description {
+    font-size: 13px;
+  }
+
+  .portal-carousel__product {
+    left: 18px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .portal-carousel {
+    height: max(420px, calc(100svh - 80px));
+    min-height: 420px;
+  }
+
+  .portal-landing-copy {
+    top: 46%;
+    left: 6vw;
+    width: min(64vw, 680px);
+  }
+
+  .portal-landing-eyebrow { margin-bottom: 10px; }
+  .portal-landing-title { font-size: clamp(38px, 7vh, 58px); }
+  .portal-landing-description { margin-top: 10px; font-size: 13px; }
+  .portal-landing-cta { min-height: 40px; margin-top: 13px; }
+  .portal-carousel__product { bottom: 14px; left: 6vw; }
+}
