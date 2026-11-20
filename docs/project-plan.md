@@ -2,7 +2,7 @@
 
 ## Draft BRD to existing storefront
 
-Source: KS-BRD-FE-001 v1.0, 20 November 2026, 47 pages. The attachment supplies requirements and acceptance scenarios. The owner's message authorizes phases 1–3 only. KS-BRD-BE-001 is referenced as a future deliverable. Proposed endpoint names and schema choices require reconciliation with that document.
+Source: KS-BRD-FE-001 v1.0, 20 November 2026, 47 pages. The attachment supplies requirements and acceptance scenarios. The initial authorization covered phases 1–3. The owner subsequently requested work to start on the proposed first milestone, phase 4A: catalog reads, stable product and weight identifiers, and regression checks. Later commerce milestones require separate scope decisions. KS-BRD-BE-001 is referenced as a future deliverable. Proposed endpoint names and schema choices require reconciliation with that document.
 
 | BRD reference | Current evidence | Planned acceptance |
 | --- | --- | --- |

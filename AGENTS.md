@@ -2,7 +2,7 @@
 
 ## Scope and approvals
 
-Read the owner's request, the applicable BRD revision, docs/project-plan.md and docs/api-contracts.md before taking a ticket. KS-BRD-FE-001 v1.0 is a stakeholder draft. Record disagreements or missing business rules for the owner. The current authorization covers inspection and planning documentation. Start feature work only after the owner approves a named scope. Astra High reviews through a manual handoff. The owner separately authorizes merge and deployment.
+Read the owner's request, the applicable BRD revision, docs/project-plan.md and docs/api-contracts.md before taking a ticket. KS-BRD-FE-001 v1.0 is a stakeholder draft. Record disagreements or missing business rules for the owner. The owner authorized the first read-only catalog milestone and storefront regression checks after the planning handoff. Start feature work only after the owner approves a named scope. Astra High reviews through a manual handoff. The owner separately authorizes merge and deployment.
 
 ## Ownership
 
