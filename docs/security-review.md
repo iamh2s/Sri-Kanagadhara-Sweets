@@ -1,5 +1,11 @@
 # Independent security baseline · 20 November 2026
 
+## Catalog candidate review
+
+An independent auditor inspected the public, read-only Express routes, TypeScript data source, query validation, JSON error handling, loopback listener, Vite proxy, rate limiting, lockfile and tests. The first candidate lockfile audit reported four affected transitive packages including Critical proxy-addr (GHSA-jqcg-44mw-7w3h) and High body-parser (GHSA-27r3-jxmh-p828). The other affected packages were ip-address and qs. The catalog routes do not enable a body parser and the app uses Express's default untrusted proxy configuration.
+
+The backend engineer updated the transitive resolutions. Independent re-audit of lock blob a1918ec3a1d1292439417ef0ff2e827e0894fb97 returned exit 0 and zero advisories across 276 dependencies. Installed remediation versions were proxy-addr 2.0.8, body-parser 2.4.0, ip-address 10.7.6 and qs 6.17.1. For a future public or multi-instance deployment, specify and test trusted proxy configuration and a shared rate-limit store. Review applies to the local catalog milestone.
+
 Reviewer: Security Auditor subagent. Scope: existing storefront source and npm lockfile. No confirmed Critical or High issue emerged from those checks. Production security approval is pending an actual server implementation, deployment configuration and independently reviewed candidate.
 
 | Area | Evidence | Required follow-up |

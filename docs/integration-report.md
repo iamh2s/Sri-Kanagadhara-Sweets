@@ -1,5 +1,13 @@
 # Integration and verification record · 20 November 2026
 
+## First implementation milestone
+
+At base 67e1ecf the original storefront was captured in Git. The candidate adds API tests for category and product reads, filtering, pagination, validation, missing resources and rate limiting. Three saved-bag tests cover pre-API numeric IDs, separate weights, stale entries and saved favorites. Run `npm test` to repeat the API and persistence checks.
+
+Chrome 157.0.8103.79 exercised both the prior bundle and the freshly built frontend candidate (index-VJGDVQc_.js). Desktop 1440×900 used the desktop Shop link. Tablet 768×1024 and phone 390×844 used the mobile menu. Each viewport showed eight products, found Butter Murukku, selected 500g and restored quantity two at ₹250 each after refresh. The cart focused its close button and fit the viewport. Tests used reduced motion and blocked external media. Physical-device behavior, image fidelity and field performance were outside this run.
+
+A separate local integration check queried /api/v1/products?category=ghee-sweets through the configured Vite development proxy. It returned Mysore Pak and the 500g variant at 35000 paise. A direct /shop-all navigation returned the storefront entry document.
+
 QA used installed project binaries with a fresh temporary output directory, preserving src and the existing dist. The inspection found no npm test script or conventionally named test/spec files under src.
 
 | Command | Result |

@@ -1,5 +1,9 @@
 # Architecture baseline · 20 November 2026
 
+## Catalog milestone implementation
+
+The original inventory below describes commit 67e1ecf. The catalog milestone adds an Express/TypeScript service in server and a shared catalog module. The storefront still renders its local catalog and preserves existing browser storage. The local Vite server proxies /api to the catalog service. MongoDB, authoritative inventory and transactional checkout belong to later milestones.
+
 ## Existing application
 
 | Layer | Evidence and implications |

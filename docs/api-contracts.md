@@ -1,6 +1,20 @@
-# Draft REST contracts
+# Catalog API and proposed commerce contracts
 
-Status: proposal for review alongside KS-BRD-BE-001. No endpoints exist in the inspected storefront. All paths below are relative to /api/v1. Retain stable public catalog IDs for existing browser carts and map each product/weight pair to a canonical SKU.
+## Implemented catalog milestone
+
+Run `npm run dev:api` and `npm run dev` in separate terminals. The API defaults to 127.0.0.1:3001. The Vite development server forwards /api requests to that port. The storefront and API read the same catalog module. The existing storefront renders locally, so browsing and saved bags continue to work without the API process.
+
+| GET path | Behavior |
+| --- | --- |
+| /api/v1/categories | Returns seven navigation categories as `{data:[{name,slug,image,route}]}`. Gift Boxes is a collection without individual catalog products. |
+| /api/v1/products | Returns `{data:[...],nextCursor:null}` or a cursor for the next page. Optional q matches name, description or category (up to 100 characters). category accepts a category slug. limit defaults to 20 and accepts 1–50. cursor is the exclusive numeric product ID from the previous page. |
+| /api/v1/products/mysore-pak | Returns one product in the data envelope, including numeric ID, slug, name, category, categorySlug, description, image, currency and variants. Each variant carries sku, weight and pricePaise. The existing 250g Mysore Pak variant is KS-1-250g at 18000 paise. |
+
+The weight-based identifiers use the original product ID and weight; prices can change independently. A stale or unknown product slug returns 404. Unsupported or malformed query fields return 400. Rate-limited requests return 429. Errors include a requestId and the same identifier is available in the X-Request-Id header. The catalog carries the store's existing indicative prices. Availability and approved product disclosures require business data.
+
+## Remaining contracts for review
+
+The table below records the wider BRD proposal. The three catalog reads above are implemented. Other endpoints are awaiting the backend BRD and scope approval. Paths are relative to /api/v1.
 
 | Operation | Request and result | Access / constraints |
 | --- | --- | --- |
