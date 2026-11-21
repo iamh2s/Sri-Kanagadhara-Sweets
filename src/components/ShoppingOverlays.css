@@ -1,0 +1,21 @@
+.cart-drawer.cart-page {
+  width: min(100% - 2rem, 52rem);
+  height: auto;
+  margin: clamp(1rem, 4vw, 3rem) auto;
+}
+
+.cart-page .cart-items { flex: none; overflow: visible; }
+.cart-page .empty-cart { padding-block: clamp(2rem, 8vw, 5rem); }
+.shopping-dialog .cart-drawer { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+
+/* Short screens need a single scroll area so the subtotal cannot squeeze items out. */
+@media (max-height: 540px) {
+  .shopping-dialog .cart-drawer { overflow-y: auto; overscroll-behavior: contain; }
+  .shopping-dialog .cart-drawer > * { flex: none; }
+  .shopping-dialog .cart-items { overflow: visible; }
+}
+
+@media (pointer: coarse) {
+  .cart-drawer .quantity-control button { width: 36px; height: 40px; }
+  .shopping-dialog .icon-button { min-width: 44px; min-height: 44px; }
+}

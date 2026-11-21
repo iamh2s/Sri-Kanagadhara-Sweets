@@ -1,4 +1,5 @@
 import { catalogSlug } from '../../shared/catalogSlug'
+import './HomePage.css'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import {
   ArrowRight,
@@ -472,7 +473,7 @@ const cardEffect = 'tilt shine focus'
             <p className="offer-kicker">
               <span className="offer-kicker-line" /> THE ART OF GIFTING <span className="offer-kicker-line" />
             </p>
-            <span className="offer-ornament" aria-hidden="true">✳</span>
+            <span className="offer-ornament" aria-hidden="true"></span>
             <h2>Celebrate every<br /><em>sweet occasion.</em></h2>
             <p className="offer-description">
               Beautifully curated sweets, thoughtfully wrapped and made to turn
@@ -603,7 +604,7 @@ const cardEffect = 'tilt shine focus'
         </section>
 
         <section className="newsletter-section" data-aos="fade-up">
-          <div className="newsletter-decoration" aria-hidden="true">✳</div>
+         
           <div className="newsletter-copy">
             <p className="eyebrow eyebrow-light"><span /> A little note from us</p>
             <h2>Stay connected<br />with <em>sweetness.</em></h2>

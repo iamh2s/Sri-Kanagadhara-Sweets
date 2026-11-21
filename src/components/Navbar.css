@@ -357,7 +357,8 @@
     left: 12px;
     display: flex;
     width: min(360px, calc(100vw - 24px));
-    max-height: calc(100dvh - 140px);
+    max-height: calc(100vh - 140px);
+    max-height: calc(100dvh - 140px - env(safe-area-inset-bottom, 0px));
     flex-direction: column;
     overflow-y: auto;
     padding: 16px;
@@ -390,7 +391,10 @@
   .ks-header .ks-actions svg { width: 19px; height: 19px; }
   .ks-header .ks-brand { height: 100px; }                          /* was 72px */
   .ks-header .ks-corner { display: none; }
-  .ks-header .ks-mobile-panel { max-height: calc(100dvh - 124px); }
+  .ks-header .ks-mobile-panel {
+    max-height: calc(100vh - 124px);
+    max-height: calc(100dvh - 124px - env(safe-area-inset-bottom, 0px));
+  }
   .ks-header .ks-search-panel { left: 6px; right: 6px; padding: 9px; }
   .ks-header .ks-search-form { gap: 7px; padding-left: 9px; }
   .ks-header .ks-search-form input { font-size: 12px; }
@@ -415,6 +419,14 @@
 .ks-header .ks-shop-options a:is(:hover,:focus-visible,[aria-current="page"],[aria-current="location"]) { color: var(--ks-maroon); background: #f2e8d5; }
 .ks-header .ks-shop-mobile .ks-shop-toggle { width: 100%; justify-content: space-between; }
 .ks-header .ks-shop-mobile .ks-shop-options { position: static; max-height: none; margin-block: .25rem; box-shadow: none; }
+
+@media (max-height: 500px) and (max-width: 999px) {
+  .ks-header .ks-mobile-panel {
+    max-height: calc(100vh - 100px);
+    max-height: calc(100dvh - 100px - env(safe-area-inset-bottom, 0px));
+    overscroll-behavior: contain;
+  }
+}
 
 .ks-header .ks-nav-left > .ks-account-icon { display: none; }
 .ks-header .ks-account-icon[aria-current="page"] { color: var(--ks-maroon); background: #f2e8d5; }

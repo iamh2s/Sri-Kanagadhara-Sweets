@@ -34,5 +34,6 @@
   .cs-directory h2 { grid-column: 1 / -1; }
   .cs-directory a { gap: .4rem; font-size: .87rem; }
   .cs-directory a svg { flex-shrink: 0; }
+  .contact-studio .cs-message :is(input, select, textarea) { font-size: max(16px, 1rem) !important; }
 }
 @media (max-width: 420px) { .cs-fields { grid-template-columns: 1fr; } }

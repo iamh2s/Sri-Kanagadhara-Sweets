@@ -69,6 +69,16 @@
 .shop-empty p { margin-block: .5rem 1rem; }
 .shop-empty a { display: inline-flex; gap: .5rem; align-items: center; text-decoration: none; }
 .shop-listing :is(input, select, a, button):focus-visible { outline: 3px solid #937033; outline-offset: 2px; }
+@media (max-width: 900px) {
+  .shop-listing .module-product-name { display: inline-flex; align-items: center; min-height: 44px; }
+  .shop-listing .module-product-buy select,
+  .shop-listing .module-add-button,
+  .shop-heading button,
+  .shop-result-summary button,
+  .module-page:is(.module-page--shop-all, .module-page--sweets, .module-page--savouries) .module-scroll-link {
+    min-height: 44px;
+  }
+}
 @media (max-width: 800px) {
   .shop-collections { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }

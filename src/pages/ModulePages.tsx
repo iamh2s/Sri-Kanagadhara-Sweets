@@ -1,5 +1,3 @@
-
-import { AccountPage } from './AccountPage'
 import { CinematicHero } from '../components/CinematicHero'
 import { ContactPage } from './ContactPage'
 import { GiftBoxesPage } from './GiftBoxesPage'
@@ -79,10 +77,6 @@ export function ModulePages(props: ModulePagesProps) {
       {/* 05 — Contact */}
       {page === 'contact' && <ContactPage />}
 
-      {/* 06 — Account */}
-      {page === 'account' && (
-        <AccountPage onNavigate={onNavigate} />
-      )}
     </div>
   )
 }

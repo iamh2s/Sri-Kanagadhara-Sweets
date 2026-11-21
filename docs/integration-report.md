@@ -49,3 +49,13 @@ RECOMMENDED NEXT ACTION: Review the local storefront and admin panel.
 The working candidate on codex/backend uses base 561da10bbdd4446ef8ec0c21671568cf549f7be5. The production build passed. All 11 automated tests passed, including four admin session checks. A disposable local credential verified login, authenticated reads, logout and revocation through the storefront proxy on port 5174.
 
 Chrome checks at 390 and 1440 pixels verified the gift guide layout and its four destinations. Shop checks covered the eight products, category navigation, searching for Butter Murukku, clearing search, price sorting and empty results. The mobile shop and gift guide fit the viewport. Admin edits continue to use fictional data. The independent auth review is in docs/security-review.md.
+
+## Responsive storefront verification — 21 November 2026
+
+Base commit 04cef2e5b214ef5e9d1b5d6511c7ac476001d6ba. Tested local working changes in Chrome and Firefox on Windows using emulated viewports.
+
+- Firefox visited 30 storefront, customer, support, service and admin URLs at 320×568, 844×390, 768×1024, 1024×768, 1440×900 and 1920×1080. No document-width overflow was observed. A separate pointer hit test verified visible header controls at widths of 320, 390, 844, 1000, 1200, 1441 and 1920 pixels.
+- Chrome checks covered home, shop, gift boxes and product details from 320 to 1440 pixels. The home quick-view purchase button passed center-point hit tests at 320×568, 640×320, 768×1024 and 1440×900.
+- Chrome exercised account, addresses, checkout, cart and admin products at six sizes with a four-item bag, long fictional addresses and a synthetic admin session. The drawer's checkout action was reachable at 640×320. The authenticated preview check assessed layout.
+- All four About Us dropdown destinations passed pointer navigation on phone and desktop layouts. Section links moved focus to their destination.
+- Mobile Safari, physical iOS and Android devices, and native macOS and Linux browsers remain unverified.

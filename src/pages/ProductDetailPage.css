@@ -9,6 +9,15 @@
 .product-information details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
 .product-information summary { cursor: pointer; font-weight: 600; color: var(--maroon); }
 .product-information p { margin-block: .75rem; }
+
+@media (max-width: 900px) {
+  .product-detail-page .product-information details { padding-block: .4rem; }
+  .product-detail-page .product-information summary { padding-block: .65rem; min-height: 44px; }
+  .product-detail-page .text-link { display: inline-flex; align-items: center; min-height: 44px; }
+  .product-detail-page .modal-product-copy > p { font-size: .95rem; }
+  .product-detail-page .modal-weights button { font-size: .9rem; }
+  .product-detail-page .modal-weights button span { font-size: .8rem; }
+}
 .cart-drawer.cart-page { width: min(100% - 2rem, 780px); height: auto; min-height: 48vh; margin: 2rem auto; box-shadow: none; animation: none; }
 .cart-page .cart-items { overflow: visible; }
 .cart-summary > .text-link { display: inline-block; margin-block: .75rem; }

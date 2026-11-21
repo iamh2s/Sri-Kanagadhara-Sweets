@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { catalogSlug } from '../../shared/catalogSlug'
 import { formatPrice } from '../data/storefront'
 import type { Product, Weight } from '../pages/ModulePages'
+import './ShoppingOverlays.css'
 
 export type CartLine = {
   product: Product

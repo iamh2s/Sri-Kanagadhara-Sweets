@@ -95,3 +95,16 @@
 .ks-admin-login input { min-width: 0; padding: 11px; border: 1px solid #888d79; border-radius: 6px; background: white; color: #173a2e; font: inherit; }
 .ks-admin-login a { color: #21533e; }
 .ks-admin-login [role=alert] { color: #872f25; margin: 0; }
+@media (max-width: 520px) {
+  .ks-admin-sidebar { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .ks-admin-brand, .ks-admin-sidebar [role=alert] { grid-column: 1 / -1; }
+  .ks-admin-sidebar nav { flex-wrap: wrap; overflow: visible; }
+  .ks-admin-sidebar nav a { gap: 6px; padding: 9px 8px; }
+  .ks-admin-heading, .ks-admin-panel-title { flex-wrap: wrap; }
+}
+@media (min-width: 821px) and (max-height: 600px) {
+  .ks-admin-sidebar { max-height: 100vh; max-height: 100dvh; overflow-y: auto; }
+}
+@media (pointer: coarse) {
+  .ks-admin :is(input,select), .ks-admin-login input { font-size: 16px; min-height: 44px; }
+}

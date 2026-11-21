@@ -6,8 +6,6 @@ const pageImages: Record<string, string> = {
   savouries: 'photo-1599487488170-d11ec9c172f0',
   'gift-boxes': 'photo-1549465220-1a8b9238cd48',
   'our-story': 'photo-1555507036-ab1f4038808a',
-  contact: 'photo-1555507036-ab1f4038808a',
-  account: 'photo-1578985545062-69928b1d9587',
 }
 
 const pageCopy: Record<string, { kicker: string; title: string; accent: string; summary: string }> = {
@@ -40,18 +38,6 @@ const pageCopy: Record<string, { kicker: string; title: string; accent: string; 
     title: 'Made with care.',
     accent: 'Kept by tradition.',
     summary: 'Some recipes feel like coming home. We make every sweet to bring that feeling to your table.',
-  },
-  contact: {
-    kicker: 'A REAL PERSON, ALWAYS',
-    title: 'Let’s make',
-    accent: 'something sweet.',
-    summary: 'Planning a celebration or choosing a gift? Tell us what you have in mind.',
-  },
-  account: {
-    kicker: 'YOUR SWEET LITTLE CORNER',
-    title: 'Everything you love,',
-    accent: 'all in one place.',
-    summary: 'Account services are coming soon. Until then, our team is happy to help with an order.',
   },
 }
 
