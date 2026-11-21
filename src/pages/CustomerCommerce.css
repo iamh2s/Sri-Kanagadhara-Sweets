@@ -1,0 +1,36 @@
+.customer-commerce { padding-block: clamp(36px,6vw,76px); color: var(--cocoa,#3b2924); }
+.customer-commerce > header { margin-bottom: 24px; }
+.customer-commerce h1, .customer-commerce h2, .customer-commerce h3 { font-family: var(--serif,Georgia,serif); color: var(--maroon,#582330); }
+.customer-commerce h1 { margin: 12px 0; font-size: clamp(2.4rem,6vw,4rem); line-height: 1.05; }
+.customer-commerce h2 { margin: 0 0 18px; font-size: 1.65rem; }
+.customer-commerce h3 { margin: 20px 0 4px; font-size: 1.2rem; }
+.customer-commerce p { margin: 9px 0 17px; line-height: 1.6; overflow-wrap: anywhere; }
+.cc-grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 22px; align-items: start; }
+.cc-panel, .cc-hub a { padding: clamp(18px,3vw,35px); border: 1px solid var(--line,#d9cdb9); background: #fffcf6; }
+.cc-panel { min-width: 0; }
+.customer-commerce .cc-notice { padding: 12px 16px; border-inline-start: 3px solid #a68145; background: #f5eddb; margin: 0 0 18px; }
+.cc-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.cc-wide { grid-column: 1/-1; }
+.customer-commerce label { display: grid; gap: 6px; font-size: .9rem; margin: 0 0 14px; }
+.customer-commerce input:not([type=checkbox]), .customer-commerce select, .customer-commerce textarea { width: 100%; min-width: 0; box-sizing: border-box; padding: 10px; font: inherit; border: 1px solid #ad9e85; border-radius: 2px; color: inherit; background: #fff; }
+.customer-commerce textarea { min-height: 5rem; }
+.customer-commerce .cc-check { display: flex; align-items: center; gap: 8px; }
+.cc-items, .cc-list { padding: 0; margin: 0; list-style: none; }
+.cc-items li, .cc-total { display: flex; justify-content: space-between; align-items: start; gap: 14px; border-top: 1px solid var(--line,#d9cdb9); padding: 14px 0; }
+.cc-items small { display: block; margin-top: 3px; }
+.cc-total { padding-bottom: 0; }
+.cc-list li + li { border-top: 1px solid var(--line,#d9cdb9); margin-top: 14px; padding-top: 14px; }
+.customer-commerce .cc-link { display: inline-block; background: transparent; border: 0; color: #18513c; text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; margin-bottom: 8px; cursor: pointer; font: inherit; }
+.cc-reference { font-family: monospace; }
+.cc-hub { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.cc-hub a { border-radius: 8px; }
+.cc-hub a:is(:hover,:focus-visible) { background: #f4eddf; }
+.cc-hub a > svg { flex: 0 0 auto; }
+.cc-hub strong, .cc-hub small { display: block; }
+.cc-hub small { margin-top: .35rem; color: #594d42; line-height: 1.5; }
+.customer-commerce .cc-account-intro { margin-bottom: 1.5rem; }
+.cc-hub a { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #194e39; }
+.cc-hub a > svg:last-child { margin-left: auto; width: 16px; }
+.customer-commerce :focus-visible { outline: 2px solid #286549; outline-offset: 3px; }
+@media(max-width: 780px) { .cc-grid,.cc-hub { grid-template-columns: 1fr; } }
+@media(max-width: 500px) { .cc-fields { grid-template-columns: 1fr; gap: 0; } .customer-commerce .button { white-space: normal; } }

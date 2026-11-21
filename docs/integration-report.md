@@ -27,3 +27,25 @@ Temporary root: %TEMP%/kanagadhara-qa-74e4d908-3656-407f-a232-39613597ee41. Unit
 - Once approved, run provider test-mode cancellation, failure, duplicate webhook, delayed verification and refresh scenarios. Never use production credentials.
 
 Integration status: frontend baseline only. Candidate SHA, branch collisions, combined server tests, merge recommendation and rollback rehearsal are pending. For a release, record candidate/base SHAs, ticket-to-BRD coverage, exact commands, outcomes, regressions, unresolved risks, rollback target and the owner's decision.
+
+
+## Customer pages and admin UI, 20 November 2026
+
+AGENT NAME: Integration and QA
+TASK: Verify the customer page inventory and local admin panel.
+STATUS: Verified local preview.
+FILES MODIFIED: Customer routing, cart, product and support views, customer commerce and admin components. Coordinator recorded results here.
+IMPLEMENTATION SUMMARY: The customer UI includes catalog/search, product details, bag, demo checkout, confirmation, tracking, account tools, support and policy screens. The admin UI includes overview, products, categories, orders and inquiries. Missing published policies, contact data and stock details are identified in the relevant screens.
+TESTS EXECUTED: npm run build, npm test, browser checks on desktop and mobile, local admin route and catalog API HTTP checks.
+TEST RESULTS: Build passed; four catalog API tests and three saved-bag tests passed. Browser checks covered checkout and confirmation, tracking, address save/remove, product and category navigation, FAQ disclosures and admin edits. Eight catalog products returned. Admin preview fit widths of 320, 390 and 768 pixels.
+SECURITY CONSIDERATIONS: Tests used synthetic shopper actions. Admin edits are in memory. Customer demo history uses browser storage.
+UNRESOLVED ISSUES: Live account access, transactions, verified payment results, deployment status codes and owner-approved business content remain pending.
+BRANCH: codex/backend
+COMMIT HASH: Not available for uncommitted UI. Base 561da10.
+RECOMMENDED NEXT ACTION: Review the local storefront and admin panel.
+
+## Admin sign-in, gift boxes and shop browsing
+
+The working candidate on codex/backend uses base 561da10bbdd4446ef8ec0c21671568cf549f7be5. The production build passed. All 11 automated tests passed, including four admin session checks. A disposable local credential verified login, authenticated reads, logout and revocation through the storefront proxy on port 5174.
+
+Chrome checks at 390 and 1440 pixels verified the gift guide layout and its four destinations. Shop checks covered the eight products, category navigation, searching for Butter Murukku, clearing search, price sorting and empty results. The mobile shop and gift guide fit the viewport. Admin edits continue to use fictional data. The independent auth review is in docs/security-review.md.

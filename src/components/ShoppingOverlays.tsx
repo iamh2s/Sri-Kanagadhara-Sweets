@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { ArrowRight, Minus, Plus, ShoppingBag, X } from 'lucide-react'
 import { storeContactEmail, storeEmailLink } from '../data/storeContact'
+import { Link } from 'react-router-dom'
+import { catalogSlug } from '../../shared/catalogSlug'
 import { formatPrice } from '../data/storefront'
 import type { Product, Weight } from '../pages/ModulePages'
 
@@ -53,14 +55,15 @@ function ShoppingDialog({ className, titleId, onClose, children }: {
   )
 }
 
-function CartDrawer({
+export function CartDrawer({
+  standalone = false,
   cart,
   cartCount,
   cartTotal,
   onClose,
   onUpdateQuantity,
   onBrowse,
-}: CartDrawerProps) {
+}: CartDrawerProps & { standalone?: boolean }) {
   const orderItems = cart.map(({ product, weight, quantity }) =>
     `${quantity} × ${product.name} (${weight}) — ${formatPrice(product.prices[weight] * quantity)}`,
   )
@@ -73,15 +76,14 @@ function CartDrawer({
     'Please confirm availability, pricing, and delivery options.',
   ].join('\r\n')
 
-  return (
-    <ShoppingDialog className="drawer-backdrop" titleId="cart-title" onClose={onClose}>
-      <aside className="cart-drawer">
+  const bag = (
+      <section className={standalone ? "cart-drawer cart-page" : "cart-drawer"}>
         <div className="drawer-heading">
           <div>
             <p className="eyebrow"><span /> Your little collection</p>
             <h2 id="cart-title">Your bag <span>({cartCount})</span></h2>
           </div>
-          <button className="icon-button" aria-label="Close cart" autoFocus onClick={onClose}><X size={20} /></button>
+          {standalone ? <Link className="text-link" to="/shop-all#catalog">Shop all</Link> : <button className="icon-button" aria-label="Close cart" autoFocus onClick={onClose}><X size={20} /></button>}
         </div>
         {cart.length === 0 ? (
           <div className="empty-cart">
@@ -125,6 +127,8 @@ function CartDrawer({
             </div>
             <div className="cart-summary">
               <div><span>Subtotal</span><strong>{formatPrice(cartTotal)}</strong></div>
+              <Link className="button button-primary checkout-button" to="/checkout" onClick={standalone ? undefined : onClose}>Review checkout <ArrowRight size={15} /></Link>
+              {!standalone && <Link className="text-link" to="/cart" onClick={onClose}>View bag</Link>}
               {storeContactEmail ? (
                 <>
                   <p>The shop will confirm availability, pricing, and delivery.</p>
@@ -136,15 +140,16 @@ function CartDrawer({
                   </a>
                 </>
               ) : (
-                <p className="checkout-notice">Ordering is currently unavailable.</p>
+                <p className="checkout-notice">Checkout preview is available. Live orders are currently unavailable.</p>
               )}
               <button className="continue-shopping" onClick={onClose}>Continue browsing</button>
             </div>
           </>
         )}
-      </aside>
-    </ShoppingDialog>
+      </section>
   )
+  if (standalone) return bag
+  return <ShoppingDialog className="drawer-backdrop" titleId="cart-title" onClose={onClose}>{bag}</ShoppingDialog>
 }
 
 type ProductQuickViewProps = {
@@ -173,6 +178,7 @@ function ProductQuickView({
           <span className="product-category">{product.category}</span>
           <h2 id="modal-product-name">{product.name}</h2>
           <p>{product.description}</p>
+          <Link className="text-link" to={`/products/${catalogSlug(product.name)}`} onClick={onClose}>View full product details</Link>
           <p className="modal-weight-label">Choose your size</p>
           <div className="modal-weights">
             {(['250g', '500g', '1kg'] as const).map((option) => (

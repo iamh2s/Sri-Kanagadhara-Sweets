@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import {
+  ChevronDown,
   Heart,
   Menu,
   Search,
@@ -7,6 +8,9 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
+import { contactLinks } from '../data/storeContact'
+import { shopLinks } from '../data/storefront'
 import './Navbar.css'
 
 // The props and route keys match the Navbar component you supplied.
@@ -32,16 +36,27 @@ export type NavbarProps = {
   onCartOpen: () => void
 }
 
-const NAV_ITEMS: NavItem[] = [
+const LEFT_ITEMS: NavItem[] = [
   { label: 'Home', href: '/', route: 'home' },
   { label: 'Shop', href: '/shop-all', route: 'shop-all', category: 'All' },
   { label: 'About Us', href: '/our-story', route: 'our-story' },
   { label: 'Contact', href: '/contact', route: 'contact' },
-  { label: 'Account', href: '/account', route: 'account' },
 ]
 
-const LEFT_ITEMS = NAV_ITEMS.slice(0, 4)
-const ACCOUNT_ITEM = NAV_ITEMS[4]
+const ADMIN_ITEM: NavItem = { label: 'Admin', href: '/admin', route: 'admin' }
+const MOBILE_ITEMS = [...LEFT_ITEMS, ADMIN_ITEM]
+
+const aboutLinks: NavItem[] = [
+  { label: 'Our story', route: 'our-story', href: '/our-story' },
+  { label: 'Our values', route: 'our-story#our-values', href: '/our-story#our-values' },
+  { label: 'Inside the sweet box', route: 'our-story#sweet-box', href: '/our-story#sweet-box' },
+  { label: 'Gifting traditions', route: 'our-story#gifting-traditions', href: '/our-story#gifting-traditions' },
+]
+const dropdownLinks: Partial<Record<string, NavItem[]>> = {
+  'shop-all': shopLinks,
+  'our-story': aboutLinks,
+  contact: contactLinks,
+}
 
 export function BrandMark({
   light = false,
@@ -81,17 +96,110 @@ function CountBadge({ count }: { count: number }) {
   )
 }
 
+function insideMobilePanel(target: EventTarget | null) {
+  return target instanceof Element && Boolean(target.closest('.ks-mobile-panel'))
+}
+
+function NavDropdown({ label, links, expandedId, mobile, active, onSelect, onOpen }: {
+  label: string
+  links: NavItem[]
+  expandedId: string | null
+  onOpen: (id: string) => void
+  mobile: boolean
+  active: boolean
+  onSelect: (item: NavItem) => void
+}) {
+  const [mode, setMode] = useState<'hover' | 'click' | null>(null)
+  const root = useRef<HTMLDivElement>(null)
+  const trigger = useRef<HTMLButtonElement>(null)
+  const panelId = useId()
+  const open = expandedId === panelId && mode !== null
+  const location = useLocation()
+  useEffect(() => setMode(null), [location.key])
+  useEffect(() => {
+    if (!open) return
+    const dismiss = (event: PointerEvent) => {
+      if (mobile && insideMobilePanel(event.target)) return
+      if (event.target instanceof Node && !root.current?.contains(event.target)) setMode(null)
+    }
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMode(null)
+    }
+    document.addEventListener('keydown', escape)
+    const breakpoint = window.matchMedia('(min-width: 1000px)')
+    const close = () => setMode(null)
+    document.addEventListener('pointerdown', dismiss)
+    breakpoint.addEventListener('change', close)
+    return () => {
+      document.removeEventListener('keydown', escape)
+      document.removeEventListener('pointerdown', dismiss)
+      breakpoint.removeEventListener('change', close)
+    }
+  }, [open, mobile])
+
+  return <div ref={root} className={mobile ? 'ks-shop ks-shop-mobile' : 'ks-shop'}
+    onPointerEnter={event => {
+      if (!mobile && event.pointerType === 'mouse' && !open) {
+        onOpen(panelId)
+        setMode('hover')
+      }
+    }}
+    onPointerLeave={event => {
+      if (event.pointerType === 'mouse' && mode === 'hover' && !root.current?.contains(document.activeElement)) setMode(null)
+    }}
+    onBlur={event => {
+      if (mobile && insideMobilePanel(event.relatedTarget)) return
+      if (!event.currentTarget.contains(event.relatedTarget)) setMode(null)
+    }}
+    onKeyDown={event => {
+      if (open && event.key === 'Escape') {
+        event.stopPropagation()
+        setMode(null)
+        trigger.current?.focus()
+      }
+    }}>
+    <button type="button" ref={trigger} className={`ks-shop-toggle ${mobile ? 'ks-mobile-link' : 'ks-nav-link'}${active ? ' is-active' : ''}`}
+      aria-expanded={open} aria-controls={panelId} onClick={() => {
+        if (!open) onOpen(panelId)
+        setMode(open && mode === 'click' ? null : 'click')
+      }}>
+      {label} <ChevronDown size={14} aria-hidden="true" />
+    </button>
+    <ul id={panelId} hidden={!open} className="ks-shop-options">
+      {links.map(link => <li key={link.href}><a href={link.href}
+        aria-current={link.href.startsWith('/our-story')
+          ? (location.pathname + location.hash === link.href ? (location.hash ? 'location' : 'page') : undefined)
+          : (location.pathname === link.href.split('#')[0] ? 'page' : undefined)}
+        onClick={event => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+          event.preventDefault()
+          setMode(null)
+          onSelect(link)
+        }}>{link.label}</a></li>)}
+    </ul>
+  </div>
+}
+
 function NavLink({
   item,
   active,
   mobile = false,
+  onDropdownOpen,
+  expandedId,
   onSelect,
 }: {
   item: NavItem
   active: boolean
   mobile?: boolean
+  expandedId: string | null
+  onDropdownOpen: (id: string) => void
   onSelect: (item: NavItem) => void
 }) {
+  const links = dropdownLinks[item.route]
+  if (links) return (
+    <NavDropdown label={item.label} links={links} expandedId={expandedId} active={active}
+      mobile={mobile} onSelect={onSelect} onOpen={onDropdownOpen} />
+  )
   return (
     <a
       href={item.href}
@@ -122,6 +230,11 @@ export function Navbar({
   onWishlistToggle,
   onCartOpen,
 }: NavbarProps) {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const openDropdown = (id: string) => {
+    if (searchOpen) onSearchToggle()
+    setExpandedId(id)
+  }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -176,6 +289,18 @@ export function Navbar({
     setMobileMenuOpen((old) => !old)
   }
 
+  const accountIcon = (
+    <a className="ks-icon-button ks-account-icon" href="/account" title="Your account"
+      aria-label="Your account" aria-current={page === 'account' ? 'page' : undefined}
+      onClick={event => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+        event.preventDefault()
+        navigate({ label: 'Account', href: '/account', route: 'account' })
+      }}>
+      <UserRound size={21} aria-hidden="true" />
+    </a>
+  )
+
   return (
     <header className={`ks-header${isScrolled ? ' is-scrolled' : ''}`}>
      
@@ -203,12 +328,16 @@ export function Navbar({
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
 
+              {accountIcon}
+
               <nav className="ks-desktop-links ks-desktop-links--left" aria-label="Primary navigation">
                 {LEFT_ITEMS.map((item) => (
                   <NavLink
                     key={item.route}
                     item={item}
-                    active={item.route === page}
+                    active={item.route === page || (item.route === 'contact' && contactLinks.some(link => link.route === page))}
+                    expandedId={expandedId}
+                    onDropdownOpen={openDropdown}
                     onSelect={navigate}
                   />
                 ))}
@@ -218,20 +347,14 @@ export function Navbar({
             <div className="ks-center-gap" aria-hidden="true" />
 
             <div className="ks-nav-right">
-              <a
-                className={`ks-account${page === 'account' ? ' is-active' : ''}`}
-                href={ACCOUNT_ITEM.href}
-                aria-current={page === 'account' ? 'page' : undefined}
-                onClick={(event) => {
-                  event.preventDefault()
-                  navigate(ACCOUNT_ITEM)
-                }}
-              >
-                <UserRound size={18} aria-hidden="true" />
-                <span>Account</span>
-              </a>
+              <a className="ks-account" href={ADMIN_ITEM.href} onClick={event => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+                event.preventDefault()
+                navigate(ADMIN_ITEM)
+              }}>Admin</a>
 
               <div className="ks-actions" aria-label="Shopping tools">
+                {accountIcon}
                 <button
                   type="button"
                   className={`ks-icon-button${searchOpen ? ' is-active' : ''}`}
@@ -291,12 +414,14 @@ export function Navbar({
           />
           <nav className="ks-mobile-panel" id="ks-mobile-navigation" aria-label="Mobile navigation">
             <div className="ks-mobile-heading">Explore Our Collections</div>
-            {NAV_ITEMS.map((item) => (
+            {MOBILE_ITEMS.map((item) => (
               <NavLink
                 key={item.route}
                 item={item}
-                active={item.route === page}
+                active={item.route === page || (item.route === 'contact' && contactLinks.some(link => link.route === page))}
                 mobile
+                expandedId={expandedId}
+                onDropdownOpen={openDropdown}
                 onSelect={navigate}
               />
             ))}

@@ -1,0 +1,327 @@
+
+/*
+  Sri Kanagadhara Sweets
+  Traditional cream and sage opening loader
+*/
+
+.tl {
+  --cream: #f6efdc;
+  --sage: #7d9a62;
+  --sage-deep: #4f6b3a;
+  --bark: #8a6a43;
+  --turmeric: #e0a526;
+  --sand: #f3dfb8;
+  --paper: #fbf6e8;
+
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  overflow: hidden;
+  color: var(--sage-deep);
+  isolation: isolate;
+}
+
+.tl--exit,
+.tl--open {
+  pointer-events: none;
+}
+
+/* Two traditional opening doors */
+
+.tl__door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: var(--cream);
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%237d9a62' stroke-width='0.9' opacity='0.28'%3E%3Cpath d='M60 22 C50 36 50 48 60 60 C70 48 70 36 60 22Z'/%3E%3Cpath d='M98 60 C84 50 72 50 60 60 C72 70 84 70 98 60Z'/%3E%3Cpath d='M60 98 C70 84 70 72 60 60 C50 72 50 84 60 98Z'/%3E%3Cpath d='M22 60 C36 70 48 70 60 60 C48 50 36 50 22 60Z'/%3E%3C/g%3E%3Ccircle cx='60' cy='60' r='3' fill='%23e0a526' opacity='0.5'/%3E%3C/svg%3E"),
+    radial-gradient(
+      circle,
+      rgba(79, 107, 58, 0.1) 1px,
+      transparent 1.6px
+    );
+
+  background-size:
+    120px 120px,
+    24px 24px;
+
+  transition: transform 900ms cubic-bezier(
+    0.65,
+    0,
+    0.35,
+    1
+  );
+
+  will-change: transform;
+}
+
+.tl__door--left {
+  left: 0;
+}
+
+.tl__door--right {
+  right: 0;
+}
+
+.tl--open .tl__door--left {
+  transform: translateX(-100%);
+}
+
+.tl--open .tl__door--right {
+  transform: translateX(100%);
+}
+
+/* Center content */
+
+.tl__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(18px, 4vh, 32px);
+  padding: 24px;
+
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+.tl--exit .tl__content,
+.tl--open .tl__content {
+  opacity: 0;
+}
+
+.tl__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2.5vw, 35px);
+  width: 100%;
+  max-width: 800px;
+
+  animation: tl-fade 900ms ease both;
+}
+
+/* Lotus medallion */
+
+.tl__medallion {
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  width: clamp(210px, 30vw, 320px);
+  aspect-ratio: 1;
+  flex: none;
+
+  animation: tl-fade 900ms ease 200ms both;
+}
+
+.tl__lotus {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tl__petal {
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.tl__petal--outer {
+  fill: #fffaf0;
+  stroke: #c9a46a;
+}
+
+.tl__petal--inner {
+  fill: var(--sand);
+  stroke: #c9a46a;
+}
+
+.tl__pollen {
+  fill: var(--turmeric);
+}
+
+/* Original brand logo */
+
+.tl__logo {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+
+  width: 60%;
+  aspect-ratio: 1;
+  padding: 12%;
+
+  border-radius: 50%;
+  background: var(--paper);
+
+  box-shadow:
+    0 0 0 5px var(--cream),
+    0 0 0 6px rgba(125, 154, 98, 0.35);
+
+  animation: tl-fade 900ms ease 400ms both;
+}
+
+.tl__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Decorative green leaves */
+
+.tl__sprig {
+  flex: none;
+  width: clamp(80px, 13vw, 160px);
+  height: auto;
+  overflow: visible;
+}
+
+.tl__sprig--mirror {
+  transform: scaleX(-1);
+}
+
+.tl__stem {
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.tl__leaf {
+  fill: var(--sage);
+  opacity: 0.9;
+}
+
+/* Text */
+
+.tl__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  animation: tl-fade 900ms ease 600ms both;
+}
+
+.tl__message {
+  margin: 0;
+  color: var(--sage-deep);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(26px, 3.4vw, 40px);
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.tl__tagline {
+  margin: 0;
+  color: var(--bark);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 16px;
+  font-style: italic;
+  text-align: center;
+}
+
+@keyframes tl-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Tablets */
+
+@media (max-width: 768px) {
+  .tl__stage {
+    gap: 10px;
+  }
+
+  .tl__medallion {
+    width: clamp(200px, 38vw, 290px);
+  }
+
+  .tl__sprig {
+    width: clamp(65px, 12vw, 100px);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .tl__content {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .tl__stage {
+    gap: 0;
+  }
+
+  .tl__medallion {
+    width: min(62vw, 260px);
+  }
+
+  .tl__sprig {
+    width: min(15vw, 70px);
+  }
+
+  .tl__message {
+    font-size: clamp(25px, 6vw, 32px);
+  }
+
+  .tl__tagline {
+    font-size: 14px;
+  }
+}
+
+/* Small phones */
+
+@media (max-width: 380px) {
+  .tl__medallion {
+    width: 60vw;
+  }
+
+  .tl__sprig {
+    width: 13vw;
+  }
+}
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .tl *,
+  .tl *::before,
+  .tl *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .tl--open .tl__door {
+    opacity: 0;
+  }
+}

@@ -1,4 +1,5 @@
-import { type Dispatch, type SetStateAction } from 'react'
+import { catalogSlug } from '../../shared/catalogSlug'
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import {
   ArrowRight,
   ChevronDown,
@@ -10,11 +11,14 @@ import {
   PackageCheck,
   Plus,
   Sparkles,
+  ShoppingBag,
+  X,
 } from 'lucide-react'
 import Component from '@/components/ui/landing-page'
 import CardCarousel from '@/components/ui/card-carousel'
 import { formatPrice, image } from '../data/storefront'
 import type { Collection, Product, Weight } from './ModulePages'
+import PolaroidLineCarousel from "@/components/ui/PolaroidLineCarousel";
 
 type Category = { name: string; image: string; route: string }
 type CraftStory = { title: string; caption: string; image: string }
@@ -47,6 +51,132 @@ export function HomePage({
   addToCart,
   navigate,
 }: HomePageProps) {
+  // Public assets are referenced from the site root, never with a "public/" prefix.
+  const productVideos = [
+    '/Video/mysore-pak.mp4',
+    '/Video/laddo.mp4',
+    '/Video/kajukatli.mp4',
+    '/Video/badusha.mp4',
+  ] as const
+  const [videoQuickView, setVideoQuickView] = useState<Product | null>(null)
+  const [modalWeight, setModalWeight] = useState<Weight>('250g')
+  const [failedVideos, setFailedVideos] = useState<string[]>([])
+  const modalVideoRef = useRef<HTMLVideoElement | null>(null)
+  const cardVideoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
+  // Keep animation frames and playback control outside React state to avoid rerenders.
+  const tiltFrames = useRef(new Map<HTMLElement, number>())
+  const visibleVideoIds = useRef(new Set<number>())
+  const prefersReducedMotion = typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const openProduct = (product: Product) => {
+    if (visibleBestSellers.some((item) => item.id === product.id)) {
+      setModalWeight(weights[product.id] ?? '250g')
+      setVideoQuickView(product)
+    } else {
+      setActiveProduct(product)
+    }
+  }
+
+  const bestSellerOrder = ['mysore pak', 'laddu', 'kaju katli', 'badusha']
+  const bestSellerProducts = bestSellerOrder
+    .map((name) => products.find((product) => product.name.toLowerCase().includes(name)))
+    .filter((product): product is Product => Boolean(product))
+  const visibleBestSellers = [
+    ...bestSellerProducts,
+    ...products.filter((product) => !bestSellerProducts.some((item) => item.id === product.id)),
+  ].slice(0, 4)
+  const sellerIds = visibleBestSellers.map((product) => product.id).join(',')
+
+  // Only decode videos while their cards are on screen and the page is active.
+  // The observer itself updates videos; no React setState during scrolling.
+  useEffect(() => {
+    const videos = Object.values(cardVideoRefs.current).filter(
+      (video): video is HTMLVideoElement => Boolean(video)
+    )
+    const playVisible = (video: HTMLVideoElement) => {
+      const id = Number(video.dataset.productId)
+      const allowed = visibleVideoIds.current.has(id) && !videoQuickView &&
+        !document.hidden && !prefersReducedMotion
+      if (!allowed) {
+        video.pause()
+      } else if (video.paused) {
+        void video.play().catch(() => {})
+      }
+    }
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const video = entry.target as HTMLVideoElement
+        const id = Number(video.dataset.productId)
+        if (entry.isIntersecting) visibleVideoIds.current.add(id)
+        else visibleVideoIds.current.delete(id)
+        playVisible(video)
+      }
+    }, { threshold: 0.15, rootMargin: '80px 0px' })
+    for (const video of videos) observer.observe(video)
+    const updatePlayback = () => videos.forEach(playVisible)
+    document.addEventListener('visibilitychange', updatePlayback)
+    updatePlayback()
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', updatePlayback)
+      videos.forEach((video) => video.pause())
+    }
+  }, [sellerIds, videoQuickView, prefersReducedMotion])
+
+  useEffect(() => {
+    return () => {
+      for (const frame of tiltFrames.current.values()) cancelAnimationFrame(frame)
+      tiltFrames.current.clear()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!videoQuickView) return
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setVideoQuickView(null)
+    }
+    window.addEventListener('keydown', onEscape)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onEscape)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [videoQuickView])
+
+  // Same 3D effect and glare, now capped to one DOM write per animation frame.
+  const onTilt = (event: React.MouseEvent<HTMLElement>) => {
+    if (prefersReducedMotion) return
+    const el = event.currentTarget
+    const rect = el.getBoundingClientRect()
+    const x = (event.clientX - rect.left) / rect.width
+    const y = (event.clientY - rect.top) / rect.height
+    const oldFrame = tiltFrames.current.get(el)
+    if (oldFrame !== undefined) cancelAnimationFrame(oldFrame)
+    tiltFrames.current.set(el, requestAnimationFrame(() => {
+      el.style.setProperty('--ry', `${(x - 0.5) * 12}deg`)
+      el.style.setProperty('--rx', `${(0.5 - y) * 12}deg`)
+      el.style.setProperty('--mx', `${x * 100}%`)
+      el.style.setProperty('--my', `${y * 100}%`)
+      tiltFrames.current.delete(el)
+    }))
+  }
+
+  const resetTilt = (event: React.MouseEvent<HTMLElement>) => {
+    const el = event.currentTarget
+    const oldFrame = tiltFrames.current.get(el)
+    if (oldFrame !== undefined) cancelAnimationFrame(oldFrame)
+    tiltFrames.current.delete(el)
+    el.style.setProperty('--rx', '0deg')
+    el.style.setProperty('--ry', '0deg')
+    el.style.setProperty('--mx', '50%')
+    el.style.setProperty('--my', '50%')
+  }
+
+// change this to try other effects: tilt | spin | shine | overlay | focus (combine with spaces)
+const cardEffect = 'tilt shine focus'
+
   return (
     <>
       <Component />
@@ -87,7 +217,7 @@ export function HomePage({
         ({ image: src, name: title, route }) => ({
           src,
           title,
-          route,
+          route: route === 'gift-boxes' ? route : `sweets/${catalogSlug(title)}`,
         })
       )}
       onSelect={navigate}
@@ -95,106 +225,289 @@ export function HomePage({
   </div>
 </section>
 
-        <section className="craft-section" aria-labelledby="craft-heading">
-        <div className="craft-heading" data-aos="fade-up">
-          <p className="eyebrow"><span /> A little care in every step</p>
-          <h2 id="craft-heading">Crafted with Love,<br /><em>Perfected by Tradition.</em></h2>
-          <p>Every piece is a reminder that the best things are worth making with care.</p>
-        </div>
-        <div className="craft-grid">
-          {craftStories.map((story, index) => (
-            <article className="craft-card" data-aos="fade-up" data-aos-delay={index * 120} key={story.title}>
-              <div className="craft-image">
-                <img src={story.image} alt={story.title} loading="lazy" />
-                <span className="craft-image-index">0{index + 1}</span>
-                <span className="craft-image-label">MADE BY HAND</span>
-              </div>
-              <div className="craft-card-copy">
-                <p>{story.caption}</p>
-                <h3>{story.title}</h3>
-              </div>
-            </article>
-          ))}
-        </div>
-        </section>
+       {/* A little care in every step Crafted with Love, Perfected by Tradition. */}
 
-        <section className="section bestsellers-section" id="bestsellers">
-        <div className="section-heading" data-aos="fade-up">
-          <div>
-            <p className="eyebrow"><span /> Demo catalogue</p>
-            <h2>Our <em>selection.</em></h2>
-          </div>
-            <a className="text-link" href="/shop-all" onClick={(event) => { event.preventDefault(); navigate('shop-all') }}>
-              View all products <ArrowRight size={15} />
-            </a>
-          </div>
-          <p className="catalog-note" data-aos="fade-up">Demo catalogue and indicative prices — confirm products, availability, and pricing before launch.</p>
-            <div className="product-grid">
-              {products.map((product) => {
-                const weight = weights[product.id] ?? '250g'
-                const isWishlisted = wishlist.includes(product.id)
-                return (
-                  <article className="product-card" key={product.id} data-aos="fade-up" data-aos-delay={(product.id % 4) * 70}>
-                    <button className="product-image" onClick={() => setActiveProduct(product)} aria-label={`View ${product.name} details`}>
-                      <img src={product.image} alt={product.name} loading="lazy" />
-                      {product.badge && <span className="product-badge">{product.badge}</span>}
-                      <span className="quick-view">Quick view <ArrowRight size={13} /></span>
-                    </button>
-                    <button
-                      className={`product-wishlist${isWishlisted ? ' wishlisted' : ''}`}
-                      onClick={() => toggleWishlist(product.id)}
-                      aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-                      aria-pressed={isWishlisted}
-                    >
-                      <Heart size={17} fill={isWishlisted ? 'currentColor' : 'none'} />
-                    </button>
-                    <div className="product-info">
-                      <span className="product-category">{product.category}</span>
-                      <button className="product-name" onClick={() => setActiveProduct(product)}>{product.name}</button>
-                      <p className="product-description">{product.description}</p>
-                      <div className="product-purchase">
-                        <label className="weight-select">
-                          <span className="sr-only">Choose weight for {product.name}</span>
-                          <select
-                            value={weight}
-                            onChange={(event) =>
-                              setWeights((current) => ({
-                                ...current,
-                                [product.id]: event.target.value as Weight,
-                              }))
-                            }
-                          >
-                            {(['250g', '500g', '1kg'] as const).map((option) => (
-                              <option key={option} value={option}>{option}</option>
-                            ))}
-                          </select>
-                          <ChevronDown size={13} aria-hidden="true" />
-                        </label>
-                        <strong className="product-price">{formatPrice(product.prices[weight])}</strong>
-                      </div>
-                      <button className="add-button" onClick={() => addToCart(product, weight)}>
-                        Add to bag <Plus size={15} />
-                      </button>
-                    </div>
-                  </article>
-                )
-              })}
+<section
+  className="craft-section"
+  aria-labelledby="craft-heading"
+>
+  <div className="craft-heading" data-aos="fade-up">
+    <p className="eyebrow">
+      <span /> A little care in every step
+    </p>
+
+    <h2 id="craft-heading">
+      Crafted with Love,
+      <br />
+      <em>Perfected by Tradition.</em>
+    </h2>
+
+    <p>
+      Every piece is a reminder that the best things
+      are worth making with care.
+    </p>
+  </div>
+
+  <div className="craft-polaroid" data-aos="fade-up">
+    <PolaroidLineCarousel
+      slides={craftStories.map((story) => ({
+        image: story.image,
+        title: story.title,
+        caption: story.caption,
+        alt: story.title,
+      }))}
+      height="clamp(440px, 55vw, 620px)"
+      cardWidth={270}
+      sag={30}
+      swing={0.5}
+      autoplay={3500}
+      string="#b99555"
+      ink="#17302e"
+      ariaLabel="Our traditional sweet-making process"
+    />
+  </div>
+</section>
+
+{/* best sellers */}
+
+<section className="section bestsellers-section" id="bestsellers">
+  <div className="bestsellers-inner">
+    <div className="bestsellers-heading" data-aos="fade-up">
+      <div className="bestsellers-eyebrow">
+        <span className="ornament-line" />
+        <span className="ornament-flower">✥</span>
+        Our Selection
+        <span className="ornament-flower">✥</span>
+        <span className="ornament-line" />
+      </div>
+
+      <div className="bestsellers-title-row">
+        <h2>
+          Best <em>Sellers.</em>
+        </h2>
+        <a
+          className="bestsellers-view-all"
+          href="/shop-all"
+          onClick={(event) => {
+            event.preventDefault()
+            navigate("shop-all")
+          }}
+        >
+          View all products <ArrowRight size={17} />
+        </a>
+      </div>
+
+      <p className="bestsellers-note">
+        A curated selection of our most popular sweets, loved by our customers for their authentic taste and premium quality.
+      </p>
+    </div>
+
+    <div
+      className={`premium-product-grid ${cardEffect
+        .split(' ')
+        .map((fx) => `fx-${fx}`)
+        .join(' ')}`}
+    >
+      {visibleBestSellers.map((product, index) => {
+        const weight = weights[product.id] ?? "250g"
+        const isWishlisted = wishlist.includes(product.id)
+        const royalBadges = ['★ Bestseller', '♥ Most Loved', '♛ Premium', '✦ Classic']
+        const royalCategories = ['Ghee Sweets', 'Festive Sweets', 'Dry Fruit Sweets', 'Traditional Sweets']
+        const displayName = product.name.toLowerCase().includes('laddu') ? 'Laddu' : product.name
+        const royalDescriptions = [
+          'A melt-in-your-mouth South Indian classic.',
+          'Traditional, aromatic laddus perfect for every celebration.',
+          'Smooth, rich and delicate cashew delight with a royal touch.',
+          'A flaky, juicy sweet with a perfect traditional taste.',
+        ]
+        const productImage = [
+          '/products/mysore-pak.webp',
+          '/products/laddu.webp',
+          '/products/kaju-katli.webp',
+          '/products/badusha.webp',
+        ][index]
+        const videoSrc = productVideos[index]
+        const videoFailed = failedVideos.includes(videoSrc)
+
+        return (
+          <article
+            className="premium-product-card"
+            key={product.id}
+            onClick={() => openProduct(product)}
+            onMouseMove={onTilt}
+            onMouseLeave={resetTilt}
+          >
+            <div className="premium-card-border">
+              <span className="royal-card-crown" aria-hidden="true">✦</span>
+              <div className="premium-card-content">
+                <div className="premium-image-wrap">
+                  <button
+                    className="premium-product-image"
+                    onClick={(event) => { event.stopPropagation(); openProduct(product) }}
+                    aria-label={`View ${product.name} details`}
+                  >
+                    {videoFailed || prefersReducedMotion ? (
+                      <img src={productImage} alt={product.name} loading="lazy" />
+                    ) : (
+                      <video
+                        ref={(node) => { cardVideoRefs.current[product.id] = node }}
+                        data-product-id={product.id}
+                        src={videoSrc}
+                        poster={productImage}
+                        aria-label={`${product.name} product video`}
+                        muted
+                        loop
+                        playsInline
+                        preload="none"
+                        disablePictureInPicture
+                        onError={() => setFailedVideos((current) => current.includes(videoSrc) ? current : [...current, videoSrc])}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', aspectRatio: '4 / 3' }}
+                      />
+                    )}
+                  </button>
+
+                  <span className={`premium-product-badge premium-badge-${index}`}>
+                    {royalBadges[index]}
+                  </span>
+
+                  <button
+                    className={`premium-wishlist ${isWishlisted ? "is-active" : ""}`}
+                    onClick={(event) => { event.stopPropagation(); toggleWishlist(product.id) }}
+                    aria-label={
+                      isWishlisted
+                        ? `Remove ${product.name} from wishlist`
+                        : `Add ${product.name} to wishlist`
+                    }
+                    aria-pressed={isWishlisted}
+                  >
+                    <Heart size={19} fill={isWishlisted ? "currentColor" : "none"} />
+                  </button>
+
+                  <button
+                    className="premium-quick-view"
+                    onClick={(event) => { event.stopPropagation(); openProduct(product) }}
+                  >
+                    Quick view <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                <div className="premium-product-info">
+                  <div className="premium-category">
+                    <span />
+                    {royalCategories[index]}
+                    <span />
+                  </div>
+
+                  <button
+                    className="premium-product-name"
+                    onClick={(event) => { event.stopPropagation(); openProduct(product) }}
+                  >
+                    {displayName}
+                  </button>
+
+                  <p className="premium-description">{royalDescriptions[index]}</p>
+
+                  <div className="premium-purchase">
+                    <label className="premium-weight">
+                      <span className="sr-only">Choose weight for {product.name}</span>
+                      <select
+                        value={weight}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) =>
+                          setWeights((current) => ({
+                            ...current,
+                            [product.id]: event.target.value as Weight,
+                          }))
+                        }
+                      >
+                        {(["250g", "500g", "1kg"] as const).map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown size={15} />
+                    </label>
+
+                    <span className="premium-price-divider" />
+
+                    <strong className="premium-price">
+                      {formatPrice(product.prices[weight])}
+                    </strong>
+                  </div>
+
+                  <button
+                    className="premium-add-button"
+                    onClick={(event) => { event.stopPropagation(); addToCart(product, weight) }}
+                  >
+                    <span className="premium-bag-icon">
+                      <ShoppingBag size={17} />
+                    </span>
+                    Add to bag
+                    <Plus size={17} />
+                  </button>
+
+                  <div className="premium-bottom-ornament">
+                    <span>❁</span>
+                  </div>
+                </div>
+              </div>
             </div>
-        </section>
+          </article>
+        )
+      })}
+    </div>
+  </div>
+</section>
 
-        <section className="offer-banner" data-aos="fade-up">
-          <div className="offer-ornament" aria-hidden="true">✳</div>
+
+        {/* Premium gifting banner — layout isolated from legacy offer styles */}
+        <section className="offer-banner ks-gift-banner" id="gift-offer" data-aos="fade-up">
+          <div className="offer-glow offer-glow-one" aria-hidden="true" />
+          <div className="offer-glow offer-glow-two" aria-hidden="true" />
+          <span className="offer-decor offer-decor-top" aria-hidden="true">✦</span>
+          <span className="offer-decor offer-decor-bottom" aria-hidden="true">✧</span>
+
           <div className="offer-content">
-            <p className="eyebrow eyebrow-light"><span /> A reason to celebrate</p>
-            <h2>Celebrate every<br /><em>occasion with sweetness.</em></h2>
-            <p>Find a little something for the people who make every day special.</p>
-            <a href="/gift-boxes" onClick={(event) => { event.preventDefault(); navigate('gift-boxes') }} className="button button-light">Explore gift boxes <ArrowRight size={15} /></a>
+            <p className="offer-kicker">
+              <span className="offer-kicker-line" /> THE ART OF GIFTING <span className="offer-kicker-line" />
+            </p>
+            <span className="offer-ornament" aria-hidden="true">✳</span>
+            <h2>Celebrate every<br /><em>sweet occasion.</em></h2>
+            <p className="offer-description">
+              Beautifully curated sweets, thoughtfully wrapped and made to turn
+              every celebration into a cherished memory.
+            </p>
+            <div className="offer-actions">
+              <a
+                href="/gift-boxes"
+                className="offer-cta"
+                onClick={(event) => { event.preventDefault(); navigate('gift-boxes') }}
+              >
+                Explore Gift Boxes
+                <span className="offer-cta-icon"><ArrowRight size={17} /></span>
+              </a>
+              <span className="offer-crafted"><span>✦</span> Handcrafted with love</span>
+            </div>
           </div>
-          <div className="offer-image">
-            <img src={image('photo-1549465220-1a8b9238cd48', 1000)} alt="A thoughtfully wrapped gift ready to give" loading="lazy" />
-            <span className="offer-image-note">A sweet way<br />to say it all</span>
+
+          <div className="offer-visual">
+            <div className="offer-image-frame">
+              <img
+                src={image('photo-1549465220-1a8b9238cd48', 1000)}
+                alt="A thoughtfully wrapped gift ready to give"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="offer-floating-note">
+              <span className="offer-note-icon" aria-hidden="true">✦</span>
+              <div><strong>A Gift of Sweetness</strong><small>Made for special moments</small></div>
+            </div>
+            <span className="offer-image-sparkle sparkle-a" aria-hidden="true">✧</span>
+            <span className="offer-image-sparkle sparkle-b" aria-hidden="true">✦</span>
           </div>
-          <span className="offer-corner" aria-hidden="true">✦</span>
+          <div className="offer-bottom-line" aria-hidden="true" />
         </section>
 
         <section className="section reasons-section">
@@ -298,6 +611,50 @@ export function HomePage({
           </div>
           <p className="newsletter-fineprint">Newsletter signup is currently unavailable.</p>
         </section>
+
+        {videoQuickView && (() => {
+          const index = visibleBestSellers.findIndex((item) => item.id === videoQuickView.id)
+          const src = productVideos[index]
+          const fallbackImage = ['/products/mysore-pak.webp', '/products/laddu.webp', '/products/kaju-katli.webp', '/products/badusha.webp'][index]
+          return (
+            <div className="ks-video-modal-backdrop" onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setVideoQuickView(null)
+            }}>
+              <section className="ks-video-modal ks-cinematic-preview" role="dialog" aria-modal="true" aria-label={`${videoQuickView.name} quick view`}>
+                <button className="ks-video-modal-close" aria-label="Close quick view" onClick={() => setVideoQuickView(null)}><X size={22} /></button>
+                <div className="ks-video-modal-media">
+                  {prefersReducedMotion || failedVideos.includes(src) ? (
+                    <img src={fallbackImage} alt={videoQuickView.name} />
+                  ) : (
+                    <video
+                      key={src}
+                      ref={modalVideoRef}
+                      src={src}
+                      poster={fallbackImage}
+                      autoPlay muted loop playsInline preload="metadata"
+                      disablePictureInPicture
+                      onError={() => setFailedVideos((current) => current.includes(src) ? current : [...current, src])}
+                    />
+                  )}
+                </div>
+                <div className="ks-video-modal-content">
+                  <p className="ks-video-modal-category">{['Ghee Sweets', 'Festive Sweets', 'Dry Fruit Sweets', 'Traditional Sweets'][index]}</p>
+                  <h2>{videoQuickView.name}</h2>
+                  <p>{['A melt-in-your-mouth South Indian classic.', 'Traditional, aromatic laddus perfect for every celebration.', 'Smooth, rich and delicate cashew delight with a royal touch.', 'A flaky, juicy sweet with a perfect traditional taste.'][index]}</p>
+                  <div className="ks-video-modal-sizes" aria-label="Choose weight">
+                    {(['250g', '500g', '1kg'] as const).map((weight) => (
+                      <button key={weight} type="button" aria-pressed={modalWeight === weight} className={modalWeight === weight ? 'active' : ''} onClick={() => setModalWeight(weight)}>{weight}</button>
+                    ))}
+                  </div>
+                  <strong className="ks-video-modal-price">{formatPrice(videoQuickView.prices[modalWeight])}</strong>
+                  <button className="ks-video-modal-add" onClick={() => { addToCart(videoQuickView, modalWeight); setVideoQuickView(null) }}>
+                    <ShoppingBag size={18} /> Add to bag
+                  </button>
+                </div>
+              </section>
+            </div>
+          )
+        })()}
     </>
   )
 }

@@ -1,21 +1,33 @@
-import { products } from '../data/storefront'
-import { AnimatedMarqueeHero } from '../components/ui/hero-3'
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import './NotFoundPage.css'
 
-type NotFoundPageProps = {
-  onNavigate: (path: string) => void
-}
+const suggestions = [
+  { label: 'Shop all', href: '/shop-all' },
+  { label: 'Gift boxes', href: '/gift-boxes' },
+  { label: 'Track an order', href: '/track-order' },
+  { label: 'Frequently asked questions', href: '/faq' },
+  { label: 'Contact us', href: '/contact' },
+]
 
-export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
+export function NotFoundPage() {
   return (
-    <AnimatedMarqueeHero
-      ariaLabel="Page not found"
-      tagline="ERROR 404 — PAGE NOT FOUND"
-      title={<>This sweet trail<br />ends <em>here.</em></>}
-      description="We couldn’t find the page you were looking for. Let’s get you back to something delicious."
-      ctaText="Back to Home"
-      ctaHref="/"
-      onCtaClick={() => onNavigate('home')}
-      images={products.map((product) => ({ src: product.image, alt: product.name }))}
-    />
+    <section className="store-not-found" aria-labelledby="not-found-title">
+      <p className="not-found-code">404</p>
+      <h1 id="not-found-title">Page not found</h1>
+      <p className="not-found-description">The page you’re looking for doesn’t exist or has been moved.</p>
+      <nav aria-label="Suggested pages">
+        <p>You might be looking for:</p>
+        <ul>
+          {suggestions.map(({ label, href }) => (
+            <li key={href}><Link to={href}>{label}<ArrowRight size={15} aria-hidden="true" /></Link></li>
+          ))}
+        </ul>
+      </nav>
+      <div className="not-found-actions">
+        <Link className="button button-primary" to="/">Go home</Link>
+        <Link className="button button-outline" to="/contact">Contact support</Link>
+      </div>
+    </section>
   )
 }

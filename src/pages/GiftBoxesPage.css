@@ -1,0 +1,42 @@
+﻿.gift-guide {
+  padding-block: clamp(3rem, 7vw, 6rem);
+  color: #153f35;
+}
+
+.gift-guide-heading h2,
+.gift-guide-card h3,
+.gift-guide-help h2 {
+  margin: 0;
+  color: inherit;
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.gift-guide-heading h2 { margin-bottom: 1.75rem; font-size: clamp(2rem, 4vw, 3.2rem); }
+.gift-guide-heading em { color: #865b20; }
+.gift-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(.85rem, 2vw, 1.5rem); }
+.gift-guide-card { display: flex; flex-direction: column; background: #fffaf0; border: 1px solid #ded3ba; }
+.gift-guide-card img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; background: #e4d9be; }
+.gift-guide-card > div { flex: 1; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(1rem, 2.25vw, 1.75rem); }
+.gift-guide-card h3 { font-size: clamp(1.6rem, 2.4vw, 2.2rem); }
+.gift-guide-card p,
+.gift-guide-help p { margin: .7rem 0 1rem; font-size: .94rem; line-height: 1.65; }
+.gift-guide-card p { color: #575548; }
+.gift-guide-card a,
+.gift-guide-help a { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; font-weight: 600; font-size: .9rem; line-height: 1.4; text-decoration: underline; text-underline-offset: .25em; }
+.gift-guide-card a { color: #205444; margin-top: auto; }
+.gift-guide a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.gift-guide-help { display: flex; align-items: center; gap: 1.3rem; padding: clamp(1.25rem, 3vw, 2.5rem); margin-top: 2rem; background: #163e35; color: #fff8eb; }
+.gift-guide-help > svg { flex-shrink: 0; color: #e9ce8c; }
+.gift-guide-help h2 { font-size: clamp(1.55rem, 2.5vw, 2rem); }
+.gift-guide-help p { margin: .4rem 0 0; color: #ece8d7; }
+.gift-guide-help a { flex-shrink: 0; margin-left: auto; color: #f1d493; }
+
+@media (max-width: 740px) {
+  .gift-guide-grid { grid-template-columns: 1fr; }
+  .gift-guide-card img { aspect-ratio: 2 / 1; }
+  .gift-guide-help { flex-wrap: wrap; }
+  .gift-guide-help > svg { display: none; }
+  .gift-guide-help a { margin-left: 0; }
+}

@@ -1,7 +1,9 @@
-import { ArrowRight, Heart, Plus, Sparkles } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { formatPrice } from '../data/storefront'
+import { ArrowRight, Heart, Plus, Search } from 'lucide-react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { catalogSlug } from '../../shared/catalogSlug'
+import { categories, formatPrice, shopLinks } from '../data/storefront'
 import type { ModulePagesProps, Product, Weight } from './ModulePages'
+import './ProductPage.css'
 
 function ProductTile({
   product,
@@ -37,7 +39,7 @@ function ProductTile({
       </button>
       <div className="module-product-details">
         <p className="module-product-category">{product.category}</p>
-        <button className="module-product-name" onClick={() => onViewProduct(product)}>{product.name}</button>
+        <Link className="module-product-name" to={`/products/${catalogSlug(product.name)}`}>{product.name}</Link>
         <p className="module-product-description">{product.description}</p>
         <div className="module-product-buy">
           <label>
@@ -70,7 +72,12 @@ export function ProductPage({
   catalogSearch,
   wishlistOnly,
 }: ModulePagesProps) {
-  const query = catalogSearch.toLowerCase()
+  const location = useLocation()
+  const [params, setParams] = useSearchParams()
+  const searchTerm = catalogSearch || (params.get('q') ?? '').trim()
+  const query = searchTerm.toLowerCase()
+  const activeCategory = categories.find(item => location.pathname.replace(/\/+$/, '') === '/sweets/' + catalogSlug(item.name))
+  const sort = params.get('sort') || 'featured'
   const filteredProducts = products.filter((product) => {
     const matchesPage =
       page === 'shop-all' ||
@@ -79,33 +86,63 @@ export function ProductPage({
     const matchesQuery = !query || `${product.name} ${product.description} ${product.category}`.toLowerCase().includes(query)
     return matchesPage && matchesQuery && (!wishlistOnly || wishlist.includes(product.id))
   })
-  const title = page === 'sweets'
+  if (sort === 'price-low' || sort === 'price-high') {
+    const direction = sort === 'price-low' ? 1 : -1
+    filteredProducts.sort((a, b) => direction * (a.prices[weights[a.id] ?? '250g'] - b.prices[weights[b.id] ?? '250g']))
+  }
+  const title = activeCategory?.name ?? (page === 'sweets'
     ? 'A heritage of sweetness'
     : page === 'savouries'
       ? 'The perfect chai-time companions'
-      : 'Find your next favourite'
-  const description = page === 'sweets'
-    ? 'Slow-made classics, familiar festive flavours, and little treats for an ordinary Tuesday.'
-    : page === 'savouries'
-      ? 'Crisp, savoury, and always better when the kettle is on.'
-      : 'Made fresh, packed with care, and ready to make a moment of its own.'
+      : 'Shop all')
+
+  function updateFilter(key: 'q' | 'sort', value: string) {
+    const next = new URLSearchParams(params)
+    if (value) next.set(key, value)
+    else next.delete(key)
+    setParams(next, { replace: true, state: { preserveCatalogScroll: true } })
+  }
 
   return (
-    <div id="module-content">
-      <section className="module-intro module-content-wrap" data-aos="fade-up">
-        <p className="module-kicker module-kicker-dark"><span /> FRESH FROM OUR KITCHEN <span /></p>
+    <div id="module-content" className="shop-listing">
+      <section className="shop-heading module-content-wrap">
         <h2 id="catalog" tabIndex={-1}>
-          {wishlistOnly ? 'Your wishlist' : catalogSearch ? 'Search results' : title}<em>.</em>
+          {wishlistOnly ? 'Your wishlist' : title}
         </h2>
-        <p>{catalogSearch ? `Results for “${catalogSearch}”` : wishlistOnly ? 'The sweets and savouries you’ve saved.' : description}</p>
-        {(catalogSearch || wishlistOnly) && (
-          <Link className="text-link" to="/shop-all#catalog">View all products <ArrowRight size={15} /></Link>
-        )}
+        <form role="search" aria-label="Search this collection" onSubmit={event => {
+          event.preventDefault()
+          updateFilter('q', String(new FormData(event.currentTarget).get('q') ?? '').trim())
+        }}>
+          <Search size={18} aria-hidden="true" />
+          <input key={`${location.pathname}:${searchTerm}`} defaultValue={searchTerm} name="q" type="search"
+            maxLength={100} placeholder="Search this collection" aria-label="Search this collection" />
+          <button type="submit">Search</button>
+        </form>
       </section>
+      <nav className="shop-collections module-content-wrap" aria-label="Shop categories">
+        {shopLinks.map(link => (
+          <Link key={link.href} to={link.href}
+            aria-current={!wishlistOnly && location.pathname.replace(/\/+$/, '') === link.href.split('#')[0] ? 'page' : undefined}>
+            <img src={categories.find(category => category.name === link.label)?.image ?? '/brand/indian-sweets-hero.webp'} alt="" loading="lazy" />
+            <span>{link.label}</span>
+          </Link>
+        ))}
+      </nav>
+      <div className="shop-toolbar module-content-wrap">
+        <div className="shop-result-summary"><span role="status">{filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}{query && ` matching “${searchTerm}”`}</span>
+          {query && <button onClick={() => updateFilter('q', '')}>Clear search</button>}
+        </div>
+        <label>Sort by <select value={sort} onChange={event => updateFilter('sort', event.target.value === 'featured' ? '' : event.target.value)}>
+          <option value="featured">Featured</option><option value="price-low">Price: low to high</option>
+          <option value="price-high">Price: high to low</option>
+        </select></label>
+      </div>
       {filteredProducts.length === 0 && (
-        <p className="empty-products module-content-wrap">
-          {wishlistOnly ? 'Your wishlist is empty.' : 'No products match your search.'}
-        </p>
+        <div className="shop-empty module-content-wrap">
+          <h3>{query ? 'No matching products' : wishlistOnly ? 'Your wishlist is empty' : 'This collection is empty'}</h3>
+          <p>{query ? 'Try a different product name or a broader search.' : wishlistOnly ? 'Tap the heart on a product to save it here.' : 'Browse the other collections to find a favourite.'}</p>
+          <Link to="/shop-all#catalog">Browse all products <ArrowRight size={16} /></Link>
+        </div>
       )}
       <section className="module-products-grid module-content-wrap" aria-label="Products">
         {filteredProducts.map((product, index) => (
@@ -122,13 +159,6 @@ export function ProductPage({
           </div>
         ))}
       </section>
-      {page !== 'shop-all' && (
-        <section className="module-quote-band" data-aos="fade-up">
-          <Sparkles size={24} />
-          <p>“A familiar flavour can make anywhere feel like home.”</p>
-          <span>THE KANAGADHARA WAY</span>
-        </section>
-      )}
     </div>
   )
 }

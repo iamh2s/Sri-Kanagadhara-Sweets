@@ -1,9 +1,10 @@
 import express, { type ErrorRequestHandler, type Request, type Response } from 'express'
 import { rateLimit } from 'express-rate-limit'
 import { randomUUID } from 'node:crypto'
+import { adminSessions } from './adminSession.js'
 import { categories, catalogProducts } from '../shared/catalog.js'
 
-const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+import { catalogSlug as slug } from '../shared/catalogSlug.js'
 const categoryList = categories.map((category) => ({ ...category, slug: slug(category.name) }))
 const categorySlugs = new Set(categoryList.map((category) => category.slug))
 const productList = catalogProducts.map(({ prices, ...product }) => ({
@@ -45,6 +46,8 @@ export function createApp(requestsPerMinute = 240) {
     legacyHeaders: false,
     handler: (_req, res) => respondError(res, 429, 'RATE_LIMITED', 'Please try again later.'),
   }))
+
+  app.use('/api/v1/admin/session', adminSessions())
 
   app.get('/api/v1/categories', (req, res) => {
     if (!validQuery(req, [])) return respondError(res, 400, 'INVALID_QUERY', 'Unexpected query parameters.')

@@ -1,54 +1,72 @@
-import { ArrowRight, Check, Gift } from 'lucide-react'
+﻿import type { MouseEvent } from 'react'
+import { ArrowRight, ShoppingBag } from 'lucide-react'
 import type { ModulePagesProps } from './ModulePages'
+import './GiftBoxesPage.css'
+
+const giftOptions = [
+  {
+    title: 'Festival boxes',
+    description: 'Planning for a festival? Ask which sweets are available and when your boxes can be collected.',
+    action: 'Ask about festival preorders',
+    route: 'festival-preorders',
+    image: '/brand/laddu-maker.webp',
+  },
+  {
+    title: 'Gifts for a gathering',
+    description: 'For wedding guests or the office team, tell us your headcount, occasion and preferred sweets.',
+    action: 'Request a bulk quote',
+    route: 'bulk-enquiry',
+    image: '/brand/kaju-katli-maker.webp',
+  },
+  {
+    title: 'A personal selection',
+    description: 'Pick their favourites from the sweets collection and choose a weight for each one.',
+    action: 'Browse sweets',
+    route: 'sweets#catalog',
+    image: '/brand/mysorepak-maker.webp',
+  },
+]
 
 export function GiftBoxesPage({ collections, onNavigate }: Pick<ModulePagesProps, 'collections' | 'onNavigate'>) {
+  const giftImage = collections.find(collection => collection.link === 'Gift Boxes')?.image
+
+  function follow(event: MouseEvent<HTMLAnchorElement>, route: string) {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    onNavigate(route)
+  }
+
   return (
-    <div id="module-content">
-      <section className="module-intro module-content-wrap" data-aos="fade-up">
-        <p className="module-kicker module-kicker-dark"><span /> A GIFT WITH A STORY <span /></p>
-        <h2>Make their moment<br /><em>unforgettable.</em></h2>
-        <p>From thoughtful little gestures to the big family celebrations, give them a box full of togetherness.</p>
-      </section>
-      <section className="gift-editorial module-content-wrap">
-        <div className="gift-editorial-image" data-aos="fade-right">
-          <img src={collections[1]?.image} alt="A festive sweet box ready to gift" loading="lazy" />
-          <span className="gift-image-seal"><Gift size={21} /><b>GIFT<br />WITH LOVE</b></span>
-        </div>
-        <div className="gift-editorial-copy" data-aos="fade-left">
-          <p className="module-kicker module-kicker-dark"><span /> MADE FOR YOUR PEOPLE</p>
-          <h2>Good things<br />come <em>beautifully wrapped.</em></h2>
-          <p>Hand-picked favourites, elegant presentation, and the kind of gift that brings everyone around the table.</p>
-          <ul>
-            <li><Check size={16} /> A mix of much-loved classics</li>
-            <li><Check size={16} /> Carefully packed for every journey</li>
-            <li><Check size={16} /> A thoughtful touch for every occasion</li>
-          </ul>
-          <a className="button button-primary" href="/contact" onClick={(event) => { event.preventDefault(); onNavigate('contact') }}>
-            Plan a gift <ArrowRight size={16} />
-          </a>
-        </div>
-      </section>
-      <section className="gift-collections module-content-wrap" data-aos="fade-up">
-        <div className="module-subheading" data-aos="fade-up">
-          <p className="module-kicker module-kicker-dark"><span /> A BOX FOR EVERY OCCASION</p>
-          <h2>Choose your <em>kind of joy.</em></h2>
-        </div>
-        <div className="gift-collection-grid">
-          {collections.map((collection, index) => (
-            <button className="gift-collection-card" key={collection.title} data-aos="fade-up" data-aos-delay={index * 90} onClick={() => onNavigate(collection.link === 'Sweets' ? 'sweets' : 'shop-all')}>
-              <img src={collection.image} alt="" loading="lazy" />
-              <span className="gift-collection-shade" />
-              <span className="gift-collection-number">0{index + 1}</span>
-              <span className="gift-collection-copy"><strong>{collection.title}</strong><i>{collection.subtitle}</i><b>EXPLORE <ArrowRight size={13} /></b></span>
-            </button>
+    <div id="module-content" className="gift-guide module-content-wrap">
+      <section aria-labelledby="gift-guide-heading">
+        <header className="gift-guide-heading">
+          <h2 id="gift-guide-heading">Choose a gift for <em>the occasion.</em></h2>
+        </header>
+
+        <div className="gift-guide-grid">
+          {giftOptions.map(option => (
+            <article className="gift-guide-card" key={option.route}>
+              <img src={option.route === 'bulk-enquiry' && giftImage ? giftImage : option.image} alt="" loading="lazy" />
+              <div>
+                <h3>{option.title}</h3>
+                <p>{option.description}</p>
+                <a href={'/' + option.route} onClick={event => follow(event, option.route)}>
+                  {option.action} <ArrowRight size={17} aria-hidden="true" />
+                </a>
+              </div>
+            </article>
           ))}
         </div>
       </section>
-      <section className="gift-note" data-aos="fade-up">
-        <Gift size={24} />
-        <p>Have a larger celebration in mind?</p>
-        <a href="/contact" onClick={(event) => { event.preventDefault(); onNavigate('contact') }}>Let’s plan it together <ArrowRight size={14} /></a>
-      </section>
+
+      <aside className="gift-guide-help" aria-labelledby="gift-help-heading">
+        <ShoppingBag size={30} aria-hidden="true" />
+        <div>
+          <h2 id="gift-help-heading">Need help choosing a box?</h2>
+          <p>Share your budget per box, how many you need and the date of your celebration.</p>
+        </div>
+        <a href="/contact" onClick={event => follow(event, 'contact')}>Contact the store <ArrowRight size={16} aria-hidden="true" /></a>
+      </aside>
     </div>
   )
 }

@@ -20,3 +20,34 @@ Reviewer: Security Auditor subagent. Scope: existing storefront source and npm l
 Audit command: `npm.cmd audit --package-lock-only --json --registry=https://registry.npmjs.org --fetch-retries=0 --fetch-timeout=15000`. Dynamic security testing was not executed. This baseline covers selected OWASP risk areas; a candidate-specific OWASP Top 10 review is due in phase 6.
 
 For each future finding capture severity, affected control, base/candidate SHA, observed evidence, impact, owner, remediation and independent retest. Escalate Critical and High findings to the owner and Astra High with sensitive details redacted. Record outstanding risks explicitly in the merge recommendation.
+
+
+## Customer pages and admin UI review, 20 November 2026
+
+AGENT NAME: Independent security auditor
+TASK: Review customer and admin preview storage and write boundaries.
+STATUS: Source review complete.
+FILES MODIFIED: None by reviewer. Coordinator recorded this report.
+IMPLEMENTATION SUMMARY: Admin catalog edits and sample queue updates use component state. The Express service exposes public catalog GET operations. Checkout stores a local demo summary and cannot mark a payment as paid.
+TESTS EXECUTED: Independent read-only source inspection and targeted write/sink review.
+TEST RESULTS: No confirmed Critical or High issue within the reviewed scope. Dynamic security tests: Not executed.
+SECURITY CONSIDERATIONS: Manually saved demo addresses are readable by anyone sharing the browser profile. The address book and privacy notice disclose this. Use fictional addresses.
+UNRESOLVED ISSUES: Real identity, private account storage, server-authorized admin writes, payment verification and order fulfillment require backend work.
+BRANCH: codex/backend
+COMMIT HASH: Not available for uncommitted UI. Base 561da10.
+RECOMMENDED NEXT ACTION: Review the preview before approving transactional backend work.
+
+## Admin preview sign-in review
+
+AGENT NAME: Independent security reviewer  
+TASK: Review password handling, session lifecycle, CSRF checks, proxy settings, and admin screen access.  
+STATUS: Reviewed working tree. No Critical or High findings in this scope.  
+FILES MODIFIED: docs/security-review.md  
+IMPLEMENTATION SUMMARY: Inspected server/adminSession.ts, its mounting in server/app.ts, src/pages/AdminPage.tsx, scripts/start-admin-local.ps1, and vite.config.ts. The local launcher prompts privately and binds the API to loopback. Session creation uses 32 random bytes. The server stores token digests, checks expiry, revokes on logout, and disables login when credentials are missing. Mutations require a custom header and reject conflicting origins. The proxy preserves Host.  
+TESTS EXECUTED: node --test server/adminSession.test.mjs  
+TEST RESULTS: Four tests passed, covering sign-in and revocation, request restrictions and throttling, missing configuration, and production cookie attributes.  
+SECURITY CONSIDERATIONS: Low-severity stale admin preview after logout in another tab was reported to the implementation owner. Static retest confirmed the revised component rechecks the server on focus and pageshow and closes the workspace on failure. Browser cross-tab retest by auditor: Not executed.  
+UNRESOLVED ISSUES: Sessions and rate limits are process-local. The panel edits sample data only.  
+BRANCH: codex/backend  
+COMMIT HASH: Not available for working changes. Base 561da10bbdd4446ef8ec0c21671568cf549f7be5.  
+RECOMMENDED NEXT ACTION: Include the session checks whenever a real admin data or mutation endpoint is introduced.

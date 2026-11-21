@@ -12,9 +12,15 @@ Run `npm run dev:api` and `npm run dev` in separate terminals. The API defaults 
 
 The weight-based identifiers use the original product ID and weight; prices can change independently. A stale or unknown product slug returns 404. Unsupported or malformed query fields return 400. Rate-limited requests return 429. Errors include a requestId and the same identifier is available in the X-Request-Id header. The catalog carries the store's existing indicative prices. Availability and approved product disclosures require business data.
 
+## Admin preview sign-in
+
+On Windows, run `npm run admin:local` and enter a password of 8–256 characters at the hidden prompt. Sign in at `/admin` with username `hariharasudhan`. Keep the API terminal open. The password applies to that run. Other environments can set server-only `ADMIN_USERNAME` and `ADMIN_PASSWORD` before starting the API.
+
+`POST /api/v1/admin/session` accepts JSON with `username` and `password`. A successful sign-in sets an HttpOnly, SameSite=Strict session cookie. Both POST and DELETE require `X-Admin-Request: 1`. GET returns the authenticated session expiry or 401. DELETE revokes the session. Sessions last four hours and clear when the API restarts. Missing server credentials disable sign-in. In production use HTTPS, set `NODE_ENV=production` and preserve the public Host header at the same-origin reverse proxy. The panel continues to use sample data and in-memory edits.
+
 ## Remaining contracts for review
 
-The table below records the wider BRD proposal. The three catalog reads above are implemented. Other endpoints are awaiting the backend BRD and scope approval. Paths are relative to /api/v1.
+The table below records the wider BRD proposal. The three catalog reads above are implemented. Other endpoints in the table are awaiting the backend BRD and scope approval. Paths are relative to /api/v1.
 
 | Operation | Request and result | Access / constraints |
 | --- | --- | --- |

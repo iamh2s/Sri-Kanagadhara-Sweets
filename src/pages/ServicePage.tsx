@@ -1,0 +1,23 @@
+import { Component, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
+
+export function ServicePage({ page }: { page: string }) {
+  const store = page === 'stores'
+  const maintenance = page === 'maintenance'
+  return <article className="service-page module-content-wrap">
+    <h1>{store ? 'Visit the shop' : maintenance ? 'Store maintenance' : 'This page could not load'}</h1>
+    <p>{store ? 'Store addresses and visiting hours are awaiting confirmation. Contact the shop before planning a visit.'
+      : maintenance ? 'If ordering is unavailable, you can return to the catalog or contact the shop.' : 'Try reloading the page or return to the catalog.'}</p>
+    <Link className="button button-primary" to={store ? '/contact' : '/shop-all'}>{store ? 'Contact the shop' : 'Browse the catalog'}</Link>
+  </article>
+}
+
+export class StoreErrorBoundary extends Component<{children: ReactNode}, {failed: boolean}> {
+  state = {failed: false}
+  static getDerivedStateFromError() { return {failed: true} }
+  render() {
+    if (this.state.failed) return <main className="service-page module-content-wrap"><h1>This page could not load</h1>
+      <a className="button button-primary" href="/">Return to the storefront</a></main>
+    return this.props.children
+  }
+}

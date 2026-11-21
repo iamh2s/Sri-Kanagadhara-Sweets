@@ -406,3 +406,19 @@
   .ks-header *, .ks-header *::before, .ks-header *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
 }
 .ks-header [hidden] { display: none !important; }
+.ks-header .ks-shop { position: relative; }
+.ks-header .ks-shop-toggle { display: inline-flex; align-items: center; gap: .25rem; border: 0; background: transparent; cursor: pointer; }
+.ks-header .ks-shop-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.ks-header .ks-shop-options { position: absolute; top: 100%; left: 0; z-index: 9; margin: 0; padding: .45rem; list-style: none; min-width: 12rem; max-height: 64vh; overflow-y: auto; background: #fffaf1; border: 1px solid #d7bf8c; border-radius: .5rem; box-shadow: 0 .5rem 1.25rem #33231f24; }
+.ks-header .ks-shop-options[hidden] { display: none; }
+.ks-header .ks-shop-options a { display: block; padding: .6rem .8rem; color: var(--ks-ink); text-decoration: none; font-size: .94rem; }
+.ks-header .ks-shop-options a:is(:hover,:focus-visible,[aria-current="page"],[aria-current="location"]) { color: var(--ks-maroon); background: #f2e8d5; }
+.ks-header .ks-shop-mobile .ks-shop-toggle { width: 100%; justify-content: space-between; }
+.ks-header .ks-shop-mobile .ks-shop-options { position: static; max-height: none; margin-block: .25rem; box-shadow: none; }
+
+.ks-header .ks-nav-left > .ks-account-icon { display: none; }
+.ks-header .ks-account-icon[aria-current="page"] { color: var(--ks-maroon); background: #f2e8d5; }
+@media (max-width: 999px) {
+  .ks-header .ks-nav-left > .ks-account-icon { display: inline-flex; }
+  .ks-header .ks-actions > .ks-account-icon { display: none; }
+}

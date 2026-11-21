@@ -1,3 +1,4 @@
+
 import { AccountPage } from './AccountPage'
 import { CinematicHero } from '../components/CinematicHero'
 import { ContactPage } from './ContactPage'
@@ -32,24 +33,56 @@ export type ModulePagesProps = {
   catalogSearch: string
   wishlistOnly: boolean
   weights: Record<number, Weight>
-  onWeightChange: (productId: number, weight: Weight) => void
-  onAddToCart: (product: Product, weight: Weight) => void
+  onWeightChange: (
+    productId: number,
+    weight: Weight
+  ) => void
+  onAddToCart: (
+    product: Product,
+    weight: Weight
+  ) => void
   onViewProduct: (product: Product) => void
   wishlist: number[]
   onToggleWishlist: (productId: number) => void
   onNavigate: (path: string) => void
 }
 
-
 export function ModulePages(props: ModulePagesProps) {
+  const { page, collections, onNavigate } = props
+
   return (
-    <div className="module-page">
-      <CinematicHero page={props.page} />
-      {['shop-all', 'sweets', 'savouries'].includes(props.page) && <ProductPage {...props} />}
-      {props.page === 'gift-boxes' && <GiftBoxesPage collections={props.collections} onNavigate={props.onNavigate} />}
-      {props.page === 'our-story' && <StoryPage onNavigate={props.onNavigate} />}
-      {props.page === 'contact' && <ContactPage />}
-      {props.page === 'account' && <AccountPage onNavigate={props.onNavigate} />}
+    <div
+      className={`module-page module-page--${page}`}
+      data-page={page}
+    >
+      {/* 01 — Cinematic hero for every module */}
+      {page !== 'contact' && <CinematicHero page={page} />}
+
+      {/* 02 — Shop All, Sweets and Savouries */}
+      {['shop-all', 'sweets', 'savouries'].includes(page) && (
+        <ProductPage {...props} />
+      )}
+
+      {/* 03 — Gift Boxes */}
+      {page === 'gift-boxes' && (
+        <GiftBoxesPage
+          collections={collections}
+          onNavigate={onNavigate}
+        />
+      )}
+
+      {/* 04 — Our Story */}
+      {page === 'our-story' && (
+        <StoryPage onNavigate={onNavigate} />
+      )}
+
+      {/* 05 — Contact */}
+      {page === 'contact' && <ContactPage />}
+
+      {/* 06 — Account */}
+      {page === 'account' && (
+        <AccountPage onNavigate={onNavigate} />
+      )}
     </div>
   )
 }

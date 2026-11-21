@@ -1,14 +1,39 @@
-import { useEffect, useState } from 'react'
+
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import AOS from 'aos'
-import { useLocation, useNavigate as useRouterNavigate } from 'react-router-dom'
+import {
+  useLocation,
+  useNavigate as useRouterNavigate,
+} from 'react-router-dom'
+
 import { Navbar } from './components/Navbar'
 import { AnnouncementBar } from './components/AnnouncementBar'
 import { ContactShortcut } from './components/ContactShortcut'
 import { FeatherCursor } from './components/FeatherCursor'
-import { ShoppingOverlays, type CartLine } from './components/ShoppingOverlays'
+import TraditionalLoader from './components/TraditionalLoader'
+
+import {
+  CartDrawer,
+  ShoppingOverlays,
+  type CartLine,
+} from './components/ShoppingOverlays'
+
 import { SiteFooter } from './components/SiteFooter'
+import { ProductDetailPage } from './pages/ProductDetailPage'
+import { catalogSlug } from '../shared/catalogSlug'
+import { CustomerCommerce } from './pages/CustomerCommerce'
+import { CustomerSupport } from './pages/CustomerSupport'
+import { ServicePage } from './pages/ServicePage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
+
 import {
   announcementMessages,
   categories,
@@ -16,28 +41,315 @@ import {
   craftStories,
   products,
 } from './data/storefront'
-import { ModulePages, type Product, type Weight } from './pages/ModulePages'
-import { loadCart, loadWishlist, saveCart, saveWishlist } from './data/shoppingStorage'
+
+import {
+  ModulePages,
+  type Product,
+  type Weight,
+} from './pages/ModulePages'
+
+import {
+  loadCart,
+  loadWishlist,
+  saveCart,
+  saveWishlist,
+} from './data/shoppingStorage'
+
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+
+const commerceRoutes = [
+  'account',
+  'checkout',
+  'payment/status',
+  'order-status',
+  'track-order',
+  'account/orders',
+  'account/addresses',
+]
+
+const supportRoutes = [
+  'faq',
+  'shipping',
+  'returns',
+  'privacy',
+  'terms',
+  'grievance',
+  'bulk-enquiry',
+  'festival-preorders',
+]
+
+const serviceRoutes = [
+  'stores',
+  'maintenance',
+  '500',
+]
+
+const aliases = new Map([
+  ['about', 'our-story'],
+  ['bulk-orders', 'bulk-enquiry'],
+  ['search', 'shop-all'],
+  ['account/wishlist', 'shop-all'],
+  ['policies/shipping', 'shipping'],
+  ['policies/returns', 'returns'],
+  ['policies/privacy', 'privacy'],
+  ['policies/terms', 'terms'],
+  ['policies/grievance', 'grievance'],
+])
+
+const knownRoutes = [
+  ...commerceRoutes,
+  ...supportRoutes,
+  ...serviceRoutes,
+  'cart',
+  'shop-all',
+  'sweets',
+  'savouries',
+  'gift-boxes',
+  'our-story',
+  'contact',
+  'account',
+]
+
+const INITIAL_LOADER_DURATION = 2000
+const NAVIGATION_LOADER_DURATION = 2000
 
 function App() {
   const location = useLocation()
   const routerNavigate = useRouterNavigate()
-  const currentRoute = location.pathname.replace(/^\/+|\/+$/g, '')
-  const knownRoutes = ['shop-all', 'sweets', 'savouries', 'gift-boxes', 'our-story', 'contact', 'account']
-  const page = !currentRoute ? 'home' : knownRoutes.includes(currentRoute) ? currentRoute : 'not-found'
+
+  // =====================================
+  // TRADITIONAL PAGE LOADING SYSTEM
+  // =====================================
+
+  const [websiteReady, setWebsiteReady] = useState(
+    () => document.readyState === 'complete',
+  )
+
+  const [loader, setLoader] = useState<{
+    key: string
+    ready: boolean
+    duration: number
+  } | null>(() => ({
+    key: location.key,
+    ready: document.readyState === 'complete',
+    duration: INITIAL_LOADER_DURATION,
+  }))
+
+  const previousLocationKey = useRef(location.key)
+  const loaderKeyRef = useRef(location.key)
+
+  // Browser initial load readiness
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      setWebsiteReady(true)
+      return
+    }
+
+    const handleLoad = () => {
+      setWebsiteReady(true)
+    }
+
+    window.addEventListener('load', handleLoad)
+
+    return () => {
+      window.removeEventListener('load', handleLoad)
+    }
+  }, [])
+
+  // Synchronize the initial loader with document readiness
+  useEffect(() => {
+    if (!websiteReady) return
+
+    setLoader(current => {
+      if (!current || current.ready) return current
+
+      return {
+        ...current,
+        ready: true,
+      }
+    })
+  }, [websiteReady])
+
+  // Detect browser Back / Forward and other Router navigation
+  useEffect(() => {
+    if (previousLocationKey.current === location.key) {
+      return
+    }
+
+    previousLocationKey.current = location.key
+    loaderKeyRef.current = location.key
+
+    setLoader({
+      key: location.key,
+      ready: true,
+      duration: NAVIGATION_LOADER_DURATION,
+    })
+  }, [location.key])
+
+  const finishLoader = useCallback((key: string) => {
+    setLoader(current =>
+      current?.key === key ? null : current,
+    )
+  }, [])
+
+  // =====================================
+  // ROUTE RESOLUTION
+  // =====================================
+
+  const currentRoute = location.pathname.replace(
+    /^\/+|\/+$/g,
+    '',
+  )
+
+  const detailProduct = products.find(
+    product =>
+      currentRoute ===
+        `products/${catalogSlug(product.name)}` ||
+      currentRoute ===
+        `sweets/${catalogSlug(product.category)}/${catalogSlug(product.name)}`,
+  )
+
+  const category = categories.find(
+    item =>
+      currentRoute ===
+      `sweets/${catalogSlug(item.name)}`,
+  )
+
+  let page = aliases.get(currentRoute) ?? currentRoute
+
+  if (!currentRoute) {
+    page = 'home'
+  } else if (
+    currentRoute === 'admin' ||
+    currentRoute.startsWith('admin/')
+  ) {
+    page = 'admin'
+  } else if (detailProduct) {
+    page = 'product'
+  } else if (category) {
+    page =
+      category.route === 'gift-boxes'
+        ? 'gift-boxes'
+        : 'shop-all'
+  } else if (
+    /^orders\/[^/]+\/confirmation$|^account\/orders\/[^/]+$/.test(
+      currentRoute,
+    )
+  ) {
+    page = 'order-status'
+  } else if (/^festival\/[^/]+$/.test(currentRoute)) {
+    page = 'festival-preorders'
+  } else if (!knownRoutes.includes(page)) {
+    page = 'not-found'
+  }
+
   const params = new URLSearchParams(location.search)
-  const catalogSearch = page === 'shop-all' ? (params.get('q') ?? '').trim() : ''
-  const wishlistOnly = page === 'shop-all' && params.get('wishlist') === '1'
-  const [weights, setWeights] = useState<Record<number, Weight>>({})
-  const [cart, setCart] = useState<CartLine[]>(loadCart)
-  const [wishlist, setWishlist] = useState<number[]>(loadWishlist)
+
+  const catalogSearch =
+    page === 'shop-all'
+      ? (params.get('q') ?? '').trim()
+      : ''
+
+  const wishlistOnly =
+    page === 'shop-all' &&
+    (params.get('wishlist') === '1' ||
+      currentRoute === 'account/wishlist')
+
+  // =====================================
+  // SHOPPING STATES
+  // =====================================
+
+  const [weights, setWeights] =
+    useState<Record<number, Weight>>({})
+
+  const [cart, setCart] =
+    useState<CartLine[]>(loadCart)
+
+  const [wishlist, setWishlist] =
+    useState<number[]>(loadWishlist)
+
   const [cartOpen, setCartOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeProduct, setActiveProduct] = useState<Product | null>(null)
+
+  const [activeProduct, setActiveProduct] =
+    useState<Product | null>(null)
+
+  // =====================================
+  // SEO AND DOCUMENT TITLE
+  // =====================================
+
+  useEffect(() => {
+    const originalTitle = document.title
+
+    const privatePage =
+      [
+        'admin',
+        'cart',
+        ...commerceRoutes,
+        'not-found',
+        '500',
+        'maintenance',
+      ].includes(page) ||
+      Boolean(
+        catalogSearch ||
+          wishlistOnly ||
+          currentRoute === 'search',
+      )
+
+    const robots = document.createElement('meta')
+
+    if (privatePage) {
+      robots.name = 'robots'
+      robots.content = 'noindex, nofollow'
+      document.head.appendChild(robots)
+    }
+
+    if (!detailProduct && page !== 'home') {
+      const label = wishlistOnly
+        ? 'Wishlist'
+        : catalogSearch
+          ? 'Search results'
+          : category?.name ??
+            currentRoute
+              .split('/')
+              .filter(Boolean)
+              .pop()
+              ?.replace(/-/g, ' ') ??
+            'Shop'
+
+      document.title =
+        label.charAt(0).toUpperCase() +
+        label.slice(1) +
+        ' | Sri Kanagadhara Sweets'
+    }
+
+    return () => {
+      robots.remove()
+
+      if (!detailProduct && page !== 'home') {
+        document.title = originalTitle
+      }
+    }
+  }, [
+    page,
+    category,
+    detailProduct,
+    catalogSearch,
+    wishlistOnly,
+    currentRoute,
+  ])
+
+  // =====================================
+  // LOCAL STORAGE
+  // =====================================
 
   useEffect(() => saveCart(cart), [cart])
   useEffect(() => saveWishlist(wishlist), [wishlist])
+
+  // =====================================
+  // AOS ANIMATIONS
+  // =====================================
 
   useEffect(() => {
     AOS.init({
@@ -46,28 +358,60 @@ function App() {
       offset: 75,
       once: false,
       mirror: true,
-      disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      disable: () =>
+        window.matchMedia(
+          '(prefers-reduced-motion: reduce)',
+        ).matches,
     })
   }, [])
+
+  // =====================================
+  // SCROLL MANAGEMENT
+  // =====================================
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       AOS.refreshHard()
-      const target = location.hash === '#catalog' ? document.getElementById('catalog') : null
+
+      if (location.state?.preserveCatalogScroll) {
+        return
+      }
+
+      const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
+
       if (target) {
         target.focus({ preventScroll: true })
-        target.scrollIntoView({ behavior: 'instant' })
+        target.scrollIntoView({
+          behavior: 'instant',
+        })
       } else {
-        window.scrollTo({ top: 0, behavior: 'instant' })
+        window.scrollTo({
+          top: 0,
+          behavior: 'instant',
+        })
       }
     })
+
     return () => window.cancelAnimationFrame(frame)
-  }, [location.key, location.hash])
+  }, [
+    location.key,
+    location.hash,
+    location.state,
+  ])
+
+  // =====================================
+  // NAVIGATION
+  // =====================================
 
   const navigate = (path: string) => {
     setSearchOpen(false)
     setSearchQuery('')
-    routerNavigate(path === '/' || path === 'home' ? '/' : `/${path}`)
+
+    routerNavigate(
+      path === '/' || path === 'home'
+        ? '/'
+        : `/${path.replace(/^\/+/, '')}`,
+    )
   }
 
   const showCatalog = (query = '') => {
@@ -75,50 +419,151 @@ function App() {
     navigate(`shop-all${query}#catalog`)
   }
 
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0)
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.product.prices[item.weight] * item.quantity,
+  // =====================================
+  // CART CALCULATIONS
+  // =====================================
+
+  const cartCount = cart.reduce(
+    (total, item) => total + item.quantity,
     0,
   )
 
-  const addToCart = (product: Product, weight: Weight) => {
-    setCart((current) => {
+  const cartTotal = cart.reduce(
+    (total, item) =>
+      total +
+      item.product.prices[item.weight] *
+        item.quantity,
+    0,
+  )
+
+  // =====================================
+  // ADD TO CART
+  // =====================================
+
+  const addToCart = (
+    product: Product,
+    weight: Weight,
+  ) => {
+    setCart(current => {
       const existing = current.find(
-        (line) => line.product.id === product.id && line.weight === weight,
+        line =>
+          line.product.id === product.id &&
+          line.weight === weight,
       )
+
       if (existing) {
-        return current.map((line) =>
-          line === existing ? { ...line, quantity: line.quantity + 1 } : line,
+        return current.map(line =>
+          line === existing
+            ? {
+                ...line,
+                quantity: line.quantity + 1,
+              }
+            : line,
         )
       }
-      return [...current, { product, weight, quantity: 1 }]
+
+      return [
+        ...current,
+        {
+          product,
+          weight,
+          quantity: 1,
+        },
+      ]
     })
+
     setCartOpen(true)
     setActiveProduct(null)
   }
 
-  const updateQuantity = (productId: number, weight: Weight, change: number) => {
-    setCart((current) =>
+  // =====================================
+  // UPDATE CART QUANTITY
+  // =====================================
+
+  const updateQuantity = (
+    productId: number,
+    weight: Weight,
+    change: number,
+  ) => {
+    setCart(current =>
       current
-        .map((line) =>
-          line.product.id === productId && line.weight === weight
-            ? { ...line, quantity: line.quantity + change }
+        .map(line =>
+          line.product.id === productId &&
+          line.weight === weight
+            ? {
+                ...line,
+                quantity: line.quantity + change,
+              }
             : line,
         )
-        .filter((line) => line.quantity > 0),
+        .filter(line => line.quantity > 0),
     )
   }
 
+  // =====================================
+  // WISHLIST
+  // =====================================
+
   const toggleWishlist = (id: number) => {
-    setWishlist((current) =>
-      current.includes(id) ? current.filter((productId) => productId !== id) : [...current, id],
+    setWishlist(current =>
+      current.includes(id)
+        ? current.filter(
+            productId => productId !== id,
+          )
+        : [...current, id],
     )
   }
+
+  // =====================================
+  // LOADER RENDERING
+  // =====================================
+
+  const loadingScreen = loader ? (
+    <TraditionalLoader
+      key={loader.key}
+      isReady={loader.ready}
+      duration={loader.duration}
+      onComplete={() => finishLoader(loader.key)}
+    />
+  ) : null
+
+  // =====================================
+  // ADMIN PAGE
+  // =====================================
+
+  if (page === 'admin') {
+    return (
+      <>
+        {loadingScreen}
+
+        <Suspense
+          fallback={
+            <main aria-busy="true">
+              Opening shop administration…
+            </main>
+          }
+        >
+          <AdminPage />
+        </Suspense>
+      </>
+    )
+  }
+
+  // =====================================
+  // MAIN WEBSITE
+  // =====================================
 
   return (
     <>
-      <div className="site-shell" id="home">
-        <AnnouncementBar messages={announcementMessages} />
+      {loadingScreen}
+
+      <div
+        className={`site-shell page-${page}`}
+        id={page === 'home' ? 'home' : 'app'}
+      >
+        <AnnouncementBar
+          messages={announcementMessages}
+        />
 
         <Navbar
           page={page}
@@ -129,32 +574,100 @@ function App() {
           searchQuery={searchQuery}
           onNavigate={navigate}
           onSearchToggle={() => {
-            setSearchOpen((open) => !open)
+            setSearchOpen(open => !open)
             setSearchQuery(catalogSearch)
           }}
           onSearchChange={setSearchQuery}
           onSearchSubmit={() => {
             const query = searchQuery.trim()
-            showCatalog(query ? `?${new URLSearchParams({ q: query })}` : '')
+
+            showCatalog(
+              query
+                ? `?${new URLSearchParams({
+                    q: query,
+                  })}`
+                : '',
+            )
           }}
-          onWishlistToggle={() => showCatalog(wishlistOnly ? '' : '?wishlist=1')}
-          onCartOpen={() => setCartOpen(true)}
+          onWishlistToggle={() =>
+            showCatalog(
+              wishlistOnly ? '' : '?wishlist=1',
+            )
+          }
+          onCartOpen={() =>
+            page === 'cart'
+              ? window.scrollTo({ top: 0 })
+              : setCartOpen(true)
+          }
         />
 
         <main>
-          {page === 'not-found' ? (
-            <NotFoundPage onNavigate={navigate} />
+          {detailProduct ? (
+            <ProductDetailPage
+              product={detailProduct}
+              weight={
+                weights[detailProduct.id] ?? '250g'
+              }
+              onWeightChange={weight =>
+                setWeights(current => ({
+                  ...current,
+                  [detailProduct.id]: weight,
+                }))
+              }
+              onAdd={() =>
+                addToCart(
+                  detailProduct,
+                  weights[detailProduct.id] ?? '250g',
+                )
+              }
+            />
+          ) : commerceRoutes.includes(page) ? (
+            <CustomerCommerce
+              key={currentRoute}
+              page={page}
+              cart={cart}
+              cartTotal={cartTotal}
+            />
+          ) : supportRoutes.includes(page) ? (
+            <CustomerSupport
+              key={page}
+              page={page}
+            />
+          ) : serviceRoutes.includes(page) ? (
+            <ServicePage page={page} />
+          ) : page === 'cart' ? (
+            <CartDrawer
+              standalone
+              cart={cart}
+              cartCount={cartCount}
+              cartTotal={cartTotal}
+              onUpdateQuantity={updateQuantity}
+              onBrowse={() => showCatalog()}
+              onClose={() => showCatalog()}
+            />
+          ) : page === 'not-found' ? (
+            <NotFoundPage />
           ) : page !== 'home' ? (
             <ModulePages
               page={page}
-              products={products}
+              products={
+                category
+                  ? products.filter(
+                      item =>
+                        item.category === category.name,
+                    )
+                  : products
+              }
               collections={collections}
               catalogSearch={catalogSearch}
               wishlistOnly={wishlistOnly}
               weights={weights}
               wishlist={wishlist}
               onWeightChange={(productId, weight) =>
-                setWeights((current) => ({ ...current, [productId]: weight }))
+                setWeights(current => ({
+                  ...current,
+                  [productId]: weight,
+                }))
               }
               onAddToCart={addToCart}
               onViewProduct={setActiveProduct}
@@ -179,7 +692,9 @@ function App() {
         </main>
 
         <SiteFooter onNavigate={navigate} />
+
         <ContactShortcut onNavigate={navigate} />
+
         <ShoppingOverlays
           cartOpen={cartOpen}
           cart={cart}
@@ -190,13 +705,19 @@ function App() {
           onBrowse={() => showCatalog()}
           activeProduct={activeProduct}
           weights={weights}
-          onCloseProduct={() => setActiveProduct(null)}
+          onCloseProduct={() =>
+            setActiveProduct(null)
+          }
           onWeightChange={(productId, weight) =>
-            setWeights((current) => ({ ...current, [productId]: weight }))
+            setWeights(current => ({
+              ...current,
+              [productId]: weight,
+            }))
           }
           onAddToCart={addToCart}
         />
       </div>
+
       <FeatherCursor />
     </>
   )

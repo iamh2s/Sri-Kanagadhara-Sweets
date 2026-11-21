@@ -1,0 +1,25 @@
+.product-detail-page { padding-block: 2rem 4rem; }
+.product-detail-layout { display: grid; grid-template-columns: 1fr 1fr; align-items: center; margin-top: 1.5rem; background: var(--cream); }
+.product-detail-layout > img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.product-detail-layout h1 { font: 500 clamp(2rem, 5vw, 4rem)/1.1 var(--serif); color: var(--maroon); margin: .5rem 0 1rem; }
+.product-detail-layout legend { margin-bottom: .5rem; }
+@media (max-width: 700px) { .product-detail-layout { grid-template-columns: 1fr; } }
+
+.product-information { margin: 2rem 0; }
+.product-information details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
+.product-information summary { cursor: pointer; font-weight: 600; color: var(--maroon); }
+.product-information p { margin-block: .75rem; }
+.cart-drawer.cart-page { width: min(100% - 2rem, 780px); height: auto; min-height: 48vh; margin: 2rem auto; box-shadow: none; animation: none; }
+.cart-page .cart-items { overflow: visible; }
+.cart-summary > .text-link { display: inline-block; margin-block: .75rem; }
+.service-page { padding-block: clamp(3rem, 9vw, 8rem); }
+.service-page h1 { color: var(--maroon); font: 500 clamp(2.2rem, 6vw, 4.5rem)/1.1 var(--serif); }
+.service-page p { margin: 1.3rem 0; max-width: 55ch; }
+.footer-bottom button { border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+
+.catalog-sort { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; color: var(--maroon); }
+.catalog-sort select { padding: .45rem; border: 1px solid var(--line); background: var(--cream); color: inherit; }
+
+.catalog-category-links { display: flex; flex-wrap: wrap; gap: .5rem; padding-block: .75rem; }
+.catalog-category-links a { display: inline-flex; align-items: center; min-height: 44px; border: 1px solid #ccbca6; border-radius: 2rem; padding: .4rem .95rem; background: #fffaf1; color: #4e352b; text-decoration: none; font-size: .92rem; }
+.catalog-category-links a:is(:hover, :focus-visible, [aria-current="page"]) { color: white; background: #184d3c; border-color: #184d3c; }
