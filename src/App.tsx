@@ -28,6 +28,7 @@ import {
 import { SiteFooter } from './components/SiteFooter'
 import { ProductDetailPage } from './pages/ProductDetailPage'
 import { catalogSlug } from '../shared/catalogSlug'
+import { contactLinks } from './data/storeContact'
 import { CustomerCommerce } from './pages/CustomerCommerce'
 import { CustomerSupport } from './pages/CustomerSupport'
 import { ServicePage } from './pages/ServicePage'
@@ -111,6 +112,8 @@ const knownRoutes = [
 
 const INITIAL_LOADER_DURATION = 2000
 const NAVIGATION_LOADER_DURATION = 2000
+const shopPages = new Set(['shop-all', 'sweets', 'savouries', 'gift-boxes', 'product'])
+const contactPages = new Set(contactLinks.map(link => link.route))
 
 function App() {
   const location = useLocation()
@@ -133,9 +136,6 @@ function App() {
     ready: document.readyState === 'complete',
     duration: INITIAL_LOADER_DURATION,
   }))
-
-  const previousLocationKey = useRef(location.key)
-  const loaderKeyRef = useRef(location.key)
 
   // Browser initial load readiness
   useEffect(() => {
@@ -168,22 +168,6 @@ function App() {
       }
     })
   }, [websiteReady])
-
-  // Detect browser Back / Forward and other Router navigation
-  useEffect(() => {
-    if (previousLocationKey.current === location.key) {
-      return
-    }
-
-    previousLocationKey.current = location.key
-    loaderKeyRef.current = location.key
-
-    setLoader({
-      key: location.key,
-      ready: true,
-      duration: NAVIGATION_LOADER_DURATION,
-    })
-  }, [location.key])
 
   const finishLoader = useCallback((key: string) => {
     setLoader(current =>
@@ -242,6 +226,19 @@ function App() {
     page = 'not-found'
   }
 
+  const section = shopPages.has(page) ? 'shop' : contactPages.has(page) ? 'contact' : null
+  const previousNavigation = useRef({ key: location.key, section })
+  useEffect(() => {
+    const previous = previousNavigation.current
+    if (previous.key === location.key) return
+    previousNavigation.current = { key: location.key, section }
+    if (section && section === previous.section) {
+      setLoader(null)
+      return
+    }
+    setLoader({ key: location.key, ready: true, duration: NAVIGATION_LOADER_DURATION })
+  }, [location.key, section])
+
   const params = new URLSearchParams(location.search)
 
   const catalogSearch =
@@ -269,7 +266,6 @@ function App() {
 
   const [cartOpen, setCartOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
 
   const [activeProduct, setActiveProduct] =
     useState<Product | null>(null)
@@ -404,7 +400,6 @@ function App() {
 
   const navigate = (path: string) => {
     setSearchOpen(false)
-    setSearchQuery('')
 
     routerNavigate(
       path === '/' || path === 'home'
@@ -570,16 +565,12 @@ function App() {
           wishlistCount={wishlist.length}
           wishlistOnly={wishlistOnly}
           searchOpen={searchOpen}
-          searchQuery={searchQuery}
+          searchQuery={catalogSearch}
           onNavigate={navigate}
           onSearchToggle={() => {
             setSearchOpen(open => !open)
-            setSearchQuery(catalogSearch)
           }}
-          onSearchChange={setSearchQuery}
-          onSearchSubmit={() => {
-            const query = searchQuery.trim()
-
+          onSearchSubmit={query => {
             showCatalog(
               query
                 ? `?${new URLSearchParams({
