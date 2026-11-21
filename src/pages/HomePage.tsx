@@ -1,4 +1,5 @@
 import { catalogSlug } from '../../shared/catalogSlug'
+import './HomePage.css'
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import {
   ArrowRight,

@@ -8,8 +8,8 @@
   position: fixed;
   z-index: 999;
 
-  right: 21px;
-  bottom: 10px !important;
+  right: calc(21px + env(safe-area-inset-right, 0px));
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
 
   width: 50px !important;
   height: 50px !important;
@@ -207,8 +207,8 @@
 
 @media (max-width: 600px) {
   .whatsapp-float {
-    right: 12px;
-    bottom: 40px !important;
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    bottom: calc(40px + env(safe-area-inset-bottom, 0px)) !important;
 
     width: 44px !important;
     height: 44px !important;

@@ -1,0 +1,20 @@
+@media (max-width: 900px) {
+  .page-home .premium-product-name,
+  .page-home .premium-weight select,
+  .page-home .community-section .text-link {
+    min-height: 44px;
+  }
+
+  .page-home .ks-video-modal.ks-cinematic-preview .ks-video-modal-content {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-height: calc(100% - 62px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 18px 22px 24px;
+    background: linear-gradient(0deg, #261115, rgba(38, 17, 21, .9));
+  }
+}

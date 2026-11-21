@@ -22,6 +22,19 @@
 @media (max-width: 700px) { .ks-support-layout { grid-template-columns: 1fr; } }
 @media (max-width: 450px) { .ks-support-fields { grid-template-columns: 1fr; } }
 
+@media (max-width: 700px) {
+  .ks-support > header .text-link, .ks-support-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .ks-support > header .text-link { width: fit-content; }
+  .ks-support-content details { padding: 0; }
+  .ks-support-content summary { min-height: 44px; padding-block: 10px; }
+  .ks-support .ks-support-form :is(input, textarea),
+  .ks-support .ks-support-draft textarea { font-size: max(16px, 1rem) !important; }
+}
+
 .ks-support-draft { display: grid; gap: 12px; margin-top: 24px; padding: 18px; border: 1px solid var(--line, #dacbb9); }
 .ks-support-draft p { margin: 0; }
 .ks-support-draft label { display: grid; gap: 6px; }

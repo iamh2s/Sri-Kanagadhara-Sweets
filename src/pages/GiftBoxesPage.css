@@ -33,6 +33,10 @@
 .gift-guide-help p { margin: .4rem 0 0; color: #ece8d7; }
 .gift-guide-help a { flex-shrink: 0; margin-left: auto; color: #f1d493; }
 
+@media (max-width: 900px) {
+  .module-page--gift-boxes .module-scroll-link { min-height: 44px; }
+}
+
 @media (max-width: 740px) {
   .gift-guide-grid { grid-template-columns: 1fr; }
   .gift-guide-card img { aspect-ratio: 2 / 1; }
