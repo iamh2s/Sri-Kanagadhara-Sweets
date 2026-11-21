@@ -107,7 +107,6 @@ const knownRoutes = [
   'gift-boxes',
   'our-story',
   'contact',
-  'account',
 ]
 
 const INITIAL_LOADER_DURATION = 2000
