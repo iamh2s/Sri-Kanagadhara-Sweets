@@ -1,4 +1,5 @@
-import { ArrowRight, Heart, Plus, Search } from 'lucide-react'
+import { ArrowRight, Heart, Plus } from 'lucide-react'
+import { matchesProduct, ProductSearch } from '../components/ProductSearch'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { catalogSlug } from '../../shared/catalogSlug'
 import { categories, formatPrice, shopLinks } from '../data/storefront'
@@ -70,6 +71,7 @@ export function ProductPage({
   wishlist,
   onToggleWishlist,
   catalogSearch,
+  onNavigate,
   wishlistOnly,
 }: ModulePagesProps) {
   const location = useLocation()
@@ -78,14 +80,14 @@ export function ProductPage({
   const query = searchTerm.toLowerCase()
   const activeCategory = categories.find(item => location.pathname.replace(/\/+$/, '') === '/sweets/' + catalogSlug(item.name))
   const sort = params.get('sort') || 'featured'
-  const filteredProducts = products.filter((product) => {
+  const collectionProducts = products.filter((product) => {
     const matchesPage =
       page === 'shop-all' ||
       (page === 'sweets' && product.category.toLowerCase().includes('sweet')) ||
       (page === 'savouries' && (product.category === 'Savouries' || product.category === 'Traditional Snacks'))
-    const matchesQuery = !query || `${product.name} ${product.description} ${product.category}`.toLowerCase().includes(query)
-    return matchesPage && matchesQuery && (!wishlistOnly || wishlist.includes(product.id))
+    return matchesPage && (!wishlistOnly || wishlist.includes(product.id))
   })
+  const filteredProducts = collectionProducts.filter(product => matchesProduct(product, query))
   if (sort === 'price-low' || sort === 'price-high') {
     const direction = sort === 'price-low' ? 1 : -1
     filteredProducts.sort((a, b) => direction * (a.prices[weights[a.id] ?? '250g'] - b.prices[weights[b.id] ?? '250g']))
@@ -109,15 +111,9 @@ export function ProductPage({
         <h2 id="catalog" tabIndex={-1}>
           {wishlistOnly ? 'Your wishlist' : title}
         </h2>
-        <form role="search" aria-label="Search this collection" onSubmit={event => {
-          event.preventDefault()
-          updateFilter('q', String(new FormData(event.currentTarget).get('q') ?? '').trim())
-        }}>
-          <Search size={18} aria-hidden="true" />
-          <input key={`${location.pathname}:${searchTerm}`} defaultValue={searchTerm} name="q" type="search"
-            maxLength={100} placeholder="Search this collection" aria-label="Search this collection" />
-          <button type="submit">Search</button>
-        </form>
+        <ProductSearch key={`${location.pathname}:${searchTerm}`} products={collectionProducts}
+          initialQuery={searchTerm} label="Search this collection"
+          onSearch={value => updateFilter('q', value)} onNavigate={onNavigate} />
       </section>
       <nav className="shop-collections module-content-wrap" aria-label="Shop categories">
         {shopLinks.map(link => (

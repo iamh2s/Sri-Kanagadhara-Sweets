@@ -1,0 +1,8 @@
+.product-search { position: relative; }
+.product-search-popup { position: absolute; z-index: 8; inset: calc(100% + 4px) 0 auto; max-height: min(40vh, 18rem); overflow: auto; overscroll-behavior: contain; color: #173f31; background: #fffdf7; border: 1px solid #bcac93; border-radius: .6rem; box-shadow: 0 5px 15px #33231f20; }
+.product-search-popup[hidden] { display: none; }
+.product-search-popup ul { margin: 0; padding: 0; list-style: none; }
+.product-search-popup li { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: .75rem; padding: .55rem .8rem; cursor: pointer; }
+.product-search-popup li:is(:hover, [aria-selected="true"]) { background: #f3ead7; }
+.product-search-popup small { color: #635b4c; text-align: right; }
+.product-search-popup p { margin: .75rem; }

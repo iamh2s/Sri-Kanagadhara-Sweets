@@ -10,7 +10,8 @@ import {
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { contactLinks } from '../data/storeContact'
-import { shopLinks } from '../data/storefront'
+import { products, shopLinks } from '../data/storefront'
+import { ProductSearch } from './ProductSearch'
 import './Navbar.css'
 
 // The props and route keys match the Navbar component you supplied.
@@ -30,8 +31,7 @@ export type NavbarProps = {
   searchQuery: string
   onNavigate: (route: string, category?: string) => void
   onSearchToggle: () => void
-  onSearchChange: (query: string) => void
-  onSearchSubmit: () => void
+  onSearchSubmit: (query: string) => void
   onWishlistToggle: () => void
   onCartOpen: () => void
 }
@@ -225,7 +225,6 @@ export function Navbar({
   searchQuery,
   onNavigate,
   onSearchToggle,
-  onSearchChange,
   onSearchSubmit,
   onWishlistToggle,
   onCartOpen,
@@ -431,25 +430,9 @@ export function Navbar({
       )}
 
       {searchOpen && (
-        <div className="ks-search-panel" id="ks-search-panel" role="search">
-          <form
-            className="ks-search-form"
-            onSubmit={(event) => {
-              event.preventDefault()
-              onSearchSubmit()
-            }}
-          >
-            <Search size={20} aria-hidden="true" />
-            <input
-              autoFocus
-              type="search"
-              aria-label="Search sweets and savouries"
-              placeholder="Search Mysore Pak, Laddu, Murukku..."
-              value={searchQuery}
-              onChange={(event) => onSearchChange(event.target.value)}
-            />
-            <button className="ks-search-submit" type="submit">Search</button>
-          </form>
+        <div className="ks-search-panel" id="ks-search-panel">
+          <ProductSearch header products={products} initialQuery={searchQuery} label="Search sweets and savouries"
+            onSearch={onSearchSubmit} onNavigate={onNavigate} />
         </div>
       )}
     </header>
