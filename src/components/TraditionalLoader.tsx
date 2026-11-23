@@ -172,7 +172,7 @@ export default function TraditionalLoader({
               <img
                 src="/brand/sri-kanagadhara-logo.webp"
                 alt="Sri Kanagadhara Sweets"
-                fetchPriority="high"
+                {...{ fetchpriority: 'high' }}
               />
             </div>
           </div>

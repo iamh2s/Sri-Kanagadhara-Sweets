@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { contactLinks } from '../data/storeContact'
-import { products, shopLinks } from '../data/storefront'
+import { enquirySweets, products, shopLinks } from '../data/storefront'
 import { ProductSearch } from './ProductSearch'
 import './Navbar.css'
 
@@ -431,7 +431,7 @@ export function Navbar({
 
       {searchOpen && (
         <div className="ks-search-panel" id="ks-search-panel">
-          <ProductSearch header products={products} initialQuery={searchQuery} label="Search sweets and savouries"
+          <ProductSearch header products={products} enquiries={enquirySweets} initialQuery={searchQuery} label="Search sweets and savouries"
             onSearch={onSearchSubmit} onNavigate={onNavigate} />
         </div>
       )}

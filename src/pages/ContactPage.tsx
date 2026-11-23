@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight, Copy, HelpCircle, Mail, MessageCircle, Package, RotateCcw, Truck } from 'lucide-react'
-import { contactLinks, storeContactEmail, storeEmailLink } from '../data/storeContact'
+import { contactLinks, storeAddress, storeContactEmail, storeEmailLink, storePhone, storePhoneHref } from '../data/storeContact'
 import './ContactPage.css'
 
 const supportIcons = { contact: Mail, faq: HelpCircle, 'track-order': Package, shipping: Truck, returns: RotateCcw, grievance: MessageCircle }
@@ -44,9 +44,11 @@ export function ContactPage() {
         <div className="cs-intro-copy">
           <h1>Contact <em>us.</em></h1>
           <p>Planning a gift, choosing sweets for a celebration, or checking on an order? Tell us how we can help.</p>
+          <address>{storeAddress}</address>
+          <a href={storePhoneHref}>Call the shop · {storePhone}</a>
           {storeContactEmail && <a href={storeEmailLink('Shop enquiry')}><Mail size={17} />{storeContactEmail}</a>}
         </div>
-        <img className="cs-intro-photo" src="/brand/kaju-katli-maker.webp" alt="Preparing traditional kaju katli" fetchPriority="high" />
+        <img className="cs-intro-photo" src="/brand/kaju-katli-maker.webp" alt="Preparing traditional kaju katli" {...{ fetchpriority: 'high' }} />
       </header>
       <div className="cs-body">
         <nav className="cs-directory" aria-label="Contact and support">

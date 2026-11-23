@@ -67,6 +67,12 @@
 .shop-toolbar select { margin-inline-start: .35rem; min-height: 2.75rem; padding: .45rem; border-radius: .45rem; border: 1px solid #bcac93; background: #fffaf0; color: inherit; }
 .shop-empty { padding-block: 2rem; text-align: center; }
 .shop-empty p { margin-block: .5rem 1rem; }
+.shop-enquiries { padding-block: 1.5rem 3rem; color: #173f31; }
+.shop-enquiries h2 { font: 500 clamp(1.8rem, 4vw, 2.8rem)/1.2 var(--serif); }
+.shop-enquiries ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
+.shop-enquiries li { display: grid; justify-items: start; gap: .5rem; padding: 1rem; border: 1px solid #ddcfb6; background: #fffaf1; }
+.shop-enquiries li span { font-size: 1.2rem; }
+.shop-enquiries a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; }
 .shop-empty a { display: inline-flex; gap: .5rem; align-items: center; text-decoration: none; }
 .shop-listing :is(input, select, a, button):focus-visible { outline: 3px solid #937033; outline-offset: 2px; }
 @media (max-width: 900px) {

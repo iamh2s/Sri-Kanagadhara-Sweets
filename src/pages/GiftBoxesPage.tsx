@@ -1,6 +1,7 @@
 ﻿import type { MouseEvent } from 'react'
 import { ArrowRight, ShoppingBag } from 'lucide-react'
 import type { ModulePagesProps } from './ModulePages'
+import { prebookingPhone, prebookingPhoneHref } from '../data/storeContact'
 import './GiftBoxesPage.css'
 
 const giftOptions = [
@@ -27,6 +28,9 @@ const giftOptions = [
   },
 ]
 
+const signatureSweets = ['Chandrakala', 'Suryakala', 'Khoya Samosa', 'Mysore Pak', 'Milk Cake', 'Kalakand',
+  'Halwa', 'Kaju Katli', 'Kaju Roll', 'Laddu', 'Makhan Bada', 'Sonpapdi']
+
 export function GiftBoxesPage({ collections, onNavigate }: Pick<ModulePagesProps, 'collections' | 'onNavigate'>) {
   const giftImage = collections.find(collection => collection.link === 'Gift Boxes')?.image
 
@@ -38,6 +42,12 @@ export function GiftBoxesPage({ collections, onNavigate }: Pick<ModulePagesProps
 
   return (
     <div id="module-content" className="gift-guide module-content-wrap">
+      <section id="signature-sweets" className="signature-offer" aria-labelledby="signature-offer-title" tabIndex={-1}>
+        <header className="gift-guide-heading"><h2 id="signature-offer-title">Our signature sweets</h2></header>
+        <ol>{signatureSweets.map(name => <li key={name}>{name}</li>)}</ol>
+        <p><strong>₹375</strong> · Call to pre-book and confirm availability.</p>
+        <a className="button button-primary" href={prebookingPhoneHref}>Pre-book · {prebookingPhone}</a>
+      </section>
       <section aria-labelledby="gift-guide-heading">
         <header className="gift-guide-heading">
           <h2 id="gift-guide-heading">Choose a gift for <em>the occasion.</em></h2>

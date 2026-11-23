@@ -15,6 +15,12 @@ export const shopLinks = [
 ]
 export const products: Product[] = catalogProducts
 
+export const enquirySweets = [
+  { name: 'Special Laddoo', category: 'Traditional Sweets' },
+  { name: 'Dry Fruit Halwa', category: 'Dry Fruit Sweets' },
+  { name: 'Ghee Mysore Pak', category: 'Ghee Sweets' },
+]
+
 export const FREE_SHIPPING_THRESHOLD_INR = 999
 export const announcementMessages = [
   `Free Shipping on Orders Above ₹${FREE_SHIPPING_THRESHOLD_INR}`,

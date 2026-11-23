@@ -8,12 +8,12 @@ The original inventory below describes commit 67e1ecf. The catalog milestone add
 
 | Layer | Evidence and implications |
 | --- | --- |
-| Boot and routing | src/main.tsx mounts React StrictMode and BrowserRouter. src/App.tsx selects home, shop-all, sweets, savouries, gift-boxes, our-story, contact, account or fallback. Direct product detail currently opens as a dialog. Production hosting needs deep-link handling and correct missing-page status. |
+| Boot and routing | src/main.tsx mounts React StrictMode and BrowserRouter. src/App.tsx selects home, shop-all, sweets, savouries, gift-boxes, our-story, contact, account or fallback. Product detail renders as a routed page at /products/:slug with a quick-view dialog available from product tiles. Production hosting needs deep-link handling and correct missing-page status. |
 | Components and styling | Navbar, shopping overlays, category carousel, cinematic and landing heroes, footer and feather cursor already exist. src/index.css, component CSS, PostCSS and Tailwind configuration coexist. Retain assets in public/brand and emerald, gold, maroon and ivory styling. |
 | Catalog and state | src/data/storefront.ts holds eight products with numeric IDs and three weights. App state calculates display totals. shoppingStorage.ts restores local cart and wishlist by product ID. Preserve saved bags during migration to SKUs. |
 | Commerce boundary | storeContact.ts uses the public VITE_STORE_CONTACT_EMAIL for optional email drafts. Account and newsletter are unavailable. A mail draft does not create an order. |
 | Server and persistence | Project inventory shows no Express service, MongoDB client, schemas, migrations, authentication, order ledger or payment verifier. tsconfig.node.json covers Vite configuration. |
-| Tooling | Node 24.11.1, npm 11.18.0, Git 2.49.0.windows.1. Vite React plugin, strict TypeScript, @ alias to src. npm scripts are dev, build (tsc -b then vite build) and preview. No test script. Git reports no repository in this directory or its parents. |
+| Tooling | Node 24.11.1, npm 11.18.0, Git 2.49.0.windows.1. Vite React plugin, strict TypeScript, @ alias to src. npm scripts are dev, build (tsc -b then vite build) and preview. Tests run via `npm run test:api` (catalog + admin session) and `npm test` (adds saved-bag). Git repository at branch main. |
 
 Installed direct packages from `npm ls --depth=0`: react and react-dom 18.3.1, react-router-dom 7.18.6, aos 2.3.4, motion 14.14.0, lucide-react 0.468.0. Development packages include typescript 5.6.3, vite 6.4.6, @vitejs/plugin-react 4.7.0, tailwindcss 3.4.19, postcss 8.5.33, autoprefixer 10.6.2, @types/react 18.3.31, @types/react-dom 18.3.7 and @types/aos 3.0.8.
 

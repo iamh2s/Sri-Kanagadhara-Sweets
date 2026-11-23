@@ -2,7 +2,8 @@ import { ArrowRight, Heart, Plus } from 'lucide-react'
 import { matchesProduct, ProductSearch } from '../components/ProductSearch'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { catalogSlug } from '../../shared/catalogSlug'
-import { categories, formatPrice, shopLinks } from '../data/storefront'
+import { categories, enquirySweets, formatPrice, shopLinks } from '../data/storefront'
+import { storePhoneHref } from '../data/storeContact'
 import type { ModulePagesProps, Product, Weight } from './ModulePages'
 import './ProductPage.css'
 
@@ -88,6 +89,11 @@ export function ProductPage({
     return matchesPage && (!wishlistOnly || wishlist.includes(product.id))
   })
   const filteredProducts = collectionProducts.filter(product => matchesProduct(product, query))
+  const collectionEnquiries = !wishlistOnly && (page === 'shop-all' || page === 'sweets')
+    ? enquirySweets.filter(sweet => !activeCategory || sweet.category === activeCategory.name)
+    : []
+  const filteredEnquiries = collectionEnquiries.filter(sweet => matchesProduct(sweet, query))
+  const resultCount = filteredProducts.length + filteredEnquiries.length
   if (sort === 'price-low' || sort === 'price-high') {
     const direction = sort === 'price-low' ? 1 : -1
     filteredProducts.sort((a, b) => direction * (a.prices[weights[a.id] ?? '250g'] - b.prices[weights[b.id] ?? '250g']))
@@ -111,7 +117,7 @@ export function ProductPage({
         <h2 id="catalog" tabIndex={-1}>
           {wishlistOnly ? 'Your wishlist' : title}
         </h2>
-        <ProductSearch key={`${location.pathname}:${searchTerm}`} products={collectionProducts}
+        <ProductSearch key={`${location.pathname}:${searchTerm}`} products={collectionProducts} enquiries={collectionEnquiries}
           initialQuery={searchTerm} label="Search this collection"
           onSearch={value => updateFilter('q', value)} onNavigate={onNavigate} />
       </section>
@@ -125,7 +131,7 @@ export function ProductPage({
         ))}
       </nav>
       <div className="shop-toolbar module-content-wrap">
-        <div className="shop-result-summary"><span role="status">{filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}{query && ` matching “${searchTerm}”`}</span>
+        <div className="shop-result-summary"><span role="status">{resultCount} {resultCount === 1 ? 'product' : 'products'}{query && ` matching “${searchTerm}”`}</span>
           {query && <button onClick={() => updateFilter('q', '')}>Clear search</button>}
         </div>
         <label>Sort by <select value={sort} onChange={event => updateFilter('sort', event.target.value === 'featured' ? '' : event.target.value)}>
@@ -133,14 +139,14 @@ export function ProductPage({
           <option value="price-high">Price: high to low</option>
         </select></label>
       </div>
-      {filteredProducts.length === 0 && (
+      {resultCount === 0 && (
         <div className="shop-empty module-content-wrap">
           <h3>{query ? 'No matching products' : wishlistOnly ? 'Your wishlist is empty' : 'This collection is empty'}</h3>
           <p>{query ? 'Try a different product name or a broader search.' : wishlistOnly ? 'Tap the heart on a product to save it here.' : 'Browse the other collections to find a favourite.'}</p>
           <Link to="/shop-all#catalog">Browse all products <ArrowRight size={16} /></Link>
         </div>
       )}
-      <section className="module-products-grid module-content-wrap" aria-label="Products">
+      {filteredProducts.length > 0 && <section className="module-products-grid module-content-wrap" aria-label="Products">
         {filteredProducts.map((product, index) => (
           <div className="module-product-reveal" key={product.id} data-aos="fade-up" data-aos-delay={index * 70}>
             <ProductTile
@@ -154,7 +160,14 @@ export function ProductPage({
             />
           </div>
         ))}
-      </section>
+      </section>}
+      {filteredEnquiries.length > 0 && <section className="shop-enquiries module-content-wrap" aria-labelledby="enquiry-sweets-heading">
+        <h2 id="enquiry-sweets-heading">Sweets by enquiry</h2>
+        <p>Call the shop for prices, sizes and availability.</p>
+        <ul>{filteredEnquiries.map(sweet => <li key={sweet.name}>
+          <span>{sweet.name}</span><a href={storePhoneHref} aria-label={`Call about ${sweet.name}`}>Call the shop</a>
+        </li>)}</ul>
+      </section>}
     </div>
   )
 }

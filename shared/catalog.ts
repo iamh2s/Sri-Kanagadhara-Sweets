@@ -29,7 +29,7 @@ export const catalogProducts = [
   {
     id: 4,
     name: 'Badusha',
-    description: 'Flaky layers with just the right sweetness.',
+    description: 'Also known as Baatusha, this sweet has flaky layers with just the right sweetness.',
     category: 'Traditional Sweets',
     image: image('photo-1571115177098-24ec42ed204d'),
     prices: { '250g': 150, '500g': 290, '1kg': 560 },

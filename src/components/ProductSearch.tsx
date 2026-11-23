@@ -4,12 +4,17 @@ import { catalogSlug } from '../../shared/catalogSlug'
 import type { Product } from '../pages/ModulePages'
 import './ProductSearch.css'
 
-export function matchesProduct(product: Product, query: string) {
-  return `${product.name} ${product.description} ${product.category}`.toLowerCase().includes(query)
+type EnquirySweet = Pick<Product, 'name' | 'category'>
+type SearchItem = Product | EnquirySweet
+
+export function matchesProduct(product: SearchItem, query: string) {
+  const description = 'description' in product ? product.description : ''
+  return `${product.name} ${description} ${product.category}`.toLowerCase().includes(query)
 }
 
-export function ProductSearch({ products, initialQuery, label, header = false, onSearch, onNavigate }: {
+export function ProductSearch({ products, enquiries, initialQuery, label, header = false, onSearch, onNavigate }: {
   products: Product[]
+  enquiries: EnquirySweet[]
   initialQuery: string
   label: string
   header?: boolean
@@ -22,14 +27,15 @@ export function ProductSearch({ products, initialQuery, label, header = false, o
   const listId = useId()
   const list = useRef<HTMLUListElement>(null)
   const query = value.trim().toLowerCase()
-  const matches = products.filter(product => matchesProduct(product, query))
+  const matches = [...products, ...enquiries].filter(product => matchesProduct(product, query))
     .sort((a, b) => Number(b.name.toLowerCase().startsWith(query)) - Number(a.name.toLowerCase().startsWith(query)))
     .slice(0, 5)
 
   function close() { setOpen(false); setActive(-1) }
-  function select(product: Product) {
+  function select(product: SearchItem) {
     close()
-    onNavigate(`products/${catalogSlug(product.name)}`)
+    if ('id' in product) onNavigate(`products/${catalogSlug(product.name)}`)
+    else onSearch(product.name)
   }
 
   return <form className={header ? 'product-search ks-search-form' : 'product-search'} role="search" aria-label={label}
@@ -61,9 +67,9 @@ export function ProductSearch({ products, initialQuery, label, header = false, o
     <button className={header ? 'ks-search-submit' : undefined} type="submit">Search</button>
     <div className="product-search-popup" hidden={!open}>
       <ul id={listId} ref={list} role="listbox" aria-label="Suggested products">
-        {matches.map((product, index) => <li role="option" id={`${listId}-${index}`} key={product.id}
+        {matches.map((product, index) => <li role="option" id={`${listId}-${index}`} key={product.name}
           aria-selected={index === active} onMouseDown={event => event.preventDefault()} onClick={() => select(product)}>
-          <span>{product.name}</span><small>{product.category}</small>
+          <span>{product.name}</span><small>{'id' in product ? product.category : 'Enquire by phone'}</small>
         </li>)}
       </ul>
       {!matches.length && <p role="status">No matching products.</p>}

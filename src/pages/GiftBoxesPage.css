@@ -44,3 +44,7 @@
   .gift-guide-help > svg { display: none; }
   .gift-guide-help a { margin-left: 0; }
 }
+.signature-offer { padding: clamp(1.25rem, 4vw, 3rem); margin-block-end: 3rem; background: #fffaf0; border: 1px solid #ceb880; scroll-margin-top: 8rem; }
+.signature-offer ol { columns: 2 12rem; padding-inline-start: 1.75rem; list-style: decimal; }
+.signature-offer li { padding-block: .3rem; break-inside: avoid; }
+.signature-offer p { margin-block: 1.25rem; }

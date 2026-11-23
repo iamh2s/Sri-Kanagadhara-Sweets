@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { BrandMark } from './Navbar'
-import { contactLinks, storeContactEmail, storeEmailLink } from '../data/storeContact'
+import { contactLinks, storeAddress, storeContactEmail, storeEmailLink, storePhone, storePhoneHref } from '../data/storeContact'
 
 type SiteFooterProps = {
   onNavigate: (path: string) => void
@@ -18,7 +18,6 @@ export function SiteFooter({ onNavigate }: SiteFooterProps) {
         <div className="footer-brand">
           <BrandMark light onNavigate={() => onNavigate('home')} />
           <p>A little sweetness for the moments that bring us together. Rooted in tradition, made for sharing.</p>
-
         </div>
         <div className="footer-links">
           <h3>Explore</h3>
@@ -35,7 +34,8 @@ export function SiteFooter({ onNavigate }: SiteFooterProps) {
         </div>
         <div className="footer-contact">
           <h3>Say hello</h3>
-          <p>Questions, a special request, or just want to talk sweets?</p>
+          <Link to="/stores">{storeAddress}</Link>
+          <a href={storePhoneHref}>Call {storePhone}</a>
           <a href="/contact" onClick={(event) => navigate(event, 'contact')}>Open the contact page</a>
           {storeContactEmail && <a href={storeEmailLink('Store inquiry')}>{storeContactEmail}</a>}
         </div>

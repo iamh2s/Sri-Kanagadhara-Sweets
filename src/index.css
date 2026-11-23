@@ -20,10 +20,6 @@
   --serif: 'Playfair Display', Georgia, serif;
 }
 
-*, *::before, *::after {
-  font-family: "Emilys Candy", cursive !important;
-}
-
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body {

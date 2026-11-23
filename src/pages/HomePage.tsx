@@ -476,16 +476,15 @@ const cardEffect = 'tilt shine focus'
             <span className="offer-ornament" aria-hidden="true"></span>
             <h2>Celebrate every<br /><em>sweet occasion.</em></h2>
             <p className="offer-description">
-              Beautifully curated sweets, thoughtfully wrapped and made to turn
-              every celebration into a cherished memory.
+              Discover our ₹375 signature sweets offer, from Chandrakala and Khoya Samosa to Kaju Roll and Sonpapdi.
             </p>
             <div className="offer-actions">
               <a
-                href="/gift-boxes"
+                href="/gift-boxes#signature-sweets"
                 className="offer-cta"
-                onClick={(event) => { event.preventDefault(); navigate('gift-boxes') }}
+                onClick={(event) => { event.preventDefault(); navigate('gift-boxes#signature-sweets') }}
               >
-                Explore Gift Boxes
+                View signature sweets
                 <span className="offer-cta-icon"><ArrowRight size={17} /></span>
               </a>
               <span className="offer-crafted"><span>✦</span> Handcrafted with love</span>
