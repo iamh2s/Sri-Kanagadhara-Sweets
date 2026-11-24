@@ -147,13 +147,17 @@ export function CardCarousel({ images, className = '', onSelect }: CardCarouselP
         </button>
       </div>
 
-      <button
-        type="button"
+      <a
+        href={`/${activeImage.route}`}
         className="category-carousel__shop"
-        onClick={() => onSelect(activeImage.route)}
+        onClick={event => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+          event.preventDefault()
+          onSelect(activeImage.route)
+        }}
       >
         Shop {activeImage.title} <ArrowRight size={15} aria-hidden="true" />
-      </button>
+      </a>
     </div>
   )
 }

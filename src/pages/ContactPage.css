@@ -1,42 +1,938 @@
-.contact-studio { --cs-green: #153e32; --cs-wine: #642631; --cs-line: #ddcdb7; background: #fbf6ec; color: #352b24; padding: clamp(1rem, 3vw, 3rem) max(5%, calc((100% - 1180px) / 2)) clamp(3rem, 7vw, 6rem); }
-.contact-studio * { box-sizing: border-box; }
-.cs-intro { display: grid; grid-template-columns: 1.05fr 1fr; align-items: stretch; overflow: hidden; border-radius: 4px; color: #fff8e9; background: var(--cs-green); }
-.cs-intro-copy { align-self: center; padding: clamp(1.7rem, 5vw, 4.75rem); }
-.cs-intro h1 { margin: 0; font: 500 clamp(3.5rem, 7vw, 6.8rem)/.99 var(--serif); color: inherit; }
-.cs-intro h1 em { color: #ecd29a; }
-.cs-intro p { max-width: 36ch; line-height: 1.65; margin: 1.3rem 0 0; }
-.cs-intro-copy { min-width: 0; }
-.cs-intro address { margin-top: 1rem; font-style: normal; }
-.cs-intro-copy > a { display: flex; width: fit-content; max-width: 100%; }
-.cs-intro a { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; color: #fff8e9; overflow-wrap: anywhere; }
-.cs-intro-photo { width: 100%; height: 100%; min-height: 240px; max-height: 330px; object-fit: cover; object-position: center; border-left: 3px solid #c8a768; }
-.cs-body { display: grid; grid-template-columns: minmax(15rem, 1fr) minmax(0, 1.7fr); align-items: start; gap: clamp(1.5rem, 5vw, 5rem); margin-top: clamp(1.7rem, 4vw, 3.5rem); }
-.cs-body h2 { margin: 0 0 1rem; color: var(--cs-wine); font: 500 clamp(1.8rem, 3vw, 2.6rem)/1.15 var(--serif); }
-.cs-directory a { display: flex; gap: .8rem; align-items: center; min-height: 50px; padding: .75rem; border-bottom: 1px solid var(--cs-line); color: var(--cs-green); text-decoration: none; }
-.cs-directory a span { flex: 1; }
-.cs-directory a:is(:hover, :focus-visible, [aria-current="page"]) { background: #eee6d5; }
-.cs-message { background: #fffdf8; border: 1px solid var(--cs-line); border-radius: 4px; padding: clamp(1.2rem, 3vw, 2.65rem); }
-.cs-message p { line-height: 1.55; margin: .5rem 0 1.3rem; }
-.cs-message form, .cs-message label { display: grid; gap: .45rem; }
-.cs-message form { gap: 1rem; }
-.cs-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.cs-message label { font-size: .9rem; font-weight: 600; color: var(--cs-green); }
-.cs-message :is(input, select, textarea) { width: 100%; min-width: 0; padding: .7rem .85rem; border: 1px solid #baaa94; border-radius: 4px; color: #352b24; background: white; font: inherit; font-weight: 400; }
-.cs-message textarea { resize: vertical; }
-.contact-studio :is(input, select, textarea, a, button):focus-visible { outline: 3px solid #ad8033; outline-offset: 2px; }
-.cs-primary, .cs-draft button { display: inline-flex; gap: .7rem; justify-content: center; align-items: center; justify-self: start; min-height: 44px; padding: .65rem 1.25rem; border: 1px solid var(--cs-green); border-radius: 4px; background: var(--cs-green); color: white; font-weight: 600; text-decoration: none; cursor: pointer; }
-.cs-message .cs-status:empty { margin: 0; }
-.cs-message .cs-status:not(:empty) { margin: 1rem 0; color: var(--cs-green); }
-.cs-draft { border-top: 1px solid var(--cs-line); padding-top: 1rem; }
-.cs-draft div { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .75rem; }
-.cs-draft button { background: transparent; color: var(--cs-green); }
-@media (max-width: 720px) {
-  .cs-intro, .cs-body { grid-template-columns: 1fr; }
-  .cs-intro-photo { order: -1; height: clamp(125px, 33vw, 200px); min-height: 0; border: 0; border-bottom: 2px solid #c8a768; }
-  .cs-directory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .cs-directory h2 { grid-column: 1 / -1; }
-  .cs-directory a { gap: .4rem; font-size: .87rem; }
-  .cs-directory a svg { flex-shrink: 0; }
-  .contact-studio .cs-message :is(input, select, textarea) { font-size: max(16px, 1rem) !important; }
+/* =====================================================
+   SRI KANAGADHARA SWEETS
+   CONTACT PAGE — PREMIUM ALIGNMENT
+===================================================== */
+
+.contact-studio {
+  --cs-green: #153e32;
+  --cs-wine: #642631;
+  --cs-line: #ddcdb7;
+  --cs-gold: #d6b675;
+  --cs-ivory: #fff8e9;
+
+  color: #352b24;
+
+  padding:
+    clamp(1rem, 3vw, 3rem)
+    max(2%, calc((100% - 1440px) / 2))
+    clamp(3rem, 7vw, 6rem);
+
+  background: transparent !important;
 }
-@media (max-width: 420px) { .cs-fields { grid-template-columns: 1fr; } }
+
+.contact-studio * {
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   CONTACT HERO
+===================================================== */
+
+.contact-studio .cs-intro {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  min-height: 440px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(214, 182, 117, 0.45);
+  border-radius: 6px;
+
+  color: var(--cs-ivory);
+
+  background: var(--cs-green) !important;
+}
+
+/* =====================================================
+   LEFT SIDE — CONTACT CONTENT
+===================================================== */
+
+.cs-intro-copy {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: flex-start;
+
+  min-width: 0;
+
+  padding: clamp(30px, 4.5vw, 70px);
+
+  background: transparent;
+}
+
+/* Small decorative heading */
+
+.contact-studio .cs-eyebrow {
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 10px;
+
+  margin: 0 0 18px;
+
+  color: var(--cs-gold);
+
+  font-size: 12px !important;
+  font-weight: 400 !important;
+
+  letter-spacing: 0.15em;
+
+  line-height: 1.4;
+
+  -webkit-text-stroke: 0.1px currentColor;
+}
+
+.cs-eyebrow > span {
+  display: block;
+
+  width: 24px;
+  height: 1px;
+
+  flex-shrink: 0;
+
+  background: var(--cs-gold);
+}
+
+/* =====================================================
+   CONTACT TITLE
+===================================================== */
+
+.site-shell .contact-studio .cs-intro h1 {
+  margin: 0 !important;
+
+  font-family: "Emilys Candy", cursive !important;
+
+  font-size: clamp(48px, 5.8vw, 90px) !important;
+
+  font-weight: 400 !important;
+  font-synthesis: none !important;
+
+  line-height: 1.12 !important;
+
+  letter-spacing: -0.02em;
+
+  color: var(--cs-ivory) !important;
+
+  -webkit-text-stroke: 0.35px currentColor !important;
+}
+
+.site-shell .contact-studio .cs-intro h1 em {
+  color: #ecd29a !important;
+
+  font-style: normal;
+
+  font-weight: 400 !important;
+
+  -webkit-text-stroke: 0.35px currentColor !important;
+}
+
+/* =====================================================
+   INTRO DESCRIPTION
+===================================================== */
+
+.site-shell .contact-studio .cs-intro-description {
+  width: 100%;
+  max-width: 45ch;
+
+  margin: 20px 0 0 !important;
+
+  color: #f8edda !important;
+
+  font-size: clamp(16px, 1.4vw, 20px) !important;
+
+  font-weight: 400 !important;
+
+  line-height: 1.75 !important;
+
+  -webkit-text-stroke: 0.15px currentColor !important;
+}
+
+/* =====================================================
+   DECORATIVE HORIZONTAL DIVIDER
+===================================================== */
+
+.cs-contact-divider {
+  width: 100%;
+  max-width: 420px;
+
+  height: 1px;
+
+  margin: 24px 0;
+
+  background: linear-gradient(
+    90deg,
+    rgba(214, 182, 117, 0.85),
+    rgba(214, 182, 117, 0.05)
+  );
+}
+
+/* =====================================================
+   CONTACT INFORMATION
+===================================================== */
+
+.cs-contact-details {
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr);
+
+  gap: 19px;
+
+  width: 100%;
+}
+
+/* Individual contact rows */
+
+.contact-studio .cs-contact-item {
+  display: grid !important;
+
+  grid-template-columns:
+    44px
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 15px;
+
+  width: 100%;
+
+  margin: 0 !important;
+  padding: 0;
+
+  color: var(--cs-ivory) !important;
+
+  text-decoration: none;
+
+  background: transparent;
+}
+
+/* =====================================================
+   CONTACT ICONS
+===================================================== */
+
+.cs-contact-icon {
+  display: grid;
+
+  place-items: center;
+
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(214, 182, 117, 0.5);
+  border-radius: 50%;
+
+  color: var(--cs-gold);
+
+  background: rgba(214, 182, 117, 0.06);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.cs-contact-item:hover .cs-contact-icon {
+  border-color: var(--cs-gold);
+
+  background: var(--cs-gold);
+
+  color: var(--cs-green);
+}
+
+.cs-contact-icon svg {
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   CONTACT TEXT
+===================================================== */
+
+.cs-contact-text {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  min-width: 0;
+}
+
+.site-shell .contact-studio .cs-contact-label {
+  display: block;
+
+  margin: 0 !important;
+
+  color: var(--cs-gold) !important;
+
+  font-size: 12px !important;
+  font-weight: 400 !important;
+
+  letter-spacing: 0.07em;
+
+  line-height: 1.3 !important;
+
+  text-transform: uppercase;
+
+  -webkit-text-stroke: 0.1px currentColor !important;
+}
+
+.site-shell .contact-studio .cs-contact-value,
+.site-shell .contact-studio .cs-contact-text address {
+  display: block;
+
+  max-width: 100%;
+
+  margin: 0 !important;
+
+  color: var(--cs-ivory) !important;
+
+  font-size: clamp(15px, 1.25vw, 18px) !important;
+
+  font-style: normal;
+
+  font-weight: 400 !important;
+
+  line-height: 1.55 !important;
+
+  overflow-wrap: anywhere;
+
+  -webkit-text-stroke: 0.15px currentColor !important;
+}
+
+.cs-contact-item:hover .cs-contact-value {
+  color: var(--cs-gold) !important;
+}
+
+/* =====================================================
+   RIGHT SIDE — IMAGE SECTION
+===================================================== */
+
+.cs-intro-visual {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  align-self: stretch;
+
+  min-width: 0;
+  min-height: 100%;
+
+  padding: 25px 20px;
+
+  overflow: hidden;
+
+  background: transparent;
+}
+
+/* Golden vertical divider */
+
+.cs-intro-visual::before {
+  content: "";
+
+  position: absolute;
+
+  top: 8%;
+  bottom: 8%;
+  left: 0;
+
+  width: 1px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #d6b675 20%,
+    #d6b675 80%,
+    transparent
+  );
+}
+
+/* Sweet-maker image */
+
+.contact-studio .cs-intro-photo {
+  display: block;
+
+  width: 100%;
+
+  height: auto;
+
+  min-height: 0;
+
+  max-height: 520px;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  border: 0;
+
+  margin: auto;
+
+  padding: 0;
+
+  background: transparent;
+
+  transform: none;
+}
+
+/* =====================================================
+   CUSTOMER SUPPORT AND FORM LAYOUT
+===================================================== */
+
+.cs-body {
+  display: grid;
+
+  grid-template-columns:
+    minmax(15rem, 1fr)
+    minmax(0, 1.7fr);
+
+  align-items: start;
+
+  gap: clamp(1.5rem, 5vw, 5rem);
+
+  margin-top: clamp(2rem, 5vw, 4.5rem);
+
+  background: transparent !important;
+}
+
+.cs-body h2 {
+  margin: 0 0 1rem;
+
+  color: var(--cs-wine);
+
+  font: 500
+    clamp(1.8rem, 3vw, 2.6rem) /
+    1.15
+    var(--serif);
+}
+
+/* =====================================================
+   CUSTOMER SUPPORT DIRECTORY
+===================================================== */
+
+.cs-directory {
+  min-width: 0;
+
+  background: transparent !important;
+}
+
+.cs-directory a {
+  display: flex;
+
+  gap: 0.8rem;
+
+  align-items: center;
+
+  min-height: 50px;
+
+  padding: 0.85rem;
+
+  border-bottom: 1px solid var(--cs-line);
+
+  color: var(--cs-green);
+
+  text-decoration: none;
+
+  background: transparent;
+
+  transition:
+    color 0.25s ease,
+    padding 0.25s ease;
+}
+
+.cs-directory a span {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.cs-directory a svg {
+  flex-shrink: 0;
+}
+
+/* Fixed incomplete selector */
+
+.cs-directory a:is(
+  :hover,
+  :focus-visible,
+  [aria-current="page"]
+) {
+  color: var(--cs-wine);
+
+  background: transparent !important;
+
+  border-bottom-color: var(--cs-gold);
+}
+
+.cs-directory a:hover {
+  padding-left: 1.1rem;
+}
+
+/* =====================================================
+   MESSAGE FORM
+===================================================== */
+
+.cs-message {
+  min-width: 0;
+
+  border: 1px solid var(--cs-line);
+  border-radius: 4px;
+
+  padding: clamp(1.2rem, 3vw, 2.65rem);
+
+  background: transparent !important;
+}
+
+.cs-message p {
+  line-height: 1.65;
+
+  margin: 0.5rem 0 1.3rem;
+}
+
+.cs-message form,
+.cs-message label {
+  display: grid;
+
+  gap: 0.45rem;
+}
+
+.cs-message form {
+  gap: 1rem;
+
+  background: transparent;
+}
+
+/* Form columns */
+
+.cs-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 1rem;
+}
+
+.cs-message label {
+  min-width: 0;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  color: var(--cs-green);
+}
+
+/* =====================================================
+   FORM INPUTS
+===================================================== */
+
+.cs-message :is(
+  input,
+  select,
+  textarea
+) {
+  width: 100%;
+  min-width: 0;
+
+  padding: 0.8rem 0.95rem;
+
+  border: 1px solid #baaa94;
+  border-radius: 4px;
+
+  color: #352b24;
+
+  font: inherit;
+  font-weight: 400;
+
+  background: transparent !important;
+}
+
+.cs-message select option {
+  background: #fff8e9;
+
+  color: var(--cs-green);
+}
+
+.cs-message textarea {
+  resize: vertical;
+
+  min-height: 110px;
+}
+
+/* =====================================================
+   FOCUS ACCESSIBILITY
+===================================================== */
+
+.contact-studio :is(
+  input,
+  select,
+  textarea,
+  a,
+  button
+):focus-visible {
+  outline: 2px solid #ad8033;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   PRIMARY BUTTON
+===================================================== */
+
+.cs-primary,
+.cs-draft button {
+  display: inline-flex;
+
+  gap: 0.7rem;
+
+  justify-content: center;
+  align-items: center;
+
+  justify-self: start;
+
+  min-height: 44px;
+
+  padding: 0.65rem 1.25rem;
+
+  border: 1px solid var(--cs-green);
+  border-radius: 4px;
+
+  background: var(--cs-green);
+
+  color: white;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.cs-primary:hover {
+  background: #215443;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   FORM STATUS
+===================================================== */
+
+.cs-message .cs-status:empty {
+  margin: 0;
+}
+
+.cs-message .cs-status:not(:empty) {
+  margin: 1rem 0;
+
+  color: var(--cs-green);
+}
+
+/* =====================================================
+   ENQUIRY DRAFT
+===================================================== */
+
+.cs-draft {
+  border-top: 1px solid var(--cs-line);
+
+  padding-top: 1rem;
+
+  background: transparent;
+}
+
+.cs-draft div {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.75rem;
+
+  margin-top: 0.75rem;
+}
+
+.cs-draft button {
+  background: transparent;
+
+  color: var(--cs-green);
+}
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media (min-width: 1440px) {
+
+  .contact-studio .cs-intro {
+    min-height: 500px;
+  }
+
+  .cs-intro-copy {
+    padding: 55px 70px;
+  }
+
+  .contact-studio .cs-intro-photo {
+    max-height: 530px;
+  }
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1024px) {
+
+  .contact-studio .cs-intro {
+    min-height: 390px;
+  }
+
+  .cs-intro-copy {
+    padding: 30px;
+  }
+
+  .cs-intro-visual {
+    padding: 20px 12px;
+  }
+
+  .cs-contact-details {
+    gap: 15px;
+  }
+
+  .contact-studio .cs-contact-item {
+    gap: 12px;
+
+    grid-template-columns:
+      38px
+      minmax(0, 1fr);
+  }
+
+  .cs-contact-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cs-contact-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 720px) {
+
+  .contact-studio {
+    padding:
+      16px
+      14px
+      48px;
+  }
+
+  .contact-studio .cs-intro,
+  .cs-body {
+    grid-template-columns:
+      minmax(0, 1fr);
+  }
+
+  .contact-studio .cs-intro {
+    min-height: 0;
+  }
+
+  .cs-intro-copy {
+    padding: 30px 24px 24px;
+
+    align-items: flex-start;
+  }
+
+  .site-shell .contact-studio .cs-intro h1 {
+    font-size: clamp(
+      44px,
+      10vw,
+      65px
+    ) !important;
+  }
+
+  .contact-studio .cs-eyebrow {
+    font-size: 10px !important;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+  }
+
+  .site-shell .contact-studio .cs-intro-description {
+    font-size: 16px !important;
+
+    margin-top: 16px !important;
+
+    line-height: 1.65 !important;
+  }
+
+  .cs-contact-divider {
+    margin: 20px 0;
+  }
+
+  .cs-contact-details {
+    gap: 18px;
+  }
+
+  .site-shell .contact-studio .cs-contact-value,
+  .site-shell .contact-studio .cs-contact-text address {
+    font-size: 15px !important;
+  }
+
+  /* Image below contact information */
+
+  .cs-intro-visual {
+    min-height: 0;
+
+    padding: 20px 16px 10px;
+  }
+
+  /* Horizontal divider on mobile */
+
+  .cs-intro-visual::before {
+    top: 0;
+    bottom: auto;
+
+    left: 8%;
+    right: 8%;
+
+    width: auto;
+    height: 1px;
+
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--cs-gold),
+      transparent
+    );
+  }
+
+  .contact-studio .cs-intro-photo {
+    width: 100%;
+
+    height: auto;
+
+    max-height: 300px;
+
+    object-fit: contain;
+
+    object-position: center bottom;
+  }
+
+  /* Support directory */
+
+  .cs-directory {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 0 12px;
+  }
+
+  .cs-directory h2 {
+    grid-column: 1 / -1;
+  }
+
+  .cs-directory a {
+    gap: 0.4rem;
+
+    font-size: 0.87rem;
+  }
+
+  .cs-directory a svg {
+    flex-shrink: 0;
+  }
+
+  .contact-studio .cs-message :is(
+    input,
+    select,
+    textarea
+  ) {
+    font-size: max(
+      16px,
+      1rem
+    ) !important;
+  }
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .contact-studio {
+    padding-inline: 10px;
+  }
+
+  .cs-intro-copy {
+    padding: 26px 20px;
+  }
+
+  .cs-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-directory {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-studio .cs-contact-item {
+    grid-template-columns:
+      36px
+      minmax(0, 1fr);
+
+    gap: 10px;
+  }
+
+  .cs-contact-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .contact-studio .cs-intro-photo {
+    max-height: 240px;
+  }
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .contact-studio *,
+  .contact-studio *::before,
+  .contact-studio *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* =====================================================
+   CONTACT PAGE — END
+===================================================== */

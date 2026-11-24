@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import Component from '@/components/ui/landing-page'
 import CardCarousel from '@/components/ui/card-carousel'
-import { formatPrice, image } from '../data/storefront'
+import { formatPrice } from '../data/storefront'
 import type { Collection, Product, Weight } from './ModulePages'
 import PolaroidLineCarousel from "@/components/ui/PolaroidLineCarousel";
 
@@ -39,6 +39,28 @@ type HomePageProps = {
   navigate: (path: string) => void
 }
 
+const productVideos = [
+    '/Video/mysore-pak.mp4',
+    '/Video/laddo.mp4',
+    '/Video/kajukatli.mp4',
+    '/Video/badusha.mp4',
+  ] as const
+const royalBadges = ['★ Bestseller', '♥ Most Loved', '♛ Premium', '✦ Classic']
+const royalCategories = ['Ghee Sweets', 'Festive Sweets', 'Dry Fruit Sweets', 'Traditional Sweets']
+const royalDescriptions = [
+          'A melt-in-your-mouth South Indian classic.',
+          'Traditional, aromatic laddus perfect for every celebration.',
+          'Smooth, rich and delicate cashew delight with a royal touch.',
+          'A flaky, juicy sweet with a perfect traditional taste.',
+        ]
+const productImages = [
+          '/products/mysore-pak.webp',
+          '/products/laddu.webp',
+          '/products/kaju-katli.webp',
+          '/products/badusha.webp',
+        ]
+const bestSellerOrder = ['mysore pak', 'laddu', 'kaju katli', 'badusha']
+
 export function HomePage({
   categories,
   craftStories,
@@ -52,17 +74,9 @@ export function HomePage({
   addToCart,
   navigate,
 }: HomePageProps) {
-  // Public assets are referenced from the site root, never with a "public/" prefix.
-  const productVideos = [
-    '/Video/mysore-pak.mp4',
-    '/Video/laddo.mp4',
-    '/Video/kajukatli.mp4',
-    '/Video/badusha.mp4',
-  ] as const
   const [videoQuickView, setVideoQuickView] = useState<Product | null>(null)
   const [modalWeight, setModalWeight] = useState<Weight>('250g')
   const [failedVideos, setFailedVideos] = useState<string[]>([])
-  const modalVideoRef = useRef<HTMLVideoElement | null>(null)
   const cardVideoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
   // Keep animation frames and playback control outside React state to avoid rerenders.
   const tiltFrames = useRef(new Map<HTMLElement, number>())
@@ -79,7 +93,6 @@ export function HomePage({
     }
   }
 
-  const bestSellerOrder = ['mysore pak', 'laddu', 'kaju katli', 'badusha']
   const bestSellerProducts = bestSellerOrder
     .map((name) => products.find((product) => product.name.toLowerCase().includes(name)))
     .filter((product): product is Product => Boolean(product))
@@ -312,21 +325,8 @@ const cardEffect = 'tilt shine focus'
       {visibleBestSellers.map((product, index) => {
         const weight = weights[product.id] ?? "250g"
         const isWishlisted = wishlist.includes(product.id)
-        const royalBadges = ['★ Bestseller', '♥ Most Loved', '♛ Premium', '✦ Classic']
-        const royalCategories = ['Ghee Sweets', 'Festive Sweets', 'Dry Fruit Sweets', 'Traditional Sweets']
         const displayName = product.name.toLowerCase().includes('laddu') ? 'Laddu' : product.name
-        const royalDescriptions = [
-          'A melt-in-your-mouth South Indian classic.',
-          'Traditional, aromatic laddus perfect for every celebration.',
-          'Smooth, rich and delicate cashew delight with a royal touch.',
-          'A flaky, juicy sweet with a perfect traditional taste.',
-        ]
-        const productImage = [
-          '/products/mysore-pak.webp',
-          '/products/laddu.webp',
-          '/products/kaju-katli.webp',
-          '/products/badusha.webp',
-        ][index]
+        const productImage = productImages[index]
         const videoSrc = productVideos[index]
         const videoFailed = failedVideos.includes(videoSrc)
 
@@ -399,12 +399,18 @@ const cardEffect = 'tilt shine focus'
                     <span />
                   </div>
 
-                  <button
+                  <a
+                    href={`/products/${catalogSlug(product.name)}`}
                     className="premium-product-name"
-                    onClick={(event) => { event.stopPropagation(); openProduct(product) }}
+                    onClick={event => {
+                      event.stopPropagation()
+                      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+                      event.preventDefault()
+                      openProduct(product)
+                    }}
                   >
                     {displayName}
-                  </button>
+                  </a>
 
                   <p className="premium-description">{royalDescriptions[index]}</p>
 
@@ -461,54 +467,89 @@ const cardEffect = 'tilt shine focus'
   </div>
 </section>
 
-
         {/* Premium gifting banner — layout isolated from legacy offer styles */}
-        <section className="offer-banner ks-gift-banner" id="gift-offer" data-aos="fade-up">
-          <div className="offer-glow offer-glow-one" aria-hidden="true" />
-          <div className="offer-glow offer-glow-two" aria-hidden="true" />
-          <span className="offer-decor offer-decor-top" aria-hidden="true">✦</span>
-          <span className="offer-decor offer-decor-bottom" aria-hidden="true">✧</span>
+     <section
+  className="offer-banner ks-gift-banner"
+  id="gift-offer"
+  data-aos="fade-up"
+>
+  <div className="offer-glow offer-glow-one" aria-hidden="true" />
+  <div className="offer-glow offer-glow-two" aria-hidden="true" />
 
-          <div className="offer-content">
-            <p className="offer-kicker">
-              <span className="offer-kicker-line" /> THE ART OF GIFTING <span className="offer-kicker-line" />
-            </p>
-            <span className="offer-ornament" aria-hidden="true"></span>
-            <h2>Celebrate every<br /><em>sweet occasion.</em></h2>
-            <p className="offer-description">
-              Discover our ₹375 signature sweets offer, from Chandrakala and Khoya Samosa to Kaju Roll and Sonpapdi.
-            </p>
-            <div className="offer-actions">
-              <a
-                href="/gift-boxes#signature-sweets"
-                className="offer-cta"
-                onClick={(event) => { event.preventDefault(); navigate('gift-boxes#signature-sweets') }}
-              >
-                View signature sweets
-                <span className="offer-cta-icon"><ArrowRight size={17} /></span>
-              </a>
-              <span className="offer-crafted"><span>✦</span> Handcrafted with love</span>
-            </div>
-          </div>
+  <span className="offer-decor offer-decor-top" aria-hidden="true">✦</span>
+  <span className="offer-decor offer-decor-bottom" aria-hidden="true">✧</span>
 
-          <div className="offer-visual">
-            <div className="offer-image-frame">
-              <img
-                src={image('photo-1549465220-1a8b9238cd48', 1000)}
-                alt="A thoughtfully wrapped gift ready to give"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div className="offer-floating-note">
-              <span className="offer-note-icon" aria-hidden="true">✦</span>
-              <div><strong>A Gift of Sweetness</strong><small>Made for special moments</small></div>
-            </div>
-            <span className="offer-image-sparkle sparkle-a" aria-hidden="true">✧</span>
-            <span className="offer-image-sparkle sparkle-b" aria-hidden="true">✦</span>
-          </div>
-          <div className="offer-bottom-line" aria-hidden="true" />
-        </section>
+  <div className="offer-content">
+    <p className="offer-kicker">
+      <span className="offer-kicker-line" />
+      THE ART OF GIFTING
+      <span className="offer-kicker-line" />
+    </p>
+
+    <span className="offer-ornament" aria-hidden="true"></span>
+
+    <h2>
+      Celebrate every<br />
+      <em>sweet occasion.</em>
+    </h2>
+
+    <p className="offer-description">
+      Discover our ₹375 signature sweets offer, from Chandrakala
+      and Khoya Samosa to Kaju Roll and Sonpapdi.
+    </p>
+
+    <div className="offer-actions">
+      <a
+        href="/gift-boxes#signature-sweets"
+        className="offer-cta"
+        onClick={(event) => {
+          event.preventDefault();
+          navigate('gift-boxes#signature-sweets');
+        }}
+      >
+        View signature sweets
+        <span className="offer-cta-icon">
+          <ArrowRight size={17} />
+        </span>
+      </a>
+
+      <span className="offer-crafted">
+        <span>✦</span> Handcrafted with love
+      </span>
+    </div>
+  </div>
+
+  <div className="offer-visual">
+    <div className="offer-image-frame">
+      <img
+        src="/brand/homegift.webp"
+        alt="Kanagadhara Sweets premium gift boxes"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <div className="offer-floating-note">
+      <span className="offer-note-icon" aria-hidden="true">✦</span>
+      <div>
+        <strong>A Gift of Sweetness</strong>
+        <small>Made for special moments</small>
+      </div>
+    </div>
+
+    <span
+      className="offer-image-sparkle sparkle-a"
+      aria-hidden="true"
+    >✧</span>
+
+    <span
+      className="offer-image-sparkle sparkle-b"
+      aria-hidden="true"
+    >✦</span>
+  </div>
+
+  <div className="offer-bottom-line" aria-hidden="true" />
+</section>
 
         <section className="section reasons-section">
           <div className="center-heading" data-aos="fade-up">
@@ -539,60 +580,104 @@ const cardEffect = 'tilt shine focus'
           </div>
         </section>
 
-        <section className="section collection-section" id="collections">
-          <div className="section-heading" data-aos="fade-up">
-            <div>
-              <p className="eyebrow"><span /> A box for every kind of joy</p>
-              <h2>Celebrate every <em>occasion.</em></h2>
-            </div>
-            <a className="text-link" href="/gift-boxes" onClick={(event) => { event.preventDefault(); navigate('gift-boxes') }}>Explore gift boxes <ArrowRight size={15} /></a>
-          </div>
-          <div className="collection-grid">
-            {collections.map((collection, index) => (
-              <a
-                className={`collection-card ${collection.className}`}
-                data-aos="fade-up"
-                data-aos-delay={index * 90}
-                href={collection.link === 'Gift Boxes' ? '/gift-boxes' : collection.link === 'Sweets' ? '/sweets' : '/shop-all'}
-                key={collection.title}
-                onClick={(event) => {
-                  event.preventDefault()
-                  navigate(collection.link === 'Gift Boxes' ? 'gift-boxes' : collection.link === 'Sweets' ? 'sweets' : 'shop-all')
-                }}
-              >
-                <img src={collection.image} alt="" loading="lazy" />
-                <span className="collection-shade" />
-                <span className="collection-copy">
-                  <span className="collection-kicker">A little joy, just because</span>
-                  <strong>{collection.title}</strong>
-                  <span>{collection.subtitle}</span>
-                  <span className="collection-link">Explore collection <ArrowRight size={14} /></span>
-                </span>
-                <span className="collection-corner" aria-hidden="true"><ArrowRight size={18} /></span>
-              </a>
-            ))}
-          </div>
-        </section>
+      <section
+  className="section collection-section ks-celebration"
+  id="collections"
+>
+  <div className="section-heading" data-aos="fade-up">
+    <div>
+      <p className="eyebrow">
+        <span /> A box for every kind of joy
+      </p>
 
-        <section className="story-section" id="story">
-          <div className="story-image-wrap" data-aos="fade-right">
-            <img src={image('photo-1555507036-ab1f4038808a', 1100)} alt="A warm table set for a shared moment" loading="lazy" />
-            <span className="story-image-caption">A little sweetness goes a long way</span>
-            <div className="story-roundel"><Flower2 size={20} /><span>MADE TO<br />BRING US<br />TOGETHER</span></div>
-          </div>
-          <div className="story-copy" data-aos="fade-left">
-            <p className="eyebrow"><span /> A note from us</p>
-            <h2>A legacy of<br /><em>authentic taste.</em></h2>
-            <p>
-              At Kanagadhara Sweets, every sweet represents the joy of tradition, the warmth of family, and the happiness of sharing.
-            </p>
-            <p className="story-secondary">
-              From festive gatherings to an ordinary afternoon cup of chai, we believe there is always room for one more sweet moment.
-            </p>
-            <a href="/our-story" onClick={(event) => { event.preventDefault(); navigate('our-story') }} className="button button-outline">Discover our story <ArrowRight size={15} /></a>
-            <span className="story-signoff">With sweetness, <em>Kanagadhara</em></span>
-          </div>
-        </section>
+      <h2>
+        Celebrate every <em>occasion.</em>
+      </h2>
+    </div>
+
+    <a
+      className="text-link"
+      href="/gift-boxes"
+      onClick={(event) => {
+        event.preventDefault();
+        navigate('gift-boxes');
+      }}
+    >
+      Explore gift boxes <ArrowRight size={15} />
+    </a>
+  </div>
+
+  <div className="collection-grid">
+    {collections.slice(0, 3).map((collection, index) => {
+      const route = collection.link === 'Gift Boxes'
+        ? 'gift-boxes'
+        : collection.link === 'Sweets' ? 'sweets' : 'shop-all'
+      return (
+      <a
+        className={`collection-card ${collection.className}`}
+        data-aos="fade-up"
+        data-aos-delay={index * 90}
+        href={`/${route}`}
+        key={collection.title}
+        onClick={(event) => {
+          event.preventDefault();
+
+          navigate(route);
+        }}
+      >
+
+        <img
+          src={`/brand/homecelebration${index + 1}.webp`}
+          alt={collection.title}
+          loading="lazy"
+          decoding="async"
+          className="celebration-image"
+        />
+
+        <span className="collection-shade" />
+
+        <span
+          className="celebration-border"
+          aria-hidden="true"
+        />
+
+        <span
+          className="celebration-ornament"
+          aria-hidden="true"
+        >
+          ✦
+        </span>
+
+        <span className="collection-copy">
+          <span className="collection-kicker">
+            <span className="celebration-line" />
+            A little joy, just because
+            <span className="celebration-line" />
+          </span>
+
+          <strong>{collection.title}</strong>
+
+          <span className="celebration-description">
+            {collection.subtitle}
+          </span>
+
+          <span className="collection-link">
+            Explore collection
+            <ArrowRight size={15} />
+          </span>
+        </span>
+
+        <span
+          className="collection-corner"
+          aria-hidden="true"
+        >
+          <ArrowRight size={18} />
+        </span>
+      </a>
+      )
+    })}
+  </div>
+</section>
 
         <section className="community-section" data-aos="fade-up">
           <div className="community-mark"><MessageCircle size={21} /></div>
@@ -602,20 +687,10 @@ const cardEffect = 'tilt shine focus'
           <a href="/contact" onClick={(event) => { event.preventDefault(); navigate('contact') }} className="text-link">Get in touch <ArrowRight size={15} /></a>
         </section>
 
-        <section className="newsletter-section" data-aos="fade-up">
-         
-          <div className="newsletter-copy">
-            <p className="eyebrow eyebrow-light"><span /> A little note from us</p>
-            <h2>Stay connected<br />with <em>sweetness.</em></h2>
-            <p>New arrivals, festive favourites, and little things worth celebrating—straight to your inbox.</p>
-          </div>
-          <p className="newsletter-fineprint">Newsletter signup is currently unavailable.</p>
-        </section>
-
         {videoQuickView && (() => {
           const index = visibleBestSellers.findIndex((item) => item.id === videoQuickView.id)
           const src = productVideos[index]
-          const fallbackImage = ['/products/mysore-pak.webp', '/products/laddu.webp', '/products/kaju-katli.webp', '/products/badusha.webp'][index]
+          const fallbackImage = productImages[index]
           return (
             <div className="ks-video-modal-backdrop" onMouseDown={(event) => {
               if (event.target === event.currentTarget) setVideoQuickView(null)
@@ -628,7 +703,6 @@ const cardEffect = 'tilt shine focus'
                   ) : (
                     <video
                       key={src}
-                      ref={modalVideoRef}
                       src={src}
                       poster={fallbackImage}
                       autoPlay muted loop playsInline preload="metadata"
@@ -638,9 +712,9 @@ const cardEffect = 'tilt shine focus'
                   )}
                 </div>
                 <div className="ks-video-modal-content">
-                  <p className="ks-video-modal-category">{['Ghee Sweets', 'Festive Sweets', 'Dry Fruit Sweets', 'Traditional Sweets'][index]}</p>
+                  <p className="ks-video-modal-category">{royalCategories[index]}</p>
                   <h2>{videoQuickView.name}</h2>
-                  <p>{['A melt-in-your-mouth South Indian classic.', 'Traditional, aromatic laddus perfect for every celebration.', 'Smooth, rich and delicate cashew delight with a royal touch.', 'A flaky, juicy sweet with a perfect traditional taste.'][index]}</p>
+                  <p>{royalDescriptions[index]}</p>
                   <div className="ks-video-modal-sizes" aria-label="Choose weight">
                     {(['250g', '500g', '1kg'] as const).map((weight) => (
                       <button key={weight} type="button" aria-pressed={modalWeight === weight} className={modalWeight === weight ? 'active' : ''} onClick={() => setModalWeight(weight)}>{weight}</button>

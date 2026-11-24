@@ -1,4 +1,3 @@
-
 /* ============================================
    SRI KANAGADHARA SWEETS
    PRODUCT PAGE
@@ -176,24 +175,24 @@
   min-width: 0;
   opacity: 0;
   transform: translateY(28px) scale(.97);
-  filter: blur(4px);
+  
 
-  animation: cinematicCardEntrance .8s
+  animation: cinematicCardEntrance .28s
     cubic-bezier(.2, .8, .2, 1)
-    calc(var(--card-index, 0) * 100ms) both;
+    calc(var(--card-index, 0) * 35ms) both;
 }
 
 @keyframes cinematicCardEntrance {
   from {
     opacity: 0;
     transform: translateY(28px) scale(.97);
-    filter: blur(4px);
+    
   }
 
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
+    
   }
 }
 
@@ -258,27 +257,27 @@
   height: 100%;
   object-fit: cover;
 
-  transform: scale(1.2);
-  filter: blur(7px) brightness(.75);
+  transform: scale(1);
+  opacity: 1;
 
-  animation: cinematicImageReveal 1.5s
+  animation: cinematicImageReveal .48s
     cubic-bezier(.2, .7, .2, 1)
-    calc(var(--card-index, 0) * 100ms + 150ms) forwards;
+    calc(var(--card-index, 0) * 35ms + 30ms) backwards;
 
   transition:
     transform .8s cubic-bezier(.2, .7, .2, 1),
-    filter .6s ease;
+    filter .2s ease;
 }
 
 @keyframes cinematicImageReveal {
   0% {
     transform: scale(1.2);
-    filter: blur(7px) brightness(.75);
+    opacity: .75;
   }
 
   100% {
     transform: scale(1);
-    filter: blur(0) brightness(1);
+    opacity: 1;
   }
 }
 
@@ -316,18 +315,18 @@
   left: 0;
   transform-origin: left center;
 
-  animation: cinematicCurtainLeft 1.25s
+  animation: cinematicCurtainLeft .42s
     cubic-bezier(.77, 0, .18, 1)
-    calc(var(--card-index, 0) * 100ms + 100ms) forwards;
+    calc(var(--card-index, 0) * 35ms + 25ms) both;
 }
 
 .cinematic-curtain-right {
   right: 0;
   transform-origin: right center;
 
-  animation: cinematicCurtainRight 1.25s
+  animation: cinematicCurtainRight .42s
     cubic-bezier(.77, 0, .18, 1)
-    calc(var(--card-index, 0) * 100ms + 100ms) forwards;
+    calc(var(--card-index, 0) * 35ms + 25ms) both;
 }
 
 @keyframes cinematicCurtainLeft {
@@ -516,8 +515,8 @@
   width: fit-content;
   opacity: 0;
 
-  animation: cinematicFadeUp .65s ease
-    calc(var(--card-index, 0) * 100ms + 1.05s) forwards;
+  animation: cinematicFadeUp .22s ease
+    calc(var(--card-index, 0) * 35ms + .16s) both;
 }
 
 .cinematic-category::after {
@@ -525,7 +524,9 @@
   position: absolute;
   left: 0;
   bottom: -5px;
-  width: 0;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
   height: 2px;
 
   background: linear-gradient(
@@ -534,13 +535,13 @@
     #f4d99b
   );
 
-  animation: cinematicLineDraw .7s ease
-    calc(var(--card-index, 0) * 100ms + 1.35s) forwards;
+  animation: cinematicLineDraw .28s ease
+    calc(var(--card-index, 0) * 35ms + .22s) both;
 }
 
 @keyframes cinematicLineDraw {
   to {
-    width: 100%;
+    transform: scaleX(1);
   }
 }
 
@@ -561,26 +562,26 @@
   transform: translateY(20px) rotateX(-55deg);
   transform-origin: bottom center;
 
-  animation: cinematicWordReveal .7s
+  animation: cinematicWordReveal .28s
     cubic-bezier(.2, .8, .2, 1)
     calc(
-      var(--card-index, 0) * 100ms +
-      1.45s +
-      var(--word-index, 0) * 110ms
-    ) forwards;
+      var(--card-index, 0) * 35ms +
+      .20s +
+      var(--word-index, 0) * 45ms
+    ) both;
 }
 
 @keyframes cinematicWordReveal {
   from {
     opacity: 0;
     transform: translateY(20px) rotateX(-55deg);
-    filter: blur(4px);
+    
   }
 
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0);
-    filter: blur(0);
+    
   }
 }
 
@@ -592,8 +593,8 @@
   opacity: 0;
   transform: translateY(12px);
 
-  animation: cinematicFadeUp .75s ease
-    calc(var(--card-index, 0) * 100ms + 1.85s) forwards;
+  animation: cinematicFadeUp .25s ease
+    calc(var(--card-index, 0) * 35ms + .30s) both;
 }
 
 @keyframes cinematicFadeUp {
@@ -660,8 +661,8 @@
   opacity: 0;
   transform: translateY(12px);
 
-  animation: cinematicFadeUp .7s ease
-    calc(var(--card-index, 0) * 100ms + 2.05s) forwards;
+  animation: cinematicFadeUp .25s ease
+    calc(var(--card-index, 0) * 35ms + .35s) both;
 }
 
 .cinematic-price {
@@ -732,8 +733,8 @@
   border-color: var(--cinematic-maroon);
   color: #fff9ed;
 
-  animation: cinematicFadeUp .7s ease
-    calc(var(--card-index, 0) * 100ms + 2.3s) forwards;
+  animation: cinematicFadeUp .25s ease
+    calc(var(--card-index, 0) * 35ms + .40s) both;
 }
 
 .cinematic-add::before {
@@ -756,19 +757,19 @@
 
   transform: rotate(25deg);
 
-  animation: cinematicGoldShine 1s ease
-    calc(var(--card-index, 0) * 100ms + 3s) forwards;
+  animation: cinematicGoldShine .45s ease
+    calc(var(--card-index, 0) * 35ms + .60s) both;
 
   pointer-events: none;
 }
 
 @keyframes cinematicGoldShine {
   from {
-    left: -90%;
+    transform: translateX(0) rotate(25deg);
   }
 
   to {
-    left: 150%;
+    transform: translateX(535%) rotate(25deg);
   }
 }
 
@@ -805,49 +806,7 @@
   text-decoration: none;
 }
 
-/* ============================================
-   ENQUIRY SWEETS
-   ============================================ */
 
-.shop-enquiries {
-  padding-block: 1.5rem 3rem;
-  color: #173f31;
-}
-
-.shop-enquiries h2 {
-  font: 500 clamp(1.8rem, 4vw, 2.8rem)/1.2 var(--serif);
-}
-
-.shop-enquiries ul {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 14rem), 1fr)
-  );
-  gap: 1rem;
-  padding: 0;
-  list-style: none;
-}
-
-.shop-enquiries li {
-  display: grid;
-  justify-items: start;
-  gap: .5rem;
-  padding: 1rem;
-  border: 1px solid #ddcfb6;
-  background: #fffaf1;
-}
-
-.shop-enquiries li span {
-  font-size: 1.2rem;
-}
-
-.shop-enquiries a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  text-decoration: underline;
-}
 
 /* ============================================
    ACCESSIBILITY
@@ -981,22 +940,18 @@
    LOADER + VIEWPORT ANIMATION CONTROL
    ============================================ */
 
+/* Only pause the entrance effects, not every descendant. */
 .module-products-grid .module-product-reveal,
-.module-products-grid .module-product-reveal *,
-.module-products-grid .module-product-reveal *::before,
-.module-products-grid .module-product-reveal *::after {
-  animation-play-state: paused !important;
+.module-products-grid .module-product-reveal :is(.module-product-photo img, .cinematic-curtain, .cinematic-category, .cinematic-word, .cinematic-description, .cinematic-buy, .cinematic-add),
+.module-products-grid .module-product-reveal .cinematic-category::after,
+.module-products-grid .module-product-reveal .cinematic-add::before {
+  animation-play-state: paused;
 }
-
-.module-products-grid.cinematic-ready
-.module-product-reveal.is-visible,
-.module-products-grid.cinematic-ready
-.module-product-reveal.is-visible *,
-.module-products-grid.cinematic-ready
-.module-product-reveal.is-visible *::before,
-.module-products-grid.cinematic-ready
-.module-product-reveal.is-visible *::after {
-  animation-play-state: running !important;
+.module-products-grid.cinematic-ready .module-product-reveal.is-visible,
+.module-products-grid.cinematic-ready .module-product-reveal.is-visible :is(.module-product-photo img, .cinematic-curtain, .cinematic-category, .cinematic-word, .cinematic-description, .cinematic-buy, .cinematic-add),
+.module-products-grid.cinematic-ready .module-product-reveal.is-visible .cinematic-category::after,
+.module-products-grid.cinematic-ready .module-product-reveal.is-visible .cinematic-add::before {
+  animation-play-state: running;
 }
 
 /* ============================================
@@ -1026,4 +981,18 @@
   .cinematic-curtain {
     display: none !important;
   }
+}
+
+/* Keep all cards in the DOM; skip offscreen rendering when supported. */
+@supports (content-visibility: auto) {
+  .module-products-grid .module-product-reveal {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 360px;
+  }
+}
+/* Touch screens retain the discover label without costly hover effects. */
+@media (hover: none) {
+  .module-product-photo .module-product-view { opacity: 1; transform: none; }
+  .module-product:hover { transform: none; }
+  .cinematic-card:hover .module-product-photo img { transform: none; filter: none; }
 }

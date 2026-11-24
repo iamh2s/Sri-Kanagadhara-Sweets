@@ -1,5 +1,4 @@
-
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { ArrowRight, Heart, Plus } from 'lucide-react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
@@ -12,7 +11,6 @@ import {
   formatPrice,
   shopLinks,
 } from '../data/storefront'
-import { storePhoneHref } from '../data/storeContact'
 
 import type { ModulePagesProps, Product, Weight } from './ModulePages'
 import './ProductPage.css'
@@ -25,18 +23,42 @@ type ProductTileProps = {
   index: number
   onWeightChange: (productId: number, weight: Weight) => void
   onAddToCart: (product: Product, weight: Weight) => void
-  onViewProduct: (product: Product) => void
   isWishlisted: boolean
   onToggleWishlist: (productId: number) => void
 }
 
-function ProductTile({
+// Share one observer for all product cards instead of one per card.
+let cardObserver: IntersectionObserver | undefined
+const revealCallbacks = new Map<Element, () => void>()
+
+function observeCard(element: HTMLElement, reveal: () => void) {
+  if (typeof IntersectionObserver === 'undefined') {
+    reveal()
+    return () => {}
+  }
+  cardObserver ??= new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      const callback = revealCallbacks.get(entry.target)
+      cardObserver?.unobserve(entry.target)
+      revealCallbacks.delete(entry.target)
+      callback?.()
+    }
+  }, { threshold: 0.01, rootMargin: '100px 0px' })
+  revealCallbacks.set(element, reveal)
+  cardObserver.observe(element)
+  return () => {
+    cardObserver?.unobserve(element)
+    revealCallbacks.delete(element)
+  }
+}
+
+const ProductTile = memo(function ProductTile({
   product,
   weight,
   index,
   onWeightChange,
   onAddToCart,
-  onViewProduct,
   isWishlisted,
   onToggleWishlist,
 }: ProductTileProps) {
@@ -48,31 +70,11 @@ function ProductTile({
 
     if (!element) return
 
-    if (!('IntersectionObserver' in window)) {
-      setIsVisible(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(element)
-        }
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -30px 0px',
-      },
-    )
-
-    observer.observe(element)
-
-    return () => observer.disconnect()
+    return observeCard(element, () => setIsVisible(true))
   }, [])
 
   const animationStyle = {
-    '--card-index': index % 5,
+    '--card-index': index % 3,
   } as CSSProperties
 
   return (
@@ -84,16 +86,17 @@ function ProductTile({
       style={animationStyle}
     >
       {/* Product image */}
-      <button
+      <Link
         className="module-product-photo"
-        type="button"
-        onClick={() => onViewProduct(product)}
+        to={`/products/${catalogSlug(product.name)}`}
         aria-label={`View ${product.name}`}
       >
         <img
           src={product.image}
           alt={product.name}
-          loading="lazy"
+          loading={index < 3 ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={index === 0 ? "high" : "auto"}
         />
 
         <span className="cinematic-curtain cinematic-curtain-left" aria-hidden="true" />
@@ -109,7 +112,7 @@ function ProductTile({
             {product.badge}
           </span>
         )}
-      </button>
+      </Link>
 
       {/* Wishlist */}
       <button
@@ -151,7 +154,7 @@ function ProductTile({
                 } as CSSProperties
               }
             >
-              {word}
+              {word}{' '}
             </span>
           ))}
         </Link>
@@ -204,7 +207,7 @@ function ProductTile({
       </div>
     </article>
   )
-}
+})
 
 export function ProductPage({
   page,
@@ -212,7 +215,6 @@ export function ProductPage({
   weights,
   onWeightChange,
   onAddToCart,
-  onViewProduct,
   wishlist,
   onToggleWishlist,
   catalogSearch,
@@ -271,7 +273,8 @@ export function ProductPage({
   /*
    * COLLECTION FILTERING
    */
-  const collectionProducts = products.filter((product) => {
+  const wishlistSet = useMemo(() => new Set(wishlist), [wishlist])
+  const collectionProducts = useMemo(() => products.filter((product) => {
     const matchesPage =
       page === 'shop-all' ||
       (
@@ -288,54 +291,41 @@ export function ProductPage({
 
     return (
       matchesPage &&
-      (!wishlistOnly || wishlist.includes(product.id))
+      (!wishlistOnly || wishlistSet.has(product.id))
     )
-  })
+  }), [products, page, wishlistOnly, wishlistSet])
 
   /*
    * PRODUCT SEARCH FILTER
    */
-  const filteredProducts = collectionProducts.filter(
+  const matchingProducts = useMemo(() => collectionProducts.filter(
     (product) => matchesProduct(product, query),
-  )
+  ), [collectionProducts, query])
 
   /*
    * ENQUIRY SWEETS
    */
-  const collectionEnquiries =
+  const collectionEnquiries = useMemo(() =>
     !wishlistOnly && (page === 'shop-all' || page === 'sweets')
       ? enquirySweets.filter(
           (sweet) =>
             !activeCategory ||
             sweet.category === activeCategory.name,
         )
-      : []
+      : [], [wishlistOnly, page, activeCategory])
 
-  const filteredEnquiries = collectionEnquiries.filter(
+  const filteredEnquiries = useMemo(() => collectionEnquiries.filter(
     (sweet) => matchesProduct(sweet, query),
-  )
+  ), [collectionEnquiries, query])
 
-  /*
-   * RESULT COUNT
-   */
-  const resultCount =
-    filteredProducts.length + filteredEnquiries.length
-
-  /*
-   * SORT PRODUCTS
-   */
-  if (sort === 'price-low' || sort === 'price-high') {
+  const filteredProducts = useMemo(() => {
+    if (sort !== 'price-low' && sort !== 'price-high') return matchingProducts
     const direction = sort === 'price-low' ? 1 : -1
-
-    filteredProducts.sort(
-      (a, b) =>
-        direction *
-        (
-          a.prices[weights[a.id] ?? '250g'] -
-          b.prices[weights[b.id] ?? '250g']
-        ),
-    )
-  }
+    return [...matchingProducts].sort((a, b) => direction * (
+      a.prices[weights[a.id] ?? '250g'] - b.prices[weights[b.id] ?? '250g']
+    ))
+  }, [matchingProducts, sort, weights])
+  const resultCount = filteredProducts.length + filteredEnquiries.length
 
   /*
    * PAGE TITLE
@@ -413,6 +403,9 @@ export function ProductPage({
               }
               alt=""
               loading="lazy"
+              decoding="async"
+              width={44}
+              height={44}
             />
 
             <span>{link.label}</span>
@@ -502,44 +495,14 @@ export function ProductPage({
               index={index}
               onWeightChange={onWeightChange}
               onAddToCart={onAddToCart}
-              onViewProduct={onViewProduct}
-              isWishlisted={wishlist.includes(product.id)}
+              isWishlisted={wishlistSet.has(product.id)}
               onToggleWishlist={onToggleWishlist}
             />
           ))}
         </section>
       )}
 
-      {/* ENQUIRY SWEETS */}
-      {filteredEnquiries.length > 0 && (
-        <section
-          className="shop-enquiries module-content-wrap"
-          aria-labelledby="enquiry-sweets-heading"
-        >
-          <h2 id="enquiry-sweets-heading">
-            Sweets by enquiry
-          </h2>
 
-          <p>
-            Call the shop for prices, sizes and availability.
-          </p>
-
-          <ul>
-            {filteredEnquiries.map((sweet) => (
-              <li key={sweet.name}>
-                <span>{sweet.name}</span>
-
-                <a
-                  href={storePhoneHref}
-                  aria-label={`Call about ${sweet.name}`}
-                >
-                  Call the shop
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
     </div>
   )
 }

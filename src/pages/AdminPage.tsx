@@ -202,9 +202,6 @@ function AdminWorkspace({ signOut, busy, error }: { signOut: () => void; busy: b
     setProductEdit(null)
     setCategoryEdit('')
     setNotice('')
-    const originalTitle = document.title
-    document.title = `${section ?? 'Page unavailable'} · Kanagadhara Admin`
-    return () => { document.title = originalTitle }
   }, [section])
   const visibleProducts = catalog.filter((product) =>
     (!category || category === product.category) && product.name.toLowerCase().includes(query.trim().toLowerCase()),

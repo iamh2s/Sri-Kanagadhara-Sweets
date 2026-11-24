@@ -17,6 +17,7 @@ import { AnnouncementBar } from './components/AnnouncementBar'
 import { ContactShortcut } from './components/ContactShortcut'
 import { FeatherCursor } from './components/FeatherCursor'
 import TraditionalLoader from './components/TraditionalLoader'
+import { usePageMetadata } from './usePageMetadata'
 
 import {
   CartDrawer,
@@ -331,64 +332,7 @@ function App() {
   // SEO AND DOCUMENT TITLE
   // =====================================
 
-  useEffect(() => {
-    const originalTitle = document.title
-
-    const privatePage = [
-      'admin',
-      'cart',
-      ...commerceRoutes,
-      'not-found',
-      '500',
-      'maintenance',
-    ].includes(page) || Boolean(
-      catalogSearch ||
-      wishlistOnly ||
-      currentRoute === 'search',
-    )
-
-    const robots = document.createElement('meta')
-
-    if (privatePage) {
-      robots.name = 'robots'
-      robots.content = 'noindex, nofollow'
-      document.head.appendChild(robots)
-    }
-
-    if (!detailProduct && page !== 'home') {
-      const label = wishlistOnly
-        ? 'Wishlist'
-        : catalogSearch
-          ? 'Search results'
-          : category?.name ??
-            currentRoute
-              .split('/')
-              .filter(Boolean)
-              .pop()
-              ?.replace(/-/g, ' ') ??
-            'Shop'
-
-      document.title =
-        label.charAt(0).toUpperCase() +
-        label.slice(1) +
-        ' | Sri Kanagadhara Sweets'
-    }
-
-    return () => {
-      robots.remove()
-
-      if (!detailProduct && page !== 'home') {
-        document.title = originalTitle
-      }
-    }
-  }, [
-    page,
-    category,
-    detailProduct,
-    catalogSearch,
-    wishlistOnly,
-    currentRoute,
-  ])
+  usePageMetadata(location.pathname, location.search)
 
   // =====================================
   // LOCAL STORAGE

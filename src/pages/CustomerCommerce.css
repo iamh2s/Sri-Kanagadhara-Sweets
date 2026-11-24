@@ -1,42 +1,529 @@
-.customer-commerce { padding-block: clamp(36px,6vw,76px); color: var(--cocoa,#3b2924); }
-.customer-commerce > header { margin-bottom: 24px; }
-.customer-commerce h1, .customer-commerce h2, .customer-commerce h3 { font-family: var(--serif,Georgia,serif); color: var(--maroon,#582330); }
-.customer-commerce h1 { margin: 12px 0; font-size: clamp(2.4rem,6vw,4rem); line-height: 1.05; }
-.customer-commerce h2 { margin: 0 0 18px; font-size: 1.65rem; }
-.customer-commerce h3 { margin: 20px 0 4px; font-size: 1.2rem; }
-.customer-commerce p { margin: 9px 0 17px; line-height: 1.6; overflow-wrap: anywhere; }
-.cc-grid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 22px; align-items: start; }
-.cc-panel, .cc-hub a { padding: clamp(18px,3vw,35px); border: 1px solid var(--line,#d9cdb9); background: #fffcf6; }
-.cc-panel { min-width: 0; }
-.customer-commerce .cc-notice { padding: 12px 16px; border-inline-start: 3px solid #a68145; background: #f5eddb; margin: 0 0 18px; }
-.cc-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 16px; }
-.cc-stack, .customer-commerce label { min-width: 0; }
-.cc-panel { overflow-wrap: anywhere; }
-.cc-panel .cc-link { max-width: 100%; overflow-wrap: anywhere; }
-.cc-wide { grid-column: 1/-1; }
-.customer-commerce label { display: grid; gap: 6px; font-size: .9rem; margin: 0 0 14px; }
-.customer-commerce input:not([type=checkbox]), .customer-commerce select, .customer-commerce textarea { width: 100%; min-width: 0; box-sizing: border-box; padding: 10px; font: inherit; border: 1px solid #ad9e85; border-radius: 2px; color: inherit; background: #fff; }
-.customer-commerce textarea { min-height: 5rem; }
-.customer-commerce .cc-check { display: flex; align-items: center; gap: 8px; }
-.cc-items, .cc-list { padding: 0; margin: 0; list-style: none; }
-.cc-items li, .cc-total { display: flex; justify-content: space-between; align-items: start; gap: 14px; border-top: 1px solid var(--line,#d9cdb9); padding: 14px 0; }
-.cc-items small { display: block; margin-top: 3px; }
-.cc-total { padding-bottom: 0; }
-.cc-list li + li { border-top: 1px solid var(--line,#d9cdb9); margin-top: 14px; padding-top: 14px; }
-.customer-commerce .cc-link { display: inline-block; background: transparent; border: 0; color: #18513c; text-decoration: underline; text-underline-offset: 3px; padding: 4px 0; margin-bottom: 8px; cursor: pointer; font: inherit; }
-.cc-reference { font-family: monospace; }
-.cc-hub { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
-.cc-hub a { border-radius: 8px; }
-.cc-hub a:is(:hover,:focus-visible) { background: #f4eddf; }
-.cc-hub a > svg { flex: 0 0 auto; }
-.cc-hub strong, .cc-hub small { display: block; }
-.cc-hub small { margin-top: .35rem; color: #594d42; line-height: 1.5; }
-.customer-commerce .cc-account-intro { margin-bottom: 1.5rem; }
-.cc-hub a { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #194e39; }
-.cc-hub a > svg:last-child { margin-left: auto; width: 16px; }
-.customer-commerce :focus-visible { outline: 2px solid #286549; outline-offset: 3px; }
-@media(max-width: 780px) { .cc-grid,.cc-hub { grid-template-columns: 1fr; } }
-@media(max-width: 500px) { .cc-fields { grid-template-columns: 1fr; gap: 0; } .customer-commerce .button { white-space: normal; } }
-@media (pointer: coarse) {
-  .customer-commerce :is(input:not([type=checkbox]),select,textarea) { font-size: 16px; min-height: 44px; }
+/* =====================================================
+   SRI KANAGADHARA SWEETS
+   CUSTOMER COMMERCE
+   TRANSPARENT BACKGROUND
+===================================================== */
+
+/* =====================================================
+   MAIN PAGE
+===================================================== */
+
+.customer-commerce {
+  padding-block: clamp(36px, 6vw, 76px);
+
+  color: var(--cocoa, #3b2924);
+
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
 }
+
+/* Preserve the global website background */
+
+.customer-commerce.module-content-wrap {
+  background: none !important;
+}
+
+/* =====================================================
+   REMOVE INDIVIDUAL SECTION BACKGROUNDS
+===================================================== */
+
+.customer-commerce > header,
+.customer-commerce .cc-grid,
+.customer-commerce .cc-stack,
+.customer-commerce .cc-panel,
+.customer-commerce .cc-fields,
+.customer-commerce .cc-hub,
+.customer-commerce .cc-hub a,
+.customer-commerce .cc-notice,
+.customer-commerce .cc-items,
+.customer-commerce .cc-items li,
+.customer-commerce .cc-list,
+.customer-commerce .cc-list li,
+.customer-commerce .cc-total,
+.customer-commerce form,
+.customer-commerce label {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.customer-commerce > header {
+  margin-bottom: 24px;
+}
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+
+.customer-commerce h1,
+.customer-commerce h2,
+.customer-commerce h3 {
+  font-family: var(--serif, Georgia, serif);
+  color: var(--maroon, #582330);
+}
+
+.customer-commerce h1 {
+  margin: 12px 0;
+
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.05;
+}
+
+.customer-commerce h2 {
+  margin: 0 0 18px;
+
+  font-size: 1.65rem;
+}
+
+.customer-commerce h3 {
+  margin: 20px 0 4px;
+
+  font-size: 1.2rem;
+}
+
+.customer-commerce p {
+  margin: 9px 0 17px;
+
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   MAIN GRID
+===================================================== */
+
+.customer-commerce .cc-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.3fr)
+    minmax(0, 1fr);
+
+  gap: 22px;
+
+  align-items: start;
+
+  background: none !important;
+}
+
+/* =====================================================
+   PANELS AND ACCOUNT CARDS
+===================================================== */
+
+.customer-commerce .cc-panel,
+.customer-commerce .cc-hub a {
+  padding: clamp(18px, 3vw, 35px);
+
+  border: 1px solid var(--line, #d9cdb9);
+
+  background: none !important;
+  background-color: transparent !important;
+
+  box-shadow: none !important;
+}
+
+.customer-commerce .cc-panel {
+  min-width: 0;
+
+  overflow-wrap: anywhere;
+}
+
+.customer-commerce .cc-panel .cc-link {
+  max-width: 100%;
+
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   NOTICE MESSAGE
+===================================================== */
+
+.customer-commerce .cc-notice {
+  padding: 12px 16px;
+
+  border-inline-start: 3px solid #a68145;
+
+  margin: 0 0 18px;
+
+  background: none !important;
+}
+
+/* =====================================================
+   FORM FIELD LAYOUT
+===================================================== */
+
+.customer-commerce .cc-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px 16px;
+
+  background: none !important;
+}
+
+.customer-commerce .cc-stack,
+.customer-commerce label {
+  min-width: 0;
+}
+
+.customer-commerce .cc-wide {
+  grid-column: 1 / -1;
+}
+
+/* =====================================================
+   FORM LABELS
+===================================================== */
+
+.customer-commerce label {
+  display: grid;
+
+  gap: 6px;
+
+  font-size: 0.9rem;
+
+  margin: 0 0 14px;
+}
+
+/* =====================================================
+   INPUTS, SELECT AND TEXTAREA
+===================================================== */
+
+.customer-commerce input:not([type="checkbox"]),
+.customer-commerce select,
+.customer-commerce textarea {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  padding: 10px;
+
+  font: inherit;
+
+  border: 1px solid #ad9e85;
+  border-radius: 2px;
+
+  color: inherit;
+
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  box-shadow: none !important;
+}
+
+/* Keep dropdown options readable */
+
+.customer-commerce select option {
+  color: var(--cocoa, #3b2924);
+  background-color: var(--cream, #fffaf0);
+}
+
+/* Textarea */
+
+.customer-commerce textarea {
+  min-height: 5rem;
+}
+
+/* Placeholder */
+
+.customer-commerce input::placeholder,
+.customer-commerce textarea::placeholder {
+  color: #897c6c;
+}
+
+/* Input focus */
+
+.customer-commerce input:focus,
+.customer-commerce select:focus,
+.customer-commerce textarea:focus {
+  background: none !important;
+
+  border-color: #286549;
+}
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+.customer-commerce .cc-check {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.customer-commerce input[type="checkbox"] {
+  accent-color: #174b32;
+}
+
+/* =====================================================
+   ORDER ITEMS AND LISTS
+===================================================== */
+
+.customer-commerce .cc-items,
+.customer-commerce .cc-list {
+  padding: 0;
+  margin: 0;
+
+  list-style: none;
+
+  background: none !important;
+}
+
+.customer-commerce .cc-items li,
+.customer-commerce .cc-total {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: start;
+
+  gap: 14px;
+
+  border-top: 1px solid var(--line, #d9cdb9);
+
+  padding: 14px 0;
+}
+
+.customer-commerce .cc-items small {
+  display: block;
+
+  margin-top: 3px;
+}
+
+.customer-commerce .cc-total {
+  padding-bottom: 0;
+}
+
+.customer-commerce .cc-list li + li {
+  border-top: 1px solid var(--line, #d9cdb9);
+
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+/* =====================================================
+   TEXT LINKS
+===================================================== */
+
+.customer-commerce .cc-link {
+  display: inline-block;
+
+  background: none !important;
+
+  border: 0;
+
+  color: #18513c;
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  padding: 4px 0;
+
+  margin-bottom: 8px;
+
+  cursor: pointer;
+
+  font: inherit;
+}
+
+/* =====================================================
+   ORDER REFERENCE
+===================================================== */
+
+.customer-commerce .cc-reference {
+  font-family: monospace;
+}
+
+/* =====================================================
+   CUSTOMER ACCOUNT HUB
+===================================================== */
+
+.customer-commerce .cc-hub {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+
+  background: none !important;
+}
+
+/* Account cards */
+
+.customer-commerce .cc-hub a {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-radius: 8px;
+
+  text-decoration: none;
+
+  color: #194e39;
+
+  background: none !important;
+  background-color: transparent !important;
+
+  box-shadow: none !important;
+
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* =====================================================
+   ACCOUNT CARD HOVER
+===================================================== */
+
+.customer-commerce .cc-hub a:is(
+  :hover,
+  :focus-visible,
+  :active
+) {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  border-color: #a58247;
+
+  box-shadow: none !important;
+}
+
+/* =====================================================
+   ACCOUNT ICONS
+===================================================== */
+
+.customer-commerce .cc-hub a > svg {
+  flex: 0 0 auto;
+}
+
+.customer-commerce .cc-hub a > svg:last-child {
+  margin-left: auto;
+
+  width: 16px;
+}
+
+/* =====================================================
+   ACCOUNT CARD CONTENT
+===================================================== */
+
+.customer-commerce .cc-hub strong,
+.customer-commerce .cc-hub small {
+  display: block;
+}
+
+.customer-commerce .cc-hub small {
+  margin-top: 0.35rem;
+
+  color: #594d42;
+
+  line-height: 1.5;
+}
+
+.customer-commerce .cc-account-intro {
+  margin-bottom: 1.5rem;
+}
+
+/* =====================================================
+   REMOVE DECORATIVE BACKGROUND LAYERS
+===================================================== */
+
+.customer-commerce::before,
+.customer-commerce::after,
+.customer-commerce .cc-panel::before,
+.customer-commerce .cc-panel::after,
+.customer-commerce .cc-grid::before,
+.customer-commerce .cc-grid::after,
+.customer-commerce .cc-hub::before,
+.customer-commerce .cc-hub::after,
+.customer-commerce .cc-hub a::before,
+.customer-commerce .cc-hub a::after {
+  background: none !important;
+  background-image: none !important;
+
+  box-shadow: none !important;
+}
+
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.customer-commerce :focus-visible {
+  outline: 2px solid #286549;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   TABLET RESPONSIVE
+===================================================== */
+
+@media (max-width: 780px) {
+
+  .customer-commerce .cc-grid,
+  .customer-commerce .cc-hub {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 500px) {
+
+  .customer-commerce .cc-fields {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .customer-commerce .button {
+    white-space: normal;
+  }
+}
+
+/* =====================================================
+   TOUCH DEVICE OPTIMIZATION
+===================================================== */
+
+@media (pointer: coarse) {
+
+  .customer-commerce :is(
+    input:not([type="checkbox"]),
+    select,
+    textarea
+  ) {
+    font-size: 16px;
+
+    min-height: 44px;
+  }
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .customer-commerce *,
+  .customer-commerce *::before,
+  .customer-commerce *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =====================================================
+   CUSTOMER COMMERCE — END
+===================================================== */

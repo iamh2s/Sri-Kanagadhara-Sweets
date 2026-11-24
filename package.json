@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build && npm run build:api",
     "preview": "vite preview",
+    "test:seo": "npm run build && node --test tests/seo.test.mjs",
     "build:api": "tsc -p server/tsconfig.json",
     "dev:api": "npm run build:api && npm run start:api",
     "admin:local": "powershell -NoProfile -File scripts/start-admin-local.ps1",

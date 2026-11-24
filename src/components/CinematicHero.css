@@ -1,0 +1,1008 @@
+/* =====================================================
+   SRI KANAGADHARA SWEETS
+   PREMIUM CINEMATIC HERO
+===================================================== */
+
+.module-hero {
+  --hero-green: #174b32;
+  --hero-dark: #08291d;
+  --hero-gold: #e9c979;
+  --hero-gold-light: #f7e4b1;
+  --hero-ivory: #fff9eb;
+  --hero-muted: #e1e7dc;
+
+  --hero-ease: cubic-bezier(.22, 1, .36, 1);
+
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: clamp(430px, 38vw, 580px);
+
+  margin: 0;
+
+  padding:
+    65px
+    clamp(30px, 5vw, 90px)
+    85px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  background: var(--hero-dark);
+  color: var(--hero-ivory);
+
+  border-top: 1px solid var(--hero-gold);
+  border-bottom: 2px solid var(--hero-gold);
+}
+
+/* =====================================================
+   BACKGROUND IMAGE
+===================================================== */
+
+.module-hero .module-hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  max-width: none;
+
+  object-fit: cover;
+  object-position: center;
+
+  pointer-events: none;
+
+  animation: ksHeroImageReveal
+    700ms var(--hero-ease) both;
+}
+
+@keyframes ksHeroImageReveal {
+  from {
+    transform: scale(1.035);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* =====================================================
+   CINEMATIC GREEN OVERLAY
+===================================================== */
+
+.module-hero .module-hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 32, 23, .96) 0%,
+      rgba(8, 41, 29, .86) 22%,
+      rgba(8, 41, 29, .58) 43%,
+      rgba(8, 41, 29, .16) 72%,
+      rgba(8, 41, 29, .04) 100%
+    ),
+    linear-gradient(
+      to top,
+      rgba(5, 27, 19, .55),
+      transparent 30%
+    );
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   LIGHTWEIGHT TEXTURE
+===================================================== */
+
+.module-hero .module-hero-grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background-image:
+    radial-gradient(
+      rgba(255, 255, 255, .12) .5px,
+      transparent .5px
+    );
+
+  background-size: 6px 6px;
+
+  opacity: .10;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   DECORATIVE INNER FRAME
+===================================================== */
+
+.module-hero::before {
+  content: "";
+
+  position: absolute;
+  inset: 13px;
+  z-index: 1;
+
+  border: 1px solid rgba(233, 201, 121, .22);
+
+  pointer-events: none;
+}
+
+.module-hero::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #b88e42,
+      #f7e4b1,
+      #b88e42,
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   GOLD CORNERS
+===================================================== */
+
+.module-hero .hero-corner {
+  position: absolute;
+  z-index: 2;
+
+  width: 25px;
+  height: 25px;
+
+  border-color: var(--hero-gold);
+  border-style: solid;
+  border-width: 0;
+
+  pointer-events: none;
+}
+
+.module-hero .hero-corner-top-left {
+  top: 13px;
+  left: 13px;
+
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+
+.module-hero .hero-corner-top-right {
+  top: 13px;
+  right: 13px;
+
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+
+.module-hero .hero-corner-bottom-left {
+  bottom: 13px;
+  left: 13px;
+
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+
+.module-hero .hero-corner-bottom-right {
+  bottom: 13px;
+  right: 13px;
+
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* =====================================================
+   CONTENT LAYOUT
+===================================================== */
+
+.module-hero .module-hero-content {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0;
+  padding: 0;
+
+  text-align: left;
+}
+
+/* =====================================================
+   KICKER
+===================================================== */
+
+.module-hero .module-kicker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin: 0 0 22px;
+  padding: 0;
+
+  color: var(--hero-gold) !important;
+
+  font-size: clamp(10px, 1.2vw, 15px);
+  font-weight: 600;
+
+  line-height: 1.5;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+
+  animation: ksHeroFadeUp
+    320ms var(--hero-ease) both;
+}
+
+.module-hero .module-kicker span {
+  display: inline-block;
+
+  flex-shrink: 0;
+
+  width: 30px;
+  height: 1px;
+
+  background: var(--hero-gold);
+}
+
+/* =====================================================
+   MAIN TITLE
+===================================================== */
+
+.module-hero .module-hero-content h1 {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0 0 24px;
+  padding: 0;
+
+  color: var(--hero-ivory) !important;
+/* 
+  font-family:
+    var(--font-display, "Cormorant Garamond"),
+    Georgia,
+    serif; */
+
+  font-size: clamp(45px, 6.3vw, 88px) !important;
+  font-weight: 600;
+
+  line-height: 1.02 !important;
+  letter-spacing: -.045em;
+
+  text-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+
+  overflow-wrap: break-word;
+}
+
+.module-hero .module-title-main {
+  display: block;
+
+  color: var(--hero-ivory) !important;
+
+  animation: ksHeroFadeUp
+    420ms var(--hero-ease) 50ms both;
+}
+
+/* =====================================================
+   GOLD ACCENT TITLE
+===================================================== */
+
+.module-hero .module-hero-content h1 em,
+.module-hero .module-title-accent {
+  display: block;
+
+  color: var(--hero-gold) !important;
+
+  font-size: inherit;
+  font-weight: 500;
+  font-style: italic;
+
+  line-height: inherit;
+
+  text-shadow: none;
+
+  animation: ksHeroFadeUp
+    420ms var(--hero-ease) 100ms both;
+}
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.module-hero .module-hero-summary {
+  max-width: 490px;
+
+  margin: 0 0 28px;
+
+  color: var(--hero-muted) !important;
+/* 
+  font-family:
+    var(--font-display, "Cormorant Garamond"),
+    Georgia,
+    serif; */
+
+  font-size: clamp(16px, 1.5vw, 20px) !important;
+  font-weight: 500;
+
+  line-height: 1.65;
+  letter-spacing: .01em;
+
+  animation: ksHeroFadeUp
+    420ms var(--hero-ease) 150ms both;
+}
+
+/* =====================================================
+   DISCOVER MORE BUTTON
+===================================================== */
+
+.module-hero .module-scroll-link {
+  position: relative;
+  isolation: isolate;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+
+  min-height: 54px;
+  width: fit-content;
+  max-width: 100%;
+
+  margin: 0;
+  padding: 9px 10px 9px 24px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--hero-gold-light);
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7e4b1,
+      #d9af55
+    );
+
+  color: var(--hero-dark) !important;
+
+  font-size: 12px !important;
+  font-weight: 700;
+
+  line-height: 1.2;
+  letter-spacing: .13em;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 10px rgba(233, 201, 121, .3),
+    0 0 22px rgba(233, 201, 121, .13);
+
+  animation: ksHeroFadeUp
+    420ms var(--hero-ease) 200ms both;
+
+  transition:
+    background .2s ease,
+    box-shadow .25s ease;
+}
+
+/* =====================================================
+   BUTTON TEXT
+===================================================== */
+
+.module-hero .module-button-text {
+  position: relative;
+  z-index: 2;
+
+  color: var(--hero-dark);
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   BUTTON ICON
+===================================================== */
+
+.module-hero .module-button-icon {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+
+  background: var(--hero-dark);
+  color: var(--hero-gold);
+
+  transition: transform .25s ease;
+}
+
+.module-hero .module-button-icon svg {
+  display: block;
+
+  width: 17px;
+  height: 17px;
+
+  color: var(--hero-gold);
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   GOLD BUTTON SHINE
+===================================================== */
+
+.module-hero .module-scroll-link::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 20%,
+      rgba(255, 255, 255, .6) 50%,
+      transparent 80%
+    );
+
+  transform: translateX(-120%);
+
+  transition: transform .6s ease;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   BUTTON HOVER EFFECT
+===================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .module-hero .module-scroll-link:hover {
+    background: var(--hero-gold-light);
+
+    box-shadow:
+      0 0 6px rgba(233, 201, 121, .9),
+      0 0 16px rgba(233, 201, 121, .55),
+      0 0 28px rgba(233, 201, 121, .25);
+  }
+
+  .module-hero .module-scroll-link:hover::before {
+    transform: translateX(120%);
+  }
+
+  .module-hero .module-scroll-link:hover
+  .module-button-icon {
+    transform: translateY(2px);
+  }
+}
+
+.module-hero .module-scroll-link:active {
+  box-shadow:
+    0 0 8px rgba(233, 201, 121, .9),
+    0 0 20px rgba(233, 201, 121, .6);
+}
+
+.module-hero .module-scroll-link:focus-visible {
+  outline: 2px solid var(--hero-gold-light);
+  outline-offset: 5px;
+}
+
+/* =====================================================
+   BOTTOM RIGHT BRAND SIGNATURE
+===================================================== */
+
+.module-hero .module-hero-index {
+  position: absolute;
+  z-index: 2;
+
+  right: clamp(25px, 5vw, 80px);
+  bottom: 30px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  color: var(--hero-gold-light);
+
+  pointer-events: none;
+}
+
+.module-hero .module-hero-index span {
+  font-size: 9px;
+  font-weight: 600;
+
+  letter-spacing: .18em;
+}
+
+.module-hero .module-hero-index strong {
+  /* font-family:
+    var(--font-display, "Cormorant Garamond"),
+    Georgia,
+    serif; */
+
+  font-size: clamp(16px, 1.6vw, 23px);
+  font-weight: 600;
+
+  letter-spacing: .07em;
+}
+
+.module-hero .module-hero-index i {
+  display: block;
+
+  width: 40px;
+  height: 1px;
+
+  background: var(--hero-gold);
+}
+
+/* =====================================================
+   BOTTOM LEFT CAPTION
+===================================================== */
+
+.module-hero .module-hero-caption {
+  position: absolute;
+  z-index: 2;
+
+  left: clamp(30px, 5vw, 90px);
+  bottom: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  color: rgba(255, 249, 235, .75);
+
+  font-size: 9px;
+  font-weight: 600;
+
+  line-height: 1.5;
+  letter-spacing: .1em;
+
+  pointer-events: none;
+}
+
+.module-hero .module-hero-caption i {
+  display: inline-block;
+
+  flex-shrink: 0;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: var(--hero-gold);
+}
+
+/* =====================================================
+   FAST ENTRANCE ANIMATION
+===================================================== */
+
+@keyframes ksHeroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   INDIVIDUAL PAGE THEMES
+===================================================== */
+
+/* SHOP ALL */
+
+.module-hero-shop-all {
+  --hero-gold: #e9c979;
+}
+
+.module-hero-shop-all .module-hero-image {
+  object-position: center 52%;
+}
+
+/* SWEETS */
+
+.module-hero-sweets {
+  --hero-gold: #f1cf81;
+}
+
+.module-hero-sweets .module-hero-image {
+  object-position: center 48%;
+}
+
+/* SAVOURIES */
+
+.module-hero-savouries {
+  --hero-gold: #e9b968;
+}
+
+.module-hero-savouries .module-hero-image {
+  object-position: center;
+}
+
+/* GIFT BOXES */
+
+.module-hero-gift-boxes {
+  --hero-gold: #f0d69b;
+}
+
+.module-hero-gift-boxes .module-hero-image {
+  object-position: center;
+}
+
+/* OUR STORY */
+
+.module-hero-our-story {
+  --hero-gold: #e8cc95;
+}
+
+.module-hero-our-story .module-hero-image {
+  object-position: center 40%;
+}
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media (min-width: 1600px) {
+
+  .module-hero {
+    min-height: 620px;
+
+    padding-inline: max(
+      90px,
+      calc((100vw - 1440px) / 2)
+    );
+  }
+
+  .module-hero .module-hero-content {
+    max-width: 850px;
+  }
+
+  .module-hero .module-hero-content h1 {
+    font-size: 92px !important;
+  }
+}
+
+/* =====================================================
+   TABLET RESPONSIVE
+===================================================== */
+
+@media (max-width: 1024px) {
+
+  .module-hero {
+    min-height: 460px;
+
+    padding: 65px 40px 80px;
+  }
+
+  .module-hero .module-hero-content {
+    max-width: 650px;
+  }
+
+  .module-hero .module-hero-content h1 {
+    font-size: clamp(48px, 7vw, 72px) !important;
+  }
+
+  .module-hero .module-hero-summary {
+    max-width: 430px;
+  }
+
+  .module-hero .module-hero-caption {
+    left: 40px;
+
+    font-size: 8px;
+  }
+
+  .module-hero .module-hero-index {
+    right: 30px;
+  }
+}
+
+/* =====================================================
+   SMALL TABLET
+===================================================== */
+
+@media (min-width: 601px) and (max-width: 768px) {
+
+  .module-hero {
+    min-height: 460px;
+
+    padding: 60px 30px 75px;
+  }
+
+  .module-hero .module-hero-content h1 {
+    font-size: clamp(44px, 8vw, 62px) !important;
+  }
+
+  .module-hero .module-hero-caption {
+    left: 30px;
+
+    font-size: 7px;
+  }
+
+  .module-hero .module-hero-index strong {
+    font-size: 15px;
+  }
+
+  .module-hero .module-hero-index i {
+    width: 20px;
+  }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .module-hero {
+    align-items: flex-end;
+
+    min-height: 510px;
+
+    padding: 100px 24px 90px;
+  }
+
+  .module-hero::before {
+    inset: 9px;
+  }
+
+  /* Mobile corners */
+
+  .module-hero .hero-corner {
+    width: 18px;
+    height: 18px;
+  }
+
+  .module-hero .hero-corner-top-left {
+    top: 9px;
+    left: 9px;
+  }
+
+  .module-hero .hero-corner-top-right {
+    top: 9px;
+    right: 9px;
+  }
+
+  .module-hero .hero-corner-bottom-left {
+    bottom: 9px;
+    left: 9px;
+  }
+
+  .module-hero .hero-corner-bottom-right {
+    bottom: 9px;
+    right: 9px;
+  }
+
+  /* Full background image */
+
+  .module-hero .module-hero-image {
+    object-position: center top;
+  }
+
+  /* Mobile image gradient */
+
+  .module-hero .module-hero-shade {
+    background:
+      linear-gradient(
+        to top,
+        rgba(5, 32, 23, .98) 0%,
+        rgba(5, 32, 23, .94) 24%,
+        rgba(5, 32, 23, .75) 48%,
+        rgba(5, 32, 23, .25) 76%,
+        rgba(5, 32, 23, .05) 100%
+      );
+  }
+
+  /* Content */
+
+  .module-hero .module-hero-content {
+    max-width: 100%;
+  }
+
+  /* Kicker */
+
+  .module-hero .module-kicker {
+    gap: 7px;
+
+    margin-bottom: 16px;
+
+    font-size: 10px !important;
+    letter-spacing: .12em;
+  }
+
+  .module-hero .module-kicker span {
+    width: 15px;
+  }
+
+  /* Main title */
+
+  .module-hero .module-hero-content h1 {
+    margin-bottom: 18px;
+
+    font-size: clamp(35px, 9.5vw, 53px) !important;
+
+    line-height: 1.06 !important;
+    letter-spacing: -.035em;
+  }
+
+  /* Description */
+
+  .module-hero .module-hero-summary {
+    max-width: 350px;
+
+    margin-bottom: 22px;
+
+    font-size: 16px !important;
+    line-height: 1.55;
+  }
+
+  /* Discover button */
+
+  .module-hero .module-scroll-link {
+    min-height: 48px;
+
+    padding: 7px 8px 7px 18px;
+
+    gap: 12px;
+
+    font-size: 10px !important;
+  }
+
+  .module-hero .module-button-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .module-hero .module-button-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Bottom left brand */
+
+  .module-hero .module-hero-caption {
+    left: 24px;
+    right: 24px;
+    bottom: 49px;
+
+    font-size: 7px;
+    letter-spacing: .06em;
+
+    gap: 6px;
+  }
+
+  /* Bottom right brand */
+
+  .module-hero .module-hero-index {
+    left: 24px;
+    right: auto;
+    bottom: 23px;
+
+    gap: 6px;
+  }
+
+  .module-hero .module-hero-index span {
+    font-size: 7px;
+  }
+
+  .module-hero .module-hero-index strong {
+    font-size: 12px;
+  }
+
+  .module-hero .module-hero-index i {
+    width: 22px;
+  }
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 360px) {
+
+  .module-hero {
+    min-height: 490px;
+
+    padding-inline: 19px;
+  }
+
+  .module-hero .module-hero-content h1 {
+    font-size: 33px !important;
+  }
+
+  .module-hero .module-kicker {
+    font-size: 9px !important;
+    letter-spacing: .08em;
+  }
+
+  .module-hero .module-hero-summary {
+    font-size: 14px !important;
+  }
+
+  .module-hero .module-hero-caption,
+  .module-hero .module-hero-index {
+    left: 19px;
+  }
+}
+
+/* =====================================================
+   REDUCED MOTION ACCESSIBILITY
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .module-hero,
+  .module-hero *,
+  .module-hero *::before,
+  .module-hero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .module-hero .module-hero-image,
+  .module-hero .module-kicker,
+  .module-hero .module-title-main,
+  .module-hero .module-title-accent,
+  .module-hero .module-hero-summary,
+  .module-hero .module-scroll-link {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .module-hero .module-scroll-link::before {
+    display: none;
+  }
+}
+
+/* =====================================================
+   CINEMATIC HERO — END
+===================================================== */

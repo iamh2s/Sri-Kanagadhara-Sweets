@@ -8,7 +8,7 @@
 .ks-support-content { min-width: 0; }
 .ks-support-content details, .ks-support-section { margin-bottom: 12px; padding: 14px 0; border-bottom: 1px solid var(--line, #dacbb9); }
 .ks-support summary { cursor: pointer; font-weight: 600; color: #174a39; }
-.ks-support-nav { display: grid; background: #f6eedf; border-top: 3px solid #a58247; padding: 22px; }
+.ks-support-nav { display: grid;  border-top: 3px solid #a58247; padding: 22px; }
 .ks-support-nav a { padding: 8px 4px; color: #234a3e; }
 .ks-support-nav a[aria-current] { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 .ks-support-form { display: grid; gap: 16px; }
