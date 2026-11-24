@@ -611,7 +611,7 @@ const cardEffect = 'tilt shine focus'
     {collections.slice(0, 3).map((collection, index) => {
       const route = collection.link === 'Gift Boxes'
         ? 'gift-boxes'
-        : collection.link === 'Sweets' ? 'sweets' : 'shop-all'
+        : collection.link === 'shop-all' ? 'sweets' : 'shop-all'
       return (
       <a
         className={`collection-card ${collection.className}`}

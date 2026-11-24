@@ -2,16 +2,13 @@
    SRI KANAGADHARA SWEETS
    PRODUCT PAGE
    ============================================ */
-
 .shop-listing {
   width: 100%;
   color: #173f31;
 }
-
 /* ============================================
    SHOP HEADING
    ============================================ */
-
 .shop-heading,
 .shop-toolbar,
 .shop-result-summary,
@@ -20,17 +17,14 @@
   align-items: center;
   gap: 1rem;
 }
-
 .shop-heading,
 .shop-toolbar {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-
 .shop-heading {
   padding-block: clamp(2rem, 5vw, 4.5rem) 1.25rem;
 }
-
 .shop-heading h2 {
   margin: 0;
   color: #173f31;
@@ -38,7 +32,6 @@
     var(--font-display, Georgia, serif);
   scroll-margin-top: 5rem;
 }
-
 .shop-heading form {
   width: min(100%, 24rem);
   gap: .65rem;
@@ -48,7 +41,6 @@
   background: #fffdf7;
   color: #27513e;
 }
-
 .shop-heading input {
   flex: 1;
   min-width: 0;
@@ -57,7 +49,6 @@
   border: 0;
   font: inherit;
 }
-
 .shop-heading button,
 .shop-empty a {
   padding: .65rem 1rem;
@@ -68,17 +59,14 @@
   font: inherit;
   cursor: pointer;
 }
-
 /* ============================================
    CATEGORY NAVIGATION
    ============================================ */
-
 .shop-collections {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: .55rem;
 }
-
 .shop-collections a {
   display: flex;
   align-items: center;
@@ -100,7 +88,6 @@
     color .3s,
     border-color .3s;
 }
-
 .shop-collections img {
   width: 2.75rem;
   height: 2.75rem;
@@ -108,29 +95,24 @@
   border-radius: 50%;
   background: #e7d7be;
 }
-
 .shop-collections a:hover,
 .shop-collections a[aria-current="page"] {
   background: #194a37;
   color: #fffaf0;
   border-color: #194a37;
 }
-
 /* ============================================
    TOOLBAR
    ============================================ */
-
 .shop-toolbar {
   padding-block: 1.25rem;
   color: #503e33;
 }
-
 .shop-result-summary {
   flex-wrap: wrap;
   gap: .6rem;
   overflow-wrap: anywhere;
 }
-
 .shop-result-summary button {
   border: 0;
   padding: .35rem;
@@ -139,7 +121,6 @@
   color: #184934;
   cursor: pointer;
 }
-
 .shop-toolbar select {
   margin-inline-start: .35rem;
   min-height: 2.75rem;
@@ -149,14 +130,12 @@
   background: #fffaf0;
   color: inherit;
 }
-
 /* ============================================
    PRODUCT GRID
    LAPTOP: 3 PRODUCTS
    TABLET: 2 PRODUCTS
    PHONE: 1 PRODUCT
    ============================================ */
-
 .module-products-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -166,40 +145,30 @@
   margin-inline: auto;
   padding-bottom: 3rem;
 }
-
 /* ============================================
    SCROLL REVEAL
    ============================================ */
-
 .module-product-reveal {
   min-width: 0;
   opacity: 0;
   transform: translateY(28px) scale(.97);
-  
-
   animation: cinematicCardEntrance .28s
     cubic-bezier(.2, .8, .2, 1)
     calc(var(--card-index, 0) * 35ms) both;
 }
-
 @keyframes cinematicCardEntrance {
   from {
     opacity: 0;
     transform: translateY(28px) scale(.97);
-    
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    
   }
 }
-
 /* ============================================
    PRODUCT CARD
    ============================================ */
-
 .module-product {
   position: relative;
   display: flex;
@@ -207,37 +176,30 @@
   min-width: 0;
   height: 100%;
   overflow: hidden;
-
   border: 1px solid rgba(173, 137, 86, .2);
   border-radius: 15px;
-
   background: #fffdf8;
   box-shadow: 0 4px 16px rgba(75, 48, 20, .07);
-
   transition:
     transform .35s ease,
     box-shadow .35s ease,
     border-color .35s ease;
 }
-
 .module-product:hover {
   transform: translateY(-5px);
   border-color: rgba(190, 147, 73, .55);
   box-shadow: 0 12px 28px rgba(75, 48, 20, .13);
 }
-
 .cinematic-card {
   --cinematic-maroon: #701b27;
   --cinematic-gold: #c69b4c;
   --cinematic-cream: #fff8ec;
   isolation: isolate;
 }
-
 /* ============================================
    PRODUCT IMAGE
    WIDER AND SHORTER
    ============================================ */
-
 .module-product-photo {
   position: relative;
   display: block;
@@ -250,46 +212,37 @@
   cursor: pointer;
   isolation: isolate;
 }
-
 .module-product-photo img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-
   transform: scale(1);
   opacity: 1;
-
   animation: cinematicImageReveal .48s
     cubic-bezier(.2, .7, .2, 1)
     calc(var(--card-index, 0) * 35ms + 30ms) backwards;
-
   transition:
     transform .8s cubic-bezier(.2, .7, .2, 1),
     filter .2s ease;
 }
-
 @keyframes cinematicImageReveal {
   0% {
     transform: scale(1.2);
     opacity: .75;
   }
-
   100% {
     transform: scale(1);
     opacity: 1;
   }
 }
-
 .cinematic-card:hover .module-product-photo img {
   transform: scale(1.09);
   filter: saturate(1.12);
 }
-
 /* ============================================
    CURTAIN REVEAL
    ============================================ */
-
 .cinematic-curtain {
   position: absolute;
   z-index: 4;
@@ -297,7 +250,6 @@
   bottom: 0;
   width: 51%;
   pointer-events: none;
-
   background:
     repeating-linear-gradient(
       90deg,
@@ -307,163 +259,127 @@
       rgba(130, 34, 49, .95) 65%,
       rgba(49, 6, 17, .98) 100%
     );
-
   box-shadow: inset 0 0 25px rgba(0, 0, 0, .35);
 }
-
 .cinematic-curtain-left {
   left: 0;
   transform-origin: left center;
-
   animation: cinematicCurtainLeft .42s
     cubic-bezier(.77, 0, .18, 1)
     calc(var(--card-index, 0) * 35ms + 25ms) both;
 }
-
 .cinematic-curtain-right {
   right: 0;
   transform-origin: right center;
-
   animation: cinematicCurtainRight .42s
     cubic-bezier(.77, 0, .18, 1)
     calc(var(--card-index, 0) * 35ms + 25ms) both;
 }
-
 @keyframes cinematicCurtainLeft {
   0% {
     transform: scaleX(1);
   }
-
   100% {
     transform: scaleX(0);
     visibility: hidden;
   }
 }
-
 @keyframes cinematicCurtainRight {
   0% {
     transform: scaleX(1);
   }
-
   100% {
     transform: scaleX(0);
     visibility: hidden;
   }
 }
-
 /* ============================================
    DISCOVER LABEL
    ============================================ */
-
 .module-product-view {
   position: absolute;
   z-index: 5;
   left: .8rem;
   bottom: .8rem;
-
   display: inline-flex;
   align-items: center;
   gap: .45rem;
-
   color: #fffaf0;
   font-family: var(--font-display, Georgia, serif);
   font-size: .9rem;
   text-shadow: 0 2px 8px rgba(0, 0, 0, .6);
-
   opacity: 0;
   transform: translateY(12px);
-
   transition:
     opacity .35s ease,
     transform .35s ease;
 }
-
 .module-product-photo:hover .module-product-view,
 .module-product-photo:focus-visible .module-product-view {
   opacity: 1;
   transform: translateY(0);
 }
-
 /* ============================================
    PRODUCT BADGE
    ============================================ */
-
 .product-badge {
   position: absolute;
   z-index: 6;
   top: 9px;
   left: 9px;
-
   padding: 5px 9px;
   border-radius: 2rem;
-
   background: #701b27;
   color: #fff8ec;
-
   font-size: .62rem;
   font-weight: 700;
   letter-spacing: .04em;
   text-transform: uppercase;
 }
-
 /* ============================================
    WISHLIST
    ============================================ */
-
 .module-product-wishlist {
   position: absolute;
   z-index: 8;
   top: 9px;
   right: 9px;
-
   display: grid;
   place-items: center;
-
   width: 35px;
   height: 35px;
   padding: 0;
-
   border: 0;
   border-radius: 50%;
-
   background: rgba(255, 253, 248, .95);
   color: #174a37;
-
   box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
   cursor: pointer;
-
   transition:
     transform .3s ease,
     color .3s ease,
     background .3s ease;
 }
-
 .module-product-wishlist:hover {
   transform: scale(1.12);
 }
-
 .module-product-wishlist.is-wishlisted {
   color: #a71932;
   background: #fff0ed;
 }
-
 /* ============================================
    PRODUCT DETAILS
    ============================================ */
-
 .module-product-details {
   display: flex;
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-
   padding: 13px 15px 14px;
   background: #fffdf8;
 }
-
 .module-product-category {
   margin: 0 0 5px;
-
   color: #a77d32;
   font-family: var(--font-display, Georgia, serif);
   font-size: .7rem;
@@ -472,53 +388,42 @@
   line-height: 1.3;
   text-transform: uppercase;
 }
-
 .module-product-name {
   display: inline-block;
   margin: 0 0 5px;
-
   color: #173f31;
   font-family: var(--font-display, Georgia, serif);
   font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
-
   transition: color .3s ease;
 }
-
 .module-product-name:hover {
   color: #8c2532;
 }
-
 .module-product-description {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-
   margin: 0 0 10px;
-
   color: #847765;
   font-family: var(--font-display, Georgia, serif);
   font-size: .82rem;
   line-height: 1.4;
 }
-
 /* ============================================
    CATEGORY ANIMATION
    ============================================ */
-
 .cinematic-category {
   position: relative;
   width: fit-content;
   opacity: 0;
-
   animation: cinematicFadeUp .22s ease
     calc(var(--card-index, 0) * 35ms + .16s) both;
 }
-
 .cinematic-category::after {
   content: "";
   position: absolute;
@@ -528,40 +433,32 @@
   transform: scaleX(0);
   transform-origin: left;
   height: 2px;
-
   background: linear-gradient(
     90deg,
     var(--cinematic-gold),
     #f4d99b
   );
-
   animation: cinematicLineDraw .28s ease
     calc(var(--card-index, 0) * 35ms + .22s) both;
 }
-
 @keyframes cinematicLineDraw {
   to {
     transform: scaleX(1);
   }
 }
-
 /* ============================================
    TITLE WORD REVEAL
    ============================================ */
-
 .cinematic-title {
   display: block;
   perspective: 600px;
 }
-
 .cinematic-word {
   display: inline-block;
   margin-right: .22em;
-
   opacity: 0;
   transform: translateY(20px) rotateX(-55deg);
   transform-origin: bottom center;
-
   animation: cinematicWordReveal .28s
     cubic-bezier(.2, .8, .2, 1)
     calc(
@@ -570,183 +467,143 @@
       var(--word-index, 0) * 45ms
     ) both;
 }
-
 @keyframes cinematicWordReveal {
   from {
     opacity: 0;
     transform: translateY(20px) rotateX(-55deg);
-    
   }
-
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0);
-    
   }
 }
-
 /* ============================================
    DESCRIPTION ANIMATION
    ============================================ */
-
 .cinematic-description {
   opacity: 0;
   transform: translateY(12px);
-
   animation: cinematicFadeUp .25s ease
     calc(var(--card-index, 0) * 35ms + .30s) both;
 }
-
 @keyframes cinematicFadeUp {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
 /* ============================================
    WEIGHT AND PRICE
    ============================================ */
-
 .module-product-buy {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-
   width: 100%;
   margin-top: auto;
   margin-bottom: 9px;
 }
-
 .module-product-buy label {
   display: flex;
   min-width: 0;
 }
-
 .module-product-buy select {
   min-height: 34px;
   max-width: 100%;
   padding: 4px 9px;
-
   border: 1px solid #c9b99e;
   border-radius: 6px;
-
   background: #fffaf1;
   color: #493b2e;
-
   font: inherit;
   font-size: .8rem;
   cursor: pointer;
-
   transition:
     border-color .3s ease,
     background .3s ease,
     box-shadow .3s ease;
 }
-
 .module-product-buy select:hover,
 .module-product-buy select:focus {
   border-color: var(--cinematic-gold);
   box-shadow: 0 0 0 3px rgba(198, 155, 76, .12);
 }
-
 .module-product-buy strong {
   color: #701b27;
   font-size: .95rem;
   white-space: nowrap;
 }
-
 .cinematic-buy {
   opacity: 0;
   transform: translateY(12px);
-
   animation: cinematicFadeUp .25s ease
     calc(var(--card-index, 0) * 35ms + .35s) both;
 }
-
 .cinematic-price {
   display: inline-block;
   animation: cinematicPricePop .35s ease;
 }
-
 @keyframes cinematicPricePop {
   from {
     opacity: 0;
     transform: translateY(6px) scale(.9);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
-
 /* ============================================
    ADD TO BAG
    ============================================ */
-
 .module-add-button {
   position: relative;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: .5rem;
-
   width: 100%;
   min-height: 38px;
   padding: 7px 10px;
   overflow: hidden;
-
   border: 1px solid #174a37;
   border-radius: 7px;
-
   background: #174a37;
   color: #fffaf0;
-
   font: inherit;
   font-size: .72rem;
   font-weight: 800;
   letter-spacing: .07em;
-
   cursor: pointer;
-
   transition:
     background .3s ease,
     border-color .3s ease,
     transform .3s ease,
     box-shadow .3s ease;
 }
-
 .module-add-button:hover {
   background: #103a2b;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(23, 74, 55, .2);
 }
-
 .cinematic-add {
   opacity: 0;
   transform: translateY(12px);
-
   background: var(--cinematic-maroon);
   border-color: var(--cinematic-maroon);
   color: #fff9ed;
-
   animation: cinematicFadeUp .25s ease
     calc(var(--card-index, 0) * 35ms + .40s) both;
 }
-
 .cinematic-add::before {
   content: "";
   position: absolute;
   z-index: 2;
   top: -70%;
   left: -90%;
-
   width: 45%;
   height: 240%;
-
   background: linear-gradient(
     90deg,
     transparent,
@@ -754,113 +611,88 @@
     rgba(255, 225, 153, .9),
     transparent
   );
-
   transform: rotate(25deg);
-
   animation: cinematicGoldShine .45s ease
     calc(var(--card-index, 0) * 35ms + .60s) both;
-
   pointer-events: none;
 }
-
 @keyframes cinematicGoldShine {
   from {
     transform: translateX(0) rotate(25deg);
   }
-
   to {
     transform: translateX(535%) rotate(25deg);
   }
 }
-
 .cinematic-add:hover {
   background: #4d101c;
   border-color: var(--cinematic-gold);
   transform: translateY(-3px);
   box-shadow: 0 8px 22px rgba(112, 27, 39, .23);
 }
-
 .cinematic-add span,
 .cinematic-add svg {
   position: relative;
   z-index: 3;
 }
-
 /* ============================================
    EMPTY STATE
    ============================================ */
-
 .shop-empty {
   padding-block: 2rem;
   text-align: center;
 }
-
 .shop-empty p {
   margin-block: .5rem 1rem;
 }
-
 .shop-empty a {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
   text-decoration: none;
 }
-
-
-
 /* ============================================
    ACCESSIBILITY
    ============================================ */
-
 .shop-listing :is(input, select, a, button):focus-visible {
   outline: 3px solid #937033;
   outline-offset: 2px;
 }
-
 /* ============================================
    LAPTOP - 3 PRODUCTS
    ============================================ */
-
 @media (min-width: 1025px) {
   .module-products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     max-width: 1250px;
     gap: 1.5rem;
   }
-
   .module-product-photo {
     aspect-ratio: 1.5 / 1;
   }
 }
-
 /* ============================================
    TABLET - 2 PRODUCTS
    ============================================ */
-
 @media (min-width: 601px) and (max-width: 1024px) {
   .module-products-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 850px;
     gap: 1.2rem;
   }
-
   .module-product-photo {
     aspect-ratio: 1.5 / 1;
   }
-
   .module-product-details {
     padding: 12px 14px;
   }
-
   .module-product-name {
     font-size: 1.15rem;
   }
 }
-
 /* ============================================
    PHONE - 1 PRODUCT
    ============================================ */
-
 @media (max-width: 600px) {
   .module-products-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -868,78 +700,61 @@
     gap: 1.1rem;
     padding-inline: 12px;
   }
-
   .module-product {
     width: 100%;
     border-radius: 14px;
   }
-
   .module-product-photo {
     aspect-ratio: 1.8 / 1;
   }
-
   .module-product-details {
     padding: 12px 15px 14px;
   }
-
   .module-product-category {
     font-size: .72rem;
   }
-
   .module-product-name {
     font-size: 1.2rem;
   }
-
   .module-product-description {
     font-size: .85rem;
     -webkit-line-clamp: 2;
     line-clamp: 2;
   }
-
   .module-product-buy select {
     min-height: 36px;
   }
-
   .module-add-button {
     min-height: 40px;
   }
-
   .shop-collections {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
-
 /* ============================================
    SMALL PHONE
    ============================================ */
-
 @media (max-width: 360px) {
   .module-products-grid {
     padding-inline: 8px;
     gap: .85rem;
   }
-
   .module-product-photo {
     aspect-ratio: 1.7 / 1;
   }
-
   .module-product-details {
     padding: 10px 12px 12px;
   }
-
   .module-product-name {
     font-size: 1.1rem;
   }
-
   .module-product-description {
     font-size: .8rem;
   }
 }
-
 /* ============================================
    LOADER + VIEWPORT ANIMATION CONTROL
    ============================================ */
-
 /* Only pause the entrance effects, not every descendant. */
 .module-products-grid .module-product-reveal,
 .module-products-grid .module-product-reveal :is(.module-product-photo img, .cinematic-curtain, .cinematic-category, .cinematic-word, .cinematic-description, .cinematic-buy, .cinematic-add),
@@ -953,11 +768,9 @@
 .module-products-grid.cinematic-ready .module-product-reveal.is-visible .cinematic-add::before {
   animation-play-state: running;
 }
-
 /* ============================================
    REDUCED MOTION
    ============================================ */
-
 @media (prefers-reduced-motion: reduce) {
   .cinematic-card *,
   .cinematic-card *::before,
@@ -973,16 +786,13 @@
     filter: none !important;
     transform: none !important;
   }
-
   .module-product-reveal {
     opacity: 1 !important;
   }
-
   .cinematic-curtain {
     display: none !important;
   }
 }
-
 /* Keep all cards in the DOM; skip offscreen rendering when supported. */
 @supports (content-visibility: auto) {
   .module-products-grid .module-product-reveal {
@@ -995,4 +805,46 @@
   .module-product-photo .module-product-view { opacity: 1; transform: none; }
   .module-product:hover { transform: none; }
   .cinematic-card:hover .module-product-photo img { transform: none; filter: none; }
+}
+
+/* Final responsive catalog grid — overrides shared index.css rules */
+.site-shell .shop-listing .module-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  width: 100%;
+  max-width: 1250px;
+  margin-inline: auto;
+  gap: 1.5rem;
+}
+@media (max-width: 1024px) {
+  .site-shell .shop-listing .module-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    max-width: 850px;
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .site-shell .shop-listing .module-products-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    max-width: 440px;
+    gap: 1.1rem;
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .site-shell .shop-listing .module-products-grid {
+    padding-inline: 8px;
+    gap: .85rem;
+  }
+}
+
+/* Dark maroon border with a subtle, constant glow */
+.site-shell .shop-listing .module-product,
+.site-shell .shop-listing .module-product:hover,
+.site-shell .shop-listing .module-product:focus-within {
+  border: 2px solid #641b24 !important;
+  box-shadow:
+    0 0 5px rgba(100, 27, 36, 0.35),
+    0 0 12px rgba(100, 27, 36, 0.20),
+    0 4px 16px rgba(100, 27, 36, 0.12) !important;
 }
