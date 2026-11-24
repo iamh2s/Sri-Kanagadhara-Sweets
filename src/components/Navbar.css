@@ -15,7 +15,8 @@
   width: 100%;
   color: var(--ks-ink);
   background: transparent;
-  font-family: 'Lato', 'Segoe UI', Arial, sans-serif;
+  /* font-family: 'Lato', 'Segoe UI', Arial, sans-serif; */
+  
   isolation: isolate;
 }
 .ks-header *, .ks-header *::before, .ks-header *::after { box-sizing: border-box; }

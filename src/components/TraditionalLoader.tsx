@@ -76,40 +76,41 @@ export default function TraditionalLoader({
 
   const onCompleteRef = useRef(onComplete)
 
+  // Keep the latest callback without restarting the animation.
   useEffect(() => {
     onCompleteRef.current = onComplete
   }, [onComplete])
 
+  // Minimum loader display duration.
   useEffect(() => {
-    const timer = window.setTimeout(
-      () => setMinimumPassed(true),
-      duration,
-    )
+    const timer = window.setTimeout(() => {
+      setMinimumPassed(true)
+    }, duration)
 
     return () => window.clearTimeout(timer)
   }, [duration])
 
+  // Start the exit animation only when the page is ready.
   useEffect(() => {
     if (minimumPassed && isReady && phase === 'intro') {
       setPhase('exit')
     }
   }, [minimumPassed, isReady, phase])
 
+  // Fade out the content, open the doors, then notify App.
   useEffect(() => {
     if (phase === 'exit') {
-      const timer = window.setTimeout(
-        () => setPhase('open'),
-        FADE_OUT_MS,
-      )
+      const timer = window.setTimeout(() => {
+        setPhase('open')
+      }, FADE_OUT_MS)
 
       return () => window.clearTimeout(timer)
     }
 
     if (phase === 'open') {
-      const timer = window.setTimeout(
-        () => onCompleteRef.current?.(),
-        DOORS_MS,
-      )
+      const timer = window.setTimeout(() => {
+        onCompleteRef.current?.()
+      }, DOORS_MS)
 
       return () => window.clearTimeout(timer)
     }
@@ -122,6 +123,7 @@ export default function TraditionalLoader({
       aria-live="polite"
       aria-label="Loading Sri Kanagadhara Sweets"
     >
+      {/* Left and right opening doors */}
       <div
         className="tl__door tl__door--left"
         aria-hidden="true"
@@ -132,10 +134,12 @@ export default function TraditionalLoader({
         aria-hidden="true"
       />
 
+      {/* Loader content */}
       <div className="tl__content">
         <div className="tl__stage">
           <Sprig />
 
+          {/* Lotus medallion */}
           <div className="tl__medallion">
             <svg
               className="tl__lotus"
@@ -168,11 +172,12 @@ export default function TraditionalLoader({
               />
             </svg>
 
+            {/* Brand logo */}
             <div className="tl__logo">
               <img
                 src="/brand/sri-kanagadhara-logo.webp"
                 alt="Sri Kanagadhara Sweets"
-                {...{ fetchpriority: 'high' }}
+                fetchPriority="high"
               />
             </div>
           </div>
@@ -180,6 +185,7 @@ export default function TraditionalLoader({
           <Sprig mirror />
         </div>
 
+        {/* Loading text */}
         <div className="tl__text">
           <p className="tl__message">
             Preparing the sweetness…

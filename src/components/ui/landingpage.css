@@ -1,0 +1,180 @@
+
+/* =====================================================
+   PREMIUM MAROON BUTTON — CREAM GOLD GLOW
+   ===================================================== */
+
+.site-shell .portal-landing-copy .portal-landing-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    #800020 0%,
+    #641b24 50%,
+    #480b18 100%
+  ) !important;
+
+  color: #fff5e1 !important;
+  -webkit-text-fill-color: #fff5e1 !important;
+
+  border-color: #e6c89a !important;
+
+  animation: portalButtonGlow 2.8s ease-in-out infinite;
+
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease,
+    filter 300ms ease;
+}
+
+
+/* =====================================================
+   BREATHING GLOW ANIMATION
+   ===================================================== */
+
+@keyframes portalButtonGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 5px rgba(230, 200, 154, 0.25),
+      0 0 12px rgba(230, 200, 154, 0.12);
+  }
+
+  50% {
+    box-shadow:
+      0 0 12px rgba(230, 200, 154, 0.55),
+      0 0 26px rgba(230, 200, 154, 0.30),
+      0 0 40px rgba(230, 200, 154, 0.12);
+  }
+}
+
+
+/* =====================================================
+   MOVING CREAM LIGHT EFFECT
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-cta::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 30%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 245, 225, 0.35),
+    transparent
+  );
+
+  transform: translateX(-180%) skewX(-25deg);
+
+  animation: portalButtonShine 4s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+
+@keyframes portalButtonShine {
+  0%,
+  20% {
+    transform: translateX(-180%) skewX(-25deg);
+  }
+
+  65%,
+  100% {
+    transform: translateX(600%) skewX(-25deg);
+  }
+}
+
+
+/* =====================================================
+   ARROW ANIMATION
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-cta svg {
+  color: #fff5e1 !important;
+
+  transition: transform 300ms ease;
+}
+
+
+/* =====================================================
+   HOVER EFFECT
+   ===================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta:hover {
+    animation-play-state: paused;
+
+    transform: translateY(-3px);
+
+    filter: brightness(1.12);
+
+    box-shadow:
+      0 0 12px rgba(230, 200, 154, 0.65),
+      0 0 28px rgba(230, 200, 154, 0.35),
+      0 8px 24px rgba(72, 11, 24, 0.35) !important;
+  }
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta:hover svg {
+    transform: translateX(5px);
+  }
+
+}
+
+
+/* =====================================================
+   BUTTON CLICK EFFECT
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-cta:active {
+  transform: scale(0.97);
+}
+
+
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-cta:focus-visible {
+  outline: 2px solid #fff5e1;
+  outline-offset: 5px;
+}
+
+
+/* =====================================================
+   REDUCED MOTION SUPPORT
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta,
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta::before,
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta svg {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta::before {
+    display: none;
+  }
+
+}

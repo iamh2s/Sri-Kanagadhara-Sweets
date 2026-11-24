@@ -1,4 +1,3 @@
-
 import {
   lazy,
   Suspense,
@@ -112,8 +111,18 @@ const knownRoutes = [
 
 const INITIAL_LOADER_DURATION = 2000
 const NAVIGATION_LOADER_DURATION = 2000
-const shopPages = new Set(['shop-all', 'sweets', 'savouries', 'gift-boxes', 'product'])
-const contactPages = new Set(contactLinks.map(link => link.route))
+
+const shopPages = new Set([
+  'shop-all',
+  'sweets',
+  'savouries',
+  'gift-boxes',
+  'product',
+])
+
+const contactPages = new Set(
+  contactLinks.map(link => link.route),
+)
 
 function App() {
   const location = useLocation()
@@ -131,11 +140,16 @@ function App() {
     key: string
     ready: boolean
     duration: number
-  } | null>(() => ({
-    key: location.key,
-    ready: document.readyState === 'complete',
-    duration: INITIAL_LOADER_DURATION,
-  }))
+  } | null>(() => {
+    // Keep product animations paused until the first loader completes.
+    document.documentElement.dataset.pageReady = 'false'
+
+    return {
+      key: location.key,
+      ready: document.readyState === 'complete',
+      duration: INITIAL_LOADER_DURATION,
+    }
+  })
 
   // Browser initial load readiness
   useEffect(() => {
@@ -169,11 +183,20 @@ function App() {
     })
   }, [websiteReady])
 
+  // Finish loader only after its doors have opened.
   const finishLoader = useCallback((key: string) => {
+    if (loader?.key !== key) return
+
+    document.documentElement.dataset.pageReady = 'true'
+
+    window.dispatchEvent(
+      new Event('site:loader-complete'),
+    )
+
     setLoader(current =>
       current?.key === key ? null : current,
     )
-  }, [])
+  }, [loader])
 
   // =====================================
   // ROUTE RESOLUTION
@@ -226,17 +249,49 @@ function App() {
     page = 'not-found'
   }
 
-  const section = shopPages.has(page) ? 'shop' : contactPages.has(page) ? 'contact' : null
-  const previousNavigation = useRef({ key: location.key, section })
+  // =====================================
+  // ROUTE LOADER MANAGEMENT
+  // =====================================
+
+  const section = shopPages.has(page)
+    ? 'shop'
+    : contactPages.has(page)
+      ? 'contact'
+      : null
+
+  const previousNavigation = useRef({
+    key: location.key,
+    section,
+  })
+
   useEffect(() => {
     const previous = previousNavigation.current
+
     if (previous.key === location.key) return
-    previousNavigation.current = { key: location.key, section }
+
+    previousNavigation.current = {
+      key: location.key,
+      section,
+    }
+
+    // Same-section navigation does not show the loader.
     if (section && section === previous.section) {
       setLoader(null)
       return
     }
-    setLoader({ key: location.key, ready: true, duration: NAVIGATION_LOADER_DURATION })
+
+    // A new loader is starting. Pause product animations.
+    document.documentElement.dataset.pageReady = 'false'
+
+    window.dispatchEvent(
+      new Event('site:loader-start'),
+    )
+
+    setLoader({
+      key: location.key,
+      ready: true,
+      duration: NAVIGATION_LOADER_DURATION,
+    })
   }, [location.key, section])
 
   const params = new URLSearchParams(location.search)
@@ -248,8 +303,10 @@ function App() {
 
   const wishlistOnly =
     page === 'shop-all' &&
-    (params.get('wishlist') === '1' ||
-      currentRoute === 'account/wishlist')
+    (
+      params.get('wishlist') === '1' ||
+      currentRoute === 'account/wishlist'
+    )
 
   // =====================================
   // SHOPPING STATES
@@ -277,20 +334,18 @@ function App() {
   useEffect(() => {
     const originalTitle = document.title
 
-    const privatePage =
-      [
-        'admin',
-        'cart',
-        ...commerceRoutes,
-        'not-found',
-        '500',
-        'maintenance',
-      ].includes(page) ||
-      Boolean(
-        catalogSearch ||
-          wishlistOnly ||
-          currentRoute === 'search',
-      )
+    const privatePage = [
+      'admin',
+      'cart',
+      ...commerceRoutes,
+      'not-found',
+      '500',
+      'maintenance',
+    ].includes(page) || Boolean(
+      catalogSearch ||
+      wishlistOnly ||
+      currentRoute === 'search',
+    )
 
     const robots = document.createElement('meta')
 
@@ -372,10 +427,13 @@ function App() {
         return
       }
 
-      const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
+      const target = location.hash
+        ? document.getElementById(location.hash.slice(1))
+        : null
 
       if (target) {
         target.focus({ preventScroll: true })
+
         target.scrollIntoView({
           behavior: 'instant',
         })
