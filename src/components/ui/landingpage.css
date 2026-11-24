@@ -1,9 +1,108 @@
 
 /* =====================================================
-   PREMIUM MAROON BUTTON — CREAM GOLD GLOW
+   KANAGADHARA SWEETS — LANDING PAGE
+   Premium Cream & Maroon Theme
+   Original Typography Preserved
    ===================================================== */
 
-.site-shell .portal-landing-copy .portal-landing-cta {
+.portal-landing-copy {
+  --hero-ivory: #fffdf5;
+  --hero-cream: #fff0d5;
+  --hero-gold: #dfbc8e;
+  --hero-maroon: #641b24;
+  --hero-maroon-light: #800020;
+  --hero-maroon-dark: #480b18;
+  --hero-border: #e6c89a;
+}
+
+
+/* =====================================================
+   MAIN HEADING — CREAM DOMINANT GRADIENT
+   ===================================================== */
+
+.site-shell .portal-landing-copy h1.portal-landing-title {
+  background: linear-gradient(
+    110deg,
+    #fffdf5 0%,
+    #fff5e1 35%,
+    #fff0d5 75%,
+    #dfbc8e 100%
+  ) !important;
+
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+
+  text-shadow: none !important;
+}
+
+
+/* =====================================================
+   HIGHLIGHTED TEXT — EVERY BITE
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-title em {
+  color: inherit !important;
+
+  background: none !important;
+
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+
+  text-shadow: none !important;
+}
+
+
+/* =====================================================
+   EYEBROW — FRESHLY MADE, ROOTED IN TRADITION
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-eyebrow {
+  color: #fff0d5 !important;
+  -webkit-text-fill-color: #fff0d5 !important;
+
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+
+/* Decorative line */
+
+.site-shell .portal-landing-copy
+.portal-landing-eyebrow::before {
+  background: linear-gradient(
+    90deg,
+    #fffdf5,
+    #dfbc8e
+  ) !important;
+}
+
+
+/* =====================================================
+   DESCRIPTION — PREMIUM CREAM
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-description {
+  color: #fff5e1 !important;
+  -webkit-text-fill-color: #fff5e1 !important;
+
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =====================================================
+   SHOP OUR FAVOURITES — PREMIUM MAROON BUTTON
+   ===================================================== */
+
+.site-shell .portal-landing-copy
+.portal-landing-cta {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -18,40 +117,53 @@
   color: #fff5e1 !important;
   -webkit-text-fill-color: #fff5e1 !important;
 
-  border-color: #e6c89a !important;
+  border: 1px solid #e6c89a !important;
 
-  animation: portalButtonGlow 2.8s ease-in-out infinite;
+  text-decoration: none !important;
+  text-shadow: none !important;
+
+  box-shadow:
+    0 0 8px rgba(230, 200, 154, 0.25),
+    0 0 18px rgba(230, 200, 154, 0.15);
+
+  animation:
+    portalMaroonGlow 3s ease-in-out infinite;
 
   transition:
     transform 300ms ease,
     box-shadow 300ms ease,
     filter 300ms ease;
+
+  cursor: pointer;
 }
 
 
 /* =====================================================
-   BREATHING GLOW ANIMATION
+   SOFT CHAMPAGNE BREATHING GLOW
    ===================================================== */
 
-@keyframes portalButtonGlow {
+@keyframes portalMaroonGlow {
+
   0%,
   100% {
     box-shadow:
       0 0 5px rgba(230, 200, 154, 0.25),
-      0 0 12px rgba(230, 200, 154, 0.12);
+      0 0 12px rgba(230, 200, 154, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   50% {
     box-shadow:
       0 0 12px rgba(230, 200, 154, 0.55),
       0 0 26px rgba(230, 200, 154, 0.30),
-      0 0 40px rgba(230, 200, 154, 0.12);
+      0 0 36px rgba(255, 240, 213, 0.12);
   }
+
 }
 
 
 /* =====================================================
-   MOVING CREAM LIGHT EFFECT
+   MOVING CREAM SHINE EFFECT
    ===================================================== */
 
 .site-shell .portal-landing-copy
@@ -62,51 +174,67 @@
   top: 0;
   left: 0;
 
-  width: 30%;
+  width: 35%;
   height: 100%;
 
   background: linear-gradient(
     90deg,
-    transparent,
-    rgba(255, 245, 225, 0.35),
-    transparent
+    transparent 0%,
+    rgba(255, 245, 225, 0.15) 25%,
+    rgba(255, 245, 225, 0.45) 50%,
+    rgba(255, 245, 225, 0.15) 75%,
+    transparent 100%
   );
 
-  transform: translateX(-180%) skewX(-25deg);
+  transform:
+    translateX(-150%)
+    skewX(-25deg);
 
-  animation: portalButtonShine 4s ease-in-out infinite;
+  animation:
+    portalMaroonShine 4s ease-in-out infinite;
 
   pointer-events: none;
 }
 
 
-@keyframes portalButtonShine {
+/* Shine movement */
+
+@keyframes portalMaroonShine {
+
   0%,
   20% {
-    transform: translateX(-180%) skewX(-25deg);
+    transform:
+      translateX(-150%)
+      skewX(-25deg);
   }
 
   65%,
   100% {
-    transform: translateX(600%) skewX(-25deg);
+    transform:
+      translateX(450%)
+      skewX(-25deg);
   }
+
 }
 
 
 /* =====================================================
-   ARROW ANIMATION
+   BUTTON ARROW — CREAM
    ===================================================== */
 
 .site-shell .portal-landing-copy
 .portal-landing-cta svg {
   color: #fff5e1 !important;
+  stroke: #fff5e1 !important;
+
+  flex-shrink: 0;
 
   transition: transform 300ms ease;
 }
 
 
 /* =====================================================
-   HOVER EFFECT
+   DESKTOP HOVER ANIMATIONS
    ===================================================== */
 
 @media (hover: hover) and (pointer: fine) {
@@ -115,15 +243,29 @@
   .portal-landing-cta:hover {
     animation-play-state: paused;
 
+    background: linear-gradient(
+      135deg,
+      #92253d 0%,
+      #751c2e 50%,
+      #480b18 100%
+    ) !important;
+
+    color: #fff5e1 !important;
+    -webkit-text-fill-color: #fff5e1 !important;
+
+    border-color: #fff0d5 !important;
+
     transform: translateY(-3px);
 
-    filter: brightness(1.12);
+    filter: brightness(1.08);
 
     box-shadow:
-      0 0 12px rgba(230, 200, 154, 0.65),
-      0 0 28px rgba(230, 200, 154, 0.35),
-      0 8px 24px rgba(72, 11, 24, 0.35) !important;
+      0 0 12px rgba(230, 200, 154, 0.60),
+      0 0 25px rgba(230, 200, 154, 0.30),
+      0 8px 20px rgba(0, 0, 0, 0.20) !important;
   }
+
+  /* Arrow moves forward */
 
   .site-shell .portal-landing-copy
   .portal-landing-cta:hover svg {
@@ -134,7 +276,7 @@
 
 
 /* =====================================================
-   BUTTON CLICK EFFECT
+   BUTTON PRESS EFFECT
    ===================================================== */
 
 .site-shell .portal-landing-copy
@@ -155,7 +297,33 @@
 
 
 /* =====================================================
-   REDUCED MOTION SUPPORT
+   MOBILE OPTIMIZATION
+   Preserve original responsive layout and font sizes
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta {
+    animation-duration: 4s;
+  }
+
+  .site-shell .portal-landing-copy
+  .portal-landing-cta::before {
+    animation-duration: 5s;
+  }
+
+  .site-shell .portal-landing-copy
+  .portal-landing-description {
+    text-shadow:
+      0 2px 5px rgba(0, 0, 0, 0.45);
+  }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION — ACCESSIBILITY
    ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -170,6 +338,7 @@
   .portal-landing-cta svg {
     animation: none !important;
     transition: none !important;
+    transform: none !important;
   }
 
   .site-shell .portal-landing-copy
